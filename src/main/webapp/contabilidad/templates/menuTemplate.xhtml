@@ -23,14 +23,14 @@
                         <div class="navbar navbar-light bg-light d-flex">
                             <div class="row p-0">
                                 <div class="col-md-3">
-                                    <a class="navbar-brand">Contabilidad</a>  
+                                    <a class="navbar-brand">Contabilidad</a>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <p:commandButton value="Inicio" action="contabilidad" style="color: #333;" styleClass="ui-button-flat"></p:commandButton>
-                                <p:commandButton value="Cuentas" style="color: #333;" styleClass="ui-button-flat"></p:commandButton>
+                                <p:button outcome="planCuentas" value="Cuentas" style="color: #333;" styleClass="ui-button-flat" />
                                 <p:commandButton value="Asientos" action="asientos" style="color: #333;" styleClass="ui-button-flat"></p:commandButton>
-                                <p:commandButton id="imformesBtn" style="color: #333;" value="Imformes" styleClass="ui-button-flat" icon="pi pi-book"/>
+                                <p:commandButton id="imformesBtn" style="color: #333;" value="Informes" styleClass="ui-button-flat" icon="pi pi-book"/>
                                 <p:menu overlay="true" trigger="imformesBtn" my="left top" at="left bottom">
                                     <p:menuitem value="Balance General"></p:menuitem>
                                     <p:menuitem value="Ganacias y perdidas"></p:menuitem>
