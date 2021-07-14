@@ -1,4 +1,4 @@
-package com.neoshock.soft.proyectoerp.resources;
+package com.proyectofinal.soft.proyectoerp.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

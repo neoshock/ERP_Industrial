@@ -1,4 +1,4 @@
-package com.neoshock.soft.proyectoerp;
+package com.proyectofinal.soft.proyectoerp;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
