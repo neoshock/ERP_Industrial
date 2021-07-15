@@ -9,7 +9,153 @@
     <body>
         <ui:composition template="./templates/menuTemplate.xhtml">
             <ui:define name="content">
-                
+                <h:form>
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" oncomplete="PF('detalleAsiento').show()">
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <p:dialog header="Nuevo Asiento Contable" showEffect="fade" modal="true"
+                                  widgetVar="detalleAsiento" responsive="true" width="70%"> 
+                            <p:outputPanel id="manage-product-content" class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="row">
+                                        <div class="col-md-5 p-3" style=" margin-right: 90px;">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-2">
+                                                    <h5>Numero de asiento</h5>
+                                                    <p:inputText placeholder="Numero de Asiento"></p:inputText>
+                                                </div>
+                                                <div class="col-md-12 mb-2">
+                                                    <h5>Referencia</h5>
+                                                    <p:inputText placeholder="Referencia"></p:inputText>
+                                                </div>
+                                                <div class="col-md-12 mb-1">
+                                                    <h5>Observaciones</h5>
+                                                    <p:inputTextarea rows="3" cols="33" autoResize="false"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 p-3">
+                                            <div class="row">
+                                                <div class="col-md-12 mb-2">
+                                                    <h5>Fecha</h5>
+                                                    <p:datePicker locale="es"/>
+                                                </div>
+                                                <div class="col-md-12 mb-2">
+                                                    <h5>Diario</h5>
+                                                    <p:selectOneMenu id="city" value="#{selectOneMenuView.city}" editable="true">
+                                                        <f:selectItem itemLabel="CON-0001" itemValue=""/>
+                                                        <f:selectItem itemLabel="CON-0002" itemValue=""/>
+                                                        <f:selectItem itemLabel="CON-0003" itemValue=""/>
+                                                        <f:selectItem itemLabel="INV-0001" itemValue=""/>
+                                                        <f:selectItem itemLabel="INV-0002" itemValue=""/>
+                                                        <f:selectItem itemLabel="INV-0003" itemValue=""/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                                <div class="col-md-12 mt-3">
+                                                    <p:selectOneRadio id="publicar" layout="responsive" columns="1">
+                                                        <f:selectItem itemLabel="Publicar" itemValue="publicar"/>
+                                                        <f:selectItem itemLabel="Por Revisar" itemValue="revisar"/>
+                                                    </p:selectOneRadio>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="p-grid p-mt-3">
+                                            <div class="p-col-12">
+                                                <p:commandButton value="Añadir Fila"/>
+                                            </div>
+                                        </div>
+                                        <p:dataTable id="dtCuentas" widgetVar="cuentasAsiento" var="product" value="#{dtAddRowView.products1}"
+                                                     editable="true">
+
+                                            <p:column headerText="Cuenta">
+                                                <h:outputText value="#{product.code}" />
+                                            </p:column>
+
+                                            <p:column headerText="Descripcion">
+                                                <h:outputText value="#{product.name}" />
+                                            </p:column>
+
+                                            <p:column headerText="Debe">
+                                                <h:outputText value="#{product.category}" />
+                                            </p:column>
+
+                                            <p:column headerText="Haber">
+                                                <h:outputText value="#{product.quantity}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                        <div class="row justify-content-end w-100">
+                                            <div class="col-md-2 d-flex mr-5">
+                                                <h:outputText value="$0.00"></h:outputText>
+                                            </div>
+                                            <p:divider layout="vertical"></p:divider>
+                                            <div class="col-md-3 d-flex">
+                                                <h:outputText value="$0.00"></h:outputText>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                            <f:facet name="footer">
+                                <p:commandButton value="Agregar" icon="pi pi-check" update="manage-product-content" 
+                                                 process="manage-product-content @this"/>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('detalleAsiento').hide()"
+                                                 class="ui-button-secondary"/>
+                            </f:facet>
+                        </p:dialog>
+                        <p:dataTable id="dtAsientos" widgetVar="asientosTable" var="asiento" 
+                                     value="#{asientoManagedBean.asientos}" paginator="true" 
+                                     rows="10" rowSelectMode="add" paginatorPosition="bottom">
+                            <f:facet name="header">
+                                <div class="products-table-header">
+                                    <span style="font-weight: bold; margin-right: 6px;">Asientos Contables</span>
+                                    <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" onkeyup="PF('asientosTable').filter()" placeholder="Buscar"/>
+                                    </span>
+                                </div>
+                            </f:facet>
+                            
+                            <p:column headerText="Fecha" sortBy="#{asiento.fecha}">
+                                <h:outputText value="#{asiento.fecha}" />
+                            </p:column>
+
+                            <p:column headerText="Numero" sortBy="#{asiento.numero}">
+                                <h:outputText value="#{asiento.numero}" />
+                            </p:column>
+
+                            <p:column headerText="Referencia" sortBy="#{asiento.referencia}">
+                                <h:outputText value="#{asiento.referencia}" />
+                            </p:column>
+
+                            <p:column headerText="Diario" sortBy="#{asiento.diario}">
+                                <h:outputText value="#{asiento.diario}" />
+                            </p:column>
+
+                            <p:column headerText="Total" sortBy="#{asiento.total}">
+                                <h:outputText value="#{asiento.total}" />
+                            </p:column>
+
+                            <p:column headerText="Estado" sortBy="#{asiento.estado}">
+                                <p:chip rendered="#{asiento.estado eq 'Publicado'}" styleClass="p-mr-2 custom-chip" class="bg-success">
+                                    <h:outputText class="text-light" value="#{asiento.estado}"/>
+                                </p:chip>
+                                <p:chip rendered="#{asiento.estado eq 'Pendiente'}" styleClass="p-mr-2 custom-chip" class="bg-warning">
+                                    <h:outputText class="text-light" value="#{asiento.estado}"/>
+                                </p:chip>
+                                <p:chip rendered="#{asiento.estado eq 'Deshabilitado'}" styleClass="p-mr-2 custom-chip" class="bg-danger">
+                                    <h:outputText class="text-light" value="#{asiento.estado}"/>
+                                </p:chip>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </h:form>
             </ui:define>
         </ui:composition>
     </body>
