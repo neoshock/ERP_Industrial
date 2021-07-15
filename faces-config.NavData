@@ -4,7 +4,6 @@
     <Scope Scope="Project">
         <Node id="index.xhtml" x="150" y="300" zoom="false"/>
         <Node id="contabilidad/planCuentas.xhtml" x="296" y="127" zoom="true"/>
-        <Node id="contabilidad/templates/menu.xhtml" x="400" y="300" zoom="true"/>
         <Node id="contabilidad/asientos.xhtml" x="505" y="170" zoom="true"/>
         <Node id="contabilidad/balanceGeneral.xhtml" x="547" y="224" zoom="true"/>
         <Node id="contabilidad/homeContabilidad.xhtml" x="85" y="72" zoom="true"/>
