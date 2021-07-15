@@ -26,12 +26,12 @@
     <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
-            <from-outcome>contabilidad</from-outcome>
-            <to-view-id>/contabilidad/homeContabilidad.xhtml</to-view-id>
-        </navigation-case>
-        <navigation-case>
             <from-outcome>planCuentas</from-outcome>
             <to-view-id>/contabilidad/planCuentas.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>home</from-outcome>
+            <to-view-id>/contabilidad/home.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>
