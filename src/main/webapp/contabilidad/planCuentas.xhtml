@@ -17,7 +17,7 @@
                             <p:toolbarGroup>
                                 <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{clienteController.reset()}"
                                                  update=":form:manage-product-content" oncomplete="PF('manageProductDialog').show()"
-                                                 styleClass="ui-button-success" 
+                                                 styleClass="ui-button-primary" 
                                                  style="margin-right: .5rem">
                                     <p:resetInput target=":form:manage-product-content"/>
                                 </p:commandButton>
@@ -138,12 +138,12 @@
                             <p:column exportable="false">
                                 <p:commandButton icon="pi pi-pencil" update=":form:manage-product-content"
                                                  oncomplete="PF('manageProductDialog').show()"
-                                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                                 styleClass="edit-button rounded-button ui-button-primary" process="@this">
                                     <f:setPropertyActionListener value="#{pc}" target="#{planCuentas.cuenta}"/>
                                     <p:resetInput target=":form:manage-product-content"/>
                                 </p:commandButton>
 
-                                <p:commandButton class="ui-button-secondary rounded-button" icon="pi pi-power-off" process="@this">
+                                <p:commandButton class="ui-button-help rounded-button" icon="pi pi-power-off" process="@this">
                                     <f:setPropertyActionListener value="#{cliente}" target="#{clienteController.cliente}"/>
                                 </p:commandButton>
                             </p:column>

@@ -5,3 +5,20 @@
     font-size: 21px;
     color: #fff;
 }
+
+.money {
+    float: right;
+}
+
+.grupo {
+    border-style: none none double;
+    font-weight: bold;
+}
+
+.grupo > td:nth-last-child(n) {
+    padding-top: 30px;
+}
+
+.linea {
+    border-bottom: 1px solid;
+}
