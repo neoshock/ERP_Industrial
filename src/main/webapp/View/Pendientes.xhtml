@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+        <!-- vista de resumen pendiente de pagos -->
+
+        <ui:composition template="./../Plantilla/Plantilla.xhtml">
+
+            <ui:define name="content">
+                <div class="container contenedor-flex">
+                    
+                    <h1 class="title">Resumen Pendientes de Pagos</h1>
+
+                    <h:form class="formulario">
+                        <p:panelGrid 
+                            columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+                            columns="2" 
+                            layout="grid" 
+                            styleClass="showcase-text-align-center">
+
+                            <p:outputLabel  
+                                for="fecha" 
+                                value="A Fecha:"/>
+                            <p:datePicker id="fecha"  />
+
+                            <p:outputLabel 
+                                for="proveedor" 
+                                value="Proveedor: "/>
+                            
+                            <p:selectOneMenu id="proveedor"  style="width:250px">
+                                <f:selectItem 
+                                    itemLabel="Selecionar proveedor" 
+                                    itemValue="" 
+                                    noSelectionOption="true"/>
+                                <f:selectItem 
+                                    itemLabel="Proveedor 1" 
+                                    itemValue="" 
+                                    noSelectionOption="true"/>
+                            </p:selectOneMenu>
+
+                            
+                            <p:outputLabel value="Todos los proveedores"/>
+                            <p:toggleSwitch />
+
+                            <p:row>
+                                <p:column styleClass="ui-grid-col-12" style="display: flex; justify-content: flex-end">
+                                    <p:commandButton
+                                        icon="pi pi-check" 
+                                        value="Generar"  />
+
+                                    <p:commandButton 
+                                        icon="pi pi-times" 
+                                        value="Cancelar" 
+                                        styleClass="ui-button-danger" />
+                                </p:column>
+                            </p:row>
+                            
+                        </p:panelGrid>
+
+
+                    </h:form>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </h:body>
+</html>

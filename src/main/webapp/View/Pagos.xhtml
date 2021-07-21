@@ -1,0 +1,422 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+
+        <ui:composition template="./../Plantilla/Plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <div >
+                        <p:panel >
+                            <h1 style="text-align: center"> PAGOS</h1>
+                            <p:toolbar>
+
+                                <p:toolbarGroup>
+
+                                    <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                                     oncomplete="PF('RegistroPago').show()"
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .5rem">
+                                    </p:commandButton>
+                                    <p:commandButton value="Editar" icon="pi pi-pencil" 
+                                                     oncomplete="PF('ModificarPago').show()"
+                                                     styleClass="ui-button-secondary" 
+                                                     style="margin-right: .5rem">
+                                    </p:commandButton>
+                                    <p:commandButton value="Deshabilitar"  
+                                                     styleClass="ui-button-danger" 
+                                                     icon="pi pi-times"
+                                                     style="margin-right: .5rem">
+                                        <p:confirm header="Advertencia" 
+                                                   message="Desea deshabilitar este pago?" 
+                                                   icon="pi pi-info-circle"/>
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Buscar" icon="pi pi-search" 
+                                                     oncomplete="PF('BuscarPago').show()"
+                                                     styleClass="ui-button-warning" 
+                                                     style="margin-right: .5rem">
+                                    </p:commandButton>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable value="#{pagoMB.pagos}" 
+                                         var="pago" id="proveedortabla">
+                                <p:column headerText="Fecha" >
+                                    <h:outputText value="#{pago.fechaPago}"/>
+                                </p:column>
+                                <p:column headerText="Pago por" >
+                                    <h:outputText value="#{pago.idTipoPago}"/>
+                                </p:column>
+                                <p:column headerText="Referencia">
+                                    <h:outputText value="#{pago.referencia}"/>
+                                </p:column>
+                                <p:column headerText="Importe">
+                                    <h:outputText value="#{pago.importe}">
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Proveedor" >
+                                    <h:outputText value="#{pago.idProveedor}"/>
+                                </p:column>
+                                <p:column headerText="Nombre" >
+                                    <h:outputText value="#{pago.idProveedor}"/>
+                                </p:column>
+                                <p:column headerText="Periodo" >
+                                    <h:outputText value="#{pago.periodo}"/>
+                                </p:column>
+                                <p:column headerText="Registrado" >
+                                    <h:outputText value="#{pago.resgitrado}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </div>
+                </h:form>
+                <!-- Registro de pago-->
+                <p:dialog header="Registrar Pago " widgetVar="RegistroPago"  
+                          minHeight="40" height="auto" width="700px" 
+                          showEffect="fade" modal="true">
+                    <h:form style="height:500px;width: 600px;margin: 3%;
+                            position: relative;top:  -30px;left: -10px">
+                        <div class="ui-fluid p-formgrid p-grid" 
+                             style="height:500px;width: 600px;margin: 3%;">
+
+                            <!-- Datos del proveedor -->
+                            <div class="p-field p-col-12 p-md-3">
+                                <label for="Proveedor" style="width:500px;">
+                                    Proveedor: 
+                                    <p:inputText id="NombreProveedor" type="text" 
+                                                 style="width: 250px;
+                                                 background-color:  silver" 
+                                                 disabled="true"/>
+                                    <p:inputText id="IdProveedor" type="text" 
+                                                 disabled="true" 
+                                                 style="width: 200px;
+                                                 background-color:  silver;
+                                                 margin: 10px"/>
+                                    <p:commandButton icon="pi pi-folder-open" 
+                                                     oncomplete="PF('BuscarProveedor').show()"
+                                                     styleClass="ui-button-warning" 
+                                                     style="margin-right: .5rem;
+                                                     width: 40px">
+                                    </p:commandButton>
+
+                                </label>
+                            </div>
+                            <!-- Datos a pagar y referencia del documento -->
+                            <div class="p-field p-col-12 p-md-3">
+                                <label for="Pagopor" >
+                                    Pago por: 
+
+                                    <p:selectOneMenu style="width: 130px;height: 42px;
+                                                     position: relative;top: 8px;
+                                                     left: 8px;" placeholder="Seleccione" >
+                                        <f:selectItem itemLabel="Caja" 
+                                                      itemValue="Caja"/>
+                                        <f:selectItem itemLabel="Cheque" 
+                                                      itemValue="Cheque"/>
+                                        <f:selectItem itemLabel="Transferencia"
+                                                      itemValue="Transferencia"/>
+                                    </p:selectOneMenu>
+
+                                </label>
+                                <label for="Referencia" style=" position: relative;
+                                       top: 0px;left: 15px;">
+                                    Referencia: 
+                                    <p:inputText id="Referencia" type="text" 
+                                                 style="width: 90px" />
+                                </label>
+                            </div>
+                            <div class="p-field p-col-12 p-md-3">
+                                <!-- Datos del Banco -->
+                                <label for="Banco" >
+                                    Banco:
+                                    <p:selectOneMenu style="min-width: 14rem;
+                                                     width: 50px;height: 40px;
+                                                     position: relative;top: 20px;
+                                                     left: 28px;" placeholder="Seleccione" >
+                                        <f:selectItem itemLabel="Banco Pichincha" 
+                                                      itemValue="BancoPichincha"/>
+                                        <f:selectItem itemLabel="Banco Machala" 
+                                                      itemValue="Banco_Machala"/>
+                                        <f:selectItem itemLabel="Banco Pacifico"
+                                                      itemValue="Banco_Pacifico"/>
+                                    </p:selectOneMenu>
+                                </label>
+                            </div>
+                            <div class="p-field p-col-12 p-md-3">
+                                <!-- Datos del Importe y fecha del registro -->
+                                <label for="Importe" style="position: relative;
+                                       top: 33px;left: 0px;">
+                                    Importe:
+                                    <p:inputText id="Importe" type="text" 
+                                                 style="width: 150px;
+                                                 background-color:  silver;position: relative;
+                                                 top: 5px;left: 13px;" 
+                                                 disabled="true"/>
+                                    <p:outputLabel for="Fecha" value="Fecha: " 
+                                                   style="position: relative;
+                                                   left: 30px;"/>
+                                    <p:datePicker id="Fecha" showIcon="true" 
+                                                  style="width: 150px;position: relative;
+                                                  left: 50px;"/>
+                                </label>
+                                <p:dataTable value="#{pagoMB.pagos}" 
+                                             var="pago" id="proveedortabla"
+                                             style="width: 650px;
+                                             position: relative;top:  45px;left: -30px">
+                                    <p:column headerText="Factura No." >
+                                        <h:outputText value="#{pago.fechaPago}"/>
+                                    </p:column>
+                                    <p:column headerText="Fecha" >
+                                        <h:outputText value="#{pago.idTipoPago}"/>
+                                    </p:column>
+                                    <p:column headerText="Vence">
+                                        <h:outputText value="#{pago.referencia}"/>
+                                    </p:column>
+                                    <p:column headerText="Importe">
+                                        <h:outputText value="#{pago.importe}">
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Pendiente" >
+                                        <h:outputText value="#{pago.idProveedor}"/>
+                                    </p:column>
+                                    <p:column headerText="Pago" >
+                                        <h:outputText value="#{pago.idProveedor}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+
+                            <div class="p-field p-col-12 p-md-3" 
+                                 style="width: 250px; position: relative;
+                                 top: 200px;
+                                 left: 200px;width: 300px;">
+                                <p:commandButton style="width: 100px;
+                                                 margin-right: .5rem;" 
+                                                 value="Guardar" 
+                                                 styleClass="ui-confirmdialog-no ui-button-flat">
+                                </p:commandButton>
+                                <p:commandButton style="width: 100px;
+                                                 margin-right: .5rem;" 
+                                                 value="Cancelar" 
+                                                 styleClass="ui-button-secondary" 
+                                                 >
+                                </p:commandButton>
+                            </div>
+                        </div>
+                        <!-- Botones de guardar y cancelar -->
+
+                    </h:form>
+                </p:dialog>
+                <!-- Modificar pago-->
+                <p:dialog header="Editar Pago " widgetVar="ModificarPago"  
+                          minHeight="40" height="auto" width="700px" 
+                          showEffect="fade" modal="true">
+                    <h:form style="height:500px;width: 600px;margin: 3%;
+                            position: relative;top:  -30px;left: -10px">
+                        <div class="ui-fluid p-formgrid p-grid" 
+                             style="height:500px;width: 600px;margin: 3%;">
+
+                            <!-- Datos del proveedor -->
+                            <div class="p-field p-col-12 p-md-3">
+                                <label for="Proveedor" style="width:500px;">
+                                    Proveedor: 
+                                    <p:inputText id="NombreProveedor" type="text" 
+                                                 style="width: 250px;
+                                                 background-color:  silver" 
+                                                 disabled="true"/>
+                                    <p:inputText id="IdProveedor" type="text" 
+                                                 disabled="true" 
+                                                 style="width: 200px;
+                                                 background-color:  silver;
+                                                 margin: 10px"/>
+                                </label>
+                            </div>
+                            <!-- Datos a pagar y referencia del documento -->
+                            <div class="p-field p-col-12 p-md-3">
+                                <label for="Pagopor" >
+                                    Pago por: 
+
+                                    <p:selectOneMenu style="width: 130px;height: 42px;
+                                                     position: relative;top: 8px;
+                                                     left: 8px;" 
+                                                     placeholder="Seleccione" >
+                                        <f:selectItem itemLabel="Caja" 
+                                                      itemValue="Caja"/>
+                                        <f:selectItem itemLabel="Cheque" 
+                                                      itemValue="Cheque"/>
+                                        <f:selectItem itemLabel="Transferencia"
+                                                      itemValue="Transferencia"/>
+                                    </p:selectOneMenu>
+
+                                </label>
+                                <label for="Referencia" style=" position: relative;
+                                       top: 0px;left: 15px;">
+                                    Referencia: 
+                                    <p:inputText id="Referencia" type="text" 
+                                                 style="width: 90px" />
+                                </label>
+                            </div>
+                            <div class="p-field p-col-12 p-md-3">
+                                <!-- Datos del Banco -->
+                                <label for="Banco" >
+                                    Banco:
+                                    <p:selectOneMenu style="min-width: 14rem;
+                                                     width: 50px;height: 40px;
+                                                     position: relative;top: 20px;
+                                                     left: 28px;" 
+                                                     placeholder="Seleccione" >
+                                        <f:selectItem itemLabel="Banco Pichincha" 
+                                                      itemValue="BancoPichincha"/>
+                                        <f:selectItem itemLabel="Banco Machala" 
+                                                      itemValue="Banco_Machala"/>
+                                        <f:selectItem itemLabel="Banco Pacifico"
+                                                      itemValue="Banco_Pacifico"/>
+                                    </p:selectOneMenu>
+                                </label>
+                            </div>
+                            <div class="p-field p-col-12 p-md-3">
+                                <!-- Datos del Importe y fecha del registro -->
+                                <label for="Importe" style="position: relative;
+                                       top: 33px;left: 0px;">
+                                    Importe:
+                                    <p:inputText id="Importe" type="text" 
+                                                 style="width: 150px;
+                                                 background-color:  silver;
+                                                 position: relative;
+                                                 top: 5px;left: 13px;" 
+                                                 disabled="true"/>
+                                    <p:outputLabel for="Fecha" value="Fecha: " 
+                                                   style="position: relative;
+                                                   left: 30px;"/>
+                                    <p:datePicker id="Fecha" showIcon="true" 
+                                                  style="width: 150px;position: relative;
+                                                  left: 50px;"/>
+                                </label>
+                                <p:dataTable value="#{pagoMB.pagos}" 
+                                             var="pago" id="proveedortabla"
+                                             style="width: 650px;
+                                             position: relative;top:  45px;left: -30px">
+                                    <p:column headerText="Factura No." >
+                                        <h:outputText value="#{pago.fechaPago}"/>
+                                    </p:column>
+                                    <p:column headerText="Fecha" >
+                                        <h:outputText value="#{pago.idTipoPago}"/>
+                                    </p:column>
+                                    <p:column headerText="Vence">
+                                        <h:outputText value="#{pago.referencia}"/>
+                                    </p:column>
+                                    <p:column headerText="Importe">
+                                        <h:outputText value="#{pago.importe}">
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Pendiente" >
+                                        <h:outputText value="#{pago.idProveedor}"/>
+                                    </p:column>
+                                    <p:column headerText="Pago" >
+                                        <h:outputText value="#{pago.idProveedor}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </div>
+
+                            <div class="p-field p-col-12 p-md-3" 
+                                 style="width: 250px; position: relative;top: 200px;
+                                 left: 200px;width: 300px;">
+                                <p:commandButton style="width: 100px;
+                                                 margin-right: .5rem;" 
+                                                 value="Guardar" >
+                                </p:commandButton>
+                                <p:commandButton style="width: 100px;" 
+                                                 value="Cancelar"
+                                                 styleClass="ui-button-secondary">
+                                </p:commandButton>
+                            </div>
+                        </div>
+                        <!-- Botones de guardar y cancelar -->
+
+                    </h:form>
+                </p:dialog>
+                <!-- Desahabilitar pago-->
+                <p:dialog modal="true" height="400" 
+                          width="400" widgetVar="DesahabilitarPago">
+                    <h:form>
+                        <p:confirmDialog global="true" showEffect="fade" 
+                                         hideEffect="fade" responsive="true" 
+                                         width="350">
+                            <p:commandButton value="OK" type="button" 
+                                             styleClass="ui-confirmdialog-yes"/>
+                            <p:commandButton value="Cancelar" type="button" 
+                                             styleClass="ui-confirmdialog-no ui-button-flat" />
+                        </p:confirmDialog>
+                    </h:form>
+                </p:dialog>
+                <!-- Buscar pago-->
+                <p:dialog header="Buscar Pago " widgetVar="BuscarPago"  
+                          minHeight="40" height="200px" width="400px" 
+                          showEffect="fade" modal="true">
+                    <h:form style="height: 200px">
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="BReferencia" style=" position: relative;
+                                   top: 0px;left: 15px;">
+                                Referencia: 
+                                <p:inputText id="BReferencia" type="text" 
+                                             style="width: 90px" />
+                            </label>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <label for="BProveedor" style="position: relative;
+                                   top: 10px;left: 15px;">
+                                Proveedor:
+                                <p:inputText id="BProveedor" type="text" 
+                                             style="width: 200px;
+                                             background-color:  silver" 
+                                             disabled="false"/>
+                                <p:commandButton icon="pi pi-folder-open" 
+                                                 oncomplete="PF('BuscarProveedor').show()"
+                                                 styleClass="ui-button-warning" 
+                                                 style="margin-right: .6rem;width: 40px">
+                                </p:commandButton>
+                            </label>
+
+                        </div>
+                        <div class="p-field p-col-12 p-md-3" style="width: 200px; position: relative;
+                             top: 28px;left: 100px;">
+                            <p:commandButton type="button" value="OK" 
+                                             style="margin-right: .5rem" />
+                            <p:commandButton type="button" value="Cancelar" 
+                                             styleClass="ui-button-secondary" />
+                        </div>
+                    </h:form>
+                </p:dialog>
+                <p:dialog header="Buscar Proveedor " widgetVar="BuscarProveedor"  
+                          minHeight="40" height="300px" width="500px" 
+                          showEffect="fade" modal="true">
+                    <h:form>
+                        <div class="p-field p-col-12 p-md-3"> 
+                            <p:inputText id="NombreProveedor" type="text" 
+                                         style="width: 150px;"/>
+                            <p:inputText id="IdProveedor" type="text" 
+                                         style="width: 280px;margin: 10px"/>
+                            <p:panel style="height:  200px;">
+                                <p:dataTable value="#{pagoMB.pagos}" 
+                                             var="pago" id="proveedortabla">
+                                    <p:column headerText="Proveedor" >
+                                        <h:outputText value="#{pago.fechaPago}"/>
+                                    </p:column>
+                                    <p:column headerText="Nombre" >
+                                        <h:outputText value="#{pago.idTipoPago}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                        </div>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
