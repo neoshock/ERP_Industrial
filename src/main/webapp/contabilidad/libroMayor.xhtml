@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./templates/menuTemplate.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <p:commandButton type="button" value="Guardar" title="Save" icon="pi pi-save" styleClass="ui-button-primary p-mr-2" />
+                            <p:commandButton type="button" value="Imprimir" title="Print" icon="pi pi-print" styleClass="ui-button-primary p-mr-2"/>
+                        </p:toolbarGroup>
+
+                        <p:toolbarGroup align="right">
+                            <p:menuButton value="Diario">
+                                <p:menuitem value="DIA-0001"/>
+                                <p:menuitem value="DIA-0002"/>
+                                <p:menuitem value="DIA-0003" />
+                                <p:menuitem value="DIA-0004"/>
+                            </p:menuButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <div class="card">
+                        <h3 style="margin: 1% 0px;">Libro mayor de la empresa</h3>
+                        <p:dataTable var="libro" value="#{libroManagedBean.libros}" sortBy="#{libro.cuenta}">
+                            <p:headerRow field="cuenta"
+                                         expandable="true">
+
+                                <p:column colspan="6">
+                                    <div class="p-d-inline-flex p-ai-center" style="vertical-align: middle">
+                                        <h:outputText styleClass="p-ml-2" value="#{libro.cuenta}"/>
+                                    </div>
+                                </p:column>
+                            </p:headerRow>
+
+                            <p:column headerText="Cuenta">
+                                <h:outputText value="#{libro.cuenta}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{libro.fecha}" />
+                            </p:column>
+
+                            <p:column headerText="Asiento">
+                                <h:outputText value="#{libro.asiento}"/>
+                            </p:column>
+
+                            <p:column headerText="Descripcion">
+                                <h:outputText value="#{libro.descripcion}" />
+                            </p:column>
+                            <p:column headerText="Debe">
+                                <h:outputText value="#{libro.debe}" />
+                            </p:column>
+                            <p:column headerText="Haber">
+                                <h:outputText value="#{libro.haber}" />
+                            </p:column>
+                            <p:column headerText="Saldo">
+                                <h:outputText value="#{libro.saldo}" />
+                            </p:column>
+                            <f:facet name="footer">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Balance total</h4>
+                                    </div>
+                                    <div class="col-md-1" style="margin-left: 7%">
+                                        <span>$0.00</span>
+                                    </div>
+                                    <div class="col-md-1" style="margin-left: 6%">
+                                        <span>$0.00</span>
+                                    </div>
+                                    <div class="col-md-1" style="margin-left: 6%">
+                                        <span>$0.00</span>
+                                    </div>
+                                </div>
+                            </f:facet>
+                        </p:dataTable>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>
