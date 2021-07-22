@@ -1,32 +1,25 @@
 
 package com.contabilidad.models;
 
-public class Cuenta {
-    private int id, subgrupo;
+public class Grupo {
+    private int id;
     private String codigo, nombre;
 
-    public Cuenta(int id, int subgrupo, String codigo, String nombre) {
+    public Grupo() {
+    }
+    
+    public Grupo(int id, String codigo, String nombre) {
         this.id = id;
-        this.subgrupo = subgrupo;
         this.codigo = codigo;
         this.nombre = nombre;
     }
-    
-    
+
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getSubgrupo() {
-        return subgrupo;
-    }
-
-    public void setSubgrupo(int subgrupo) {
-        this.subgrupo = subgrupo;
     }
 
     public String getCodigo() {
@@ -44,6 +37,4 @@ public class Cuenta {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
-    
 }

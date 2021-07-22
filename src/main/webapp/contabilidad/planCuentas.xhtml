@@ -16,7 +16,7 @@
 
                         <p:toolbar>
                             <p:toolbarGroup>
-                                <p:commandButton value="Nuevo" icon="pi pi-plus" actionListener="#{clienteController.reset()}"
+                                <p:commandButton value="Nuevo" icon="pi pi-plus" 
                                                  update=":form:manage-product-content" oncomplete="PF('manageProductDialog').show()"
                                                  styleClass="ui-button-primary" 
                                                  style="margin-right: .5rem">
@@ -32,63 +32,61 @@
                                 <p:outputPanel>
                                     <div class="ui-fluid p-formgrid p-grid">
                                         <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Codigo"/>
-                                            <p:inputText value="#{planCuentas.cuenta.codigo}" disabled="true" />
+                                            <p:outputLabel for="@next" value="Código"/>
+                                            <p:inputText id="codigo" value="#{planCuentas.codigo}" readonly="true" />
                                         </div>
 
                                         <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Grupo"/>
-                                            <p:selectOneMenu id="grupo" value=""
-                                                             panelStyle="width:180px" var="c"
+                                            <p:outputLabel for="@next" value="Grupo*"/>
+                                            <p:selectOneMenu id="grupo" value="#{planCuentas.onSeletedGrupo}"
+                                                             panelStyle="width:180px"
                                                              filter="true" filterMatchMode="startsWith">
-
-                                                <f:selectItem itemLabel="Activo" itemValue="1" />
-                                                <f:selectItem itemLabel="Pasivo" itemValue="2" />
-                                                <f:selectItem itemLabel="Capital" itemValue="3" />
-                                                <f:selectItem itemLabel="Ingreso" itemValue="4" />
-                                                <f:selectItem itemLabel="Gastos" itemValue="5" />
-                                                <f:selectItem itemLabel="Costo" itemValue="6" />
+                                                <p:ajax listener="#{planCuentas.onGrupoChange}" update="codigo, subgrupo" />
+                                                <f:selectItem itemLabel="Selecciona grupo" itemValue="" noSelectionOption="true"/>
+                                                <f:selectItems value="#{planCuentas.grupos}" var="grupo"
+                                                               itemLabel="#{grupo.nombre}" itemValue="#{grupo.codigo}"/>
                                             </p:selectOneMenu>
                                         </div>
 
                                         <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Subgrupo"/>
-                                            <p:selectOneMenu id="subgrupo"
+                                            <p:outputLabel for="@next" value="Subgrupo*"/>
+                                            <p:selectOneMenu id="subgrupo" 
+                                                             value="#{planCuentas.onSeletedSubgrupo}" 
                                                              filter="true" filterMatchMode="startsWith">
-
-                                                <f:selectItem itemLabel="Activos corrientes" itemValue="1.1" />
-                                                <f:selectItem itemLabel="Activos no corrientes" itemValue="1.2" />
+                                                <p:ajax listener="#{planCuentas.onSubGrupoChange}" update="codigo, cuentas" />
+                                                <f:selectItem itemLabel="Selecciona subgrupo" itemValue="" noSelectionOption="true"/>
+                                                <f:selectItems value="#{planCuentas.subgrupos}" var="subgrupo"
+                                                               itemLabel="#{subgrupo.nombre}" itemValue="#{subgrupo.codigo}"/>
                                             </p:selectOneMenu>
                                         </div>
 
                                         <div class="p-field p-col-4">
                                             <p:outputLabel for="@next" value="Cuentas"/>
                                             <p:selectOneMenu id="cuentas"
+                                                             value="#{planCuentas.onSeletedCuenta}"
                                                              filter="true" filterMatchMode="startsWith">
-
-                                                <f:selectItem itemLabel="Efectivos y sus equivalentes" itemValue="1.1.1" />
-                                                <f:selectItem itemLabel="Activos financieros" itemValue="1.1.2" />
-                                                <f:selectItem itemLabel="Cuentas y documentos por cobrar" itemValue="1.1.3" />
-                                                <f:selectItem itemLabel="Inventarios" itemValue="1.1.4" />
+                                                <p:ajax listener="#{planCuentas.onCuentaChange}" update="codigo" />
+                                                <f:selectItem itemLabel="Selecciona cuenta" itemValue="" noSelectionOption="true"/>
+                                                <f:selectItems value="#{planCuentas.cuentas}" var="cuenta"
+                                                               itemLabel="#{cuenta.nombre}" itemValue="#{cuenta.codigo}"/>
                                             </p:selectOneMenu>
                                         </div>
 
                                         <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Subcuenta"/>
-                                            <p:inputText value="" />
+                                            <p:outputLabel for="@next" value="Subcuenta*"/>
+                                            <p:inputText value="#{planCuentas.subCuenta.nombre}"/>
                                         </div>
 
-                                        <div class="p-field p-col-4">
+                                        <!--<div class="p-field p-col-4">
                                             <p:outputLabel for="@next" value="Auxiliar"/>
                                             <p:inputText value="" />
-                                        </div>
+                                        </div>-->
 
-                                        <div class="p-field p-col-4">
-                                            <p:selectManyCheckbox id="saldo" value="#{checkboxView.selectedOptions}"
-                                                                  layout="pageDirection" columns="1">
-                                                <f:selectItem itemLabel="Saldo Deudor" itemValue="1"/>
-                                                <f:selectItem itemLabel="Saldo Acreedor" itemValue="2"/>
-                                            </p:selectManyCheckbox>
+                                        <div class="p-field p-col-12">
+                                            <p:selectOneRadio id="saldo" layout="pageDirection" columns="1" value="#{planCuentas.subCuenta.tipo}">
+                                                <f:selectItem itemLabel="Saldo Deudor" itemValue="Deudor"/>
+                                                <f:selectItem itemLabel="Saldo Acreedor" itemValue="Acreedor"/>
+                                            </p:selectOneRadio>
                                         </div>
                                     </div>
                                 </p:outputPanel>
@@ -96,9 +94,10 @@
 
                             <f:facet name="footer">
                                 <p:commandButton value="Guardar" icon="pi pi-check" 
-                                                 actionListener="#{clienteController.registrarCliente()}"
-                                                 update="manage-product-content, messages" 
-                                                 process="manage-product-content @this"/>
+                                                 actionListener="#{planCuentas.registrarSubCuenta()}"
+                                                 update="manage-product-content, messages, planCuentaDt" 
+                                                 process="manage-product-content @this"
+                                                 />
                                 <p:commandButton value="Cancelar" icon="pi pi-times" 
                                                  onclick="PF('manageProductDialog').hide()"
                                                  class="ui-button-secondary"/>
@@ -107,15 +106,16 @@
 
                         <p:confirmDialog widgetVar="deleteClientDialog" showEffect="fade" width="300"
                                          message="¿Desea eliminar el cliente?" header="Confirmar" severity="warn">
-                            <p:commandButton value="Si" icon="pi pi-check" actionListener="#{clienteController.eliminarCliente()}"
+                            <p:commandButton value="Si" icon="pi pi-check"
                                              process="@this" oncomplete="PF('deleteClientDialog').hide()"/>
                             <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                              onclick="PF('deleteClientDialog').hide()"/>
                         </p:confirmDialog>
 
-                        <p:dataTable var="pc" value="#{planCuentas.cuentas}"
+                        <p:dataTable var="pc" value="#{planCuentas.cuentasContables}"
                                      style="margin-top: 10px" paginator="true"
-                                     rows="5" paginatorPosition="bottom" sortMode="single">
+                                     rows="5" paginatorPosition="bottom" sortMode="single"
+                                     id="planCuentaDt">
                             <p:column sortBy="#{pc.codigo}" headerText="Código">
                                 <h:outputText value="#{pc.codigo}" />
                             </p:column>
@@ -140,12 +140,12 @@
                                 <p:commandButton icon="pi pi-pencil" update=":form:manage-product-content"
                                                  oncomplete="PF('manageProductDialog').show()"
                                                  styleClass="edit-button rounded-button ui-button-primary" process="@this">
-                                    <f:setPropertyActionListener value="#{pc}" target="#{planCuentas.cuenta}"/>
+                                    
                                     <p:resetInput target=":form:manage-product-content"/>
                                 </p:commandButton>
 
                                 <p:commandButton class="ui-button-help rounded-button" icon="pi pi-power-off" process="@this">
-                                    <f:setPropertyActionListener value="#{cliente}" target="#{clienteController.cliente}"/>
+                                    
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
