@@ -1,15 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        <h:form>
-            <h:commandLink action="home" value="Contabilidad" />
-        </h:form>
-    </h:body>
-</html>
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
+    <body>
+        <ui:composition template="./contabilidad/templates/menuPrincipal.xhtml">
+            <ui:define name="content">
+                <div class="containerWelcome">
+                    <h:graphicImage name="images/erpLogo.png" class="logo" height="100px" />
+                    <h2 style="text-align: center;">Bienvenido a ERP Contable</h2>
+                    <p style="text-align: center;">Descripción del sistema</p>
+                </div>    
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,71 @@
+#principal{
+    width: 100%;
+    height: 620px;
+    margin: 0 auto; 
+}
+.header{
+    background-color: royalblue;  
+    position: relative; 
+    top: -13px;
+}
+#logoHeader{
+    color: white;
+    width: 300px;
+    position: relative; 
+    top: 0px; 
+    left: 20px;
+}
+#usuarioHeader{
+    position: relative; top: -40px; left: 450px;
+}
+#fechaHeader{
+    position: relative; top: -80px; left: 900px;
+}
+#LogoModulos{
+    width: 100px;
+    height: 80px;
+}
+#CuentaCobrar{
+    text-align: center;
+    width: 200px; 
+    margin-bottom: 5px;
+    position:relative; 
+    top: 10px; 
+    left: 100px;
+}
+#CuentaPagar{
+    text-align: center;
+    width: 200px; 
+    margin-bottom: 5px;
+    position:relative; 
+    top: 10px; 
+    left: 100px
+}
+
+p{
+    text-decoration: black;
+}
+.card{
+    width: 10px;
+    position: relative;
+    top: -25px;
+    left: 0px;
+}
+.mostrar
+{
+    width: 1100px;
+    position: relative;
+    top: 586px;
+    left: 229px;
+}
+#registrar{
+    text-indent: 25px;
+    vertical-align: text-top;
+    position: relative;
+    top: 500px;
+    left: 0px;
+}
+.TipoPago{
+    width: 50px;
+    height: 45px;
+}

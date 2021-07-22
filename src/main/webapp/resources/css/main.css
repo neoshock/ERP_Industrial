@@ -1,0 +1,29 @@
+* {
+    padding: 0px;
+    margin: 0px;
+}
+
+.navbar {
+    height: 75px;
+    color: #E2EAF6;
+    background-color: #445976;
+    margin-bottom: 10px;
+    padding-left: 20px;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 2px;
+}
+
+.containerWelcome {
+    position: relative;
+    left: 25%;
+    top: 180px;
+    width: 40%;
+}
+
+.containerWelcome .logo {
+    display: block;
+    margin: 0px auto;
+}

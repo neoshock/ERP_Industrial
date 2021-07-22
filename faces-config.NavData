@@ -2,12 +2,15 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
-        <Node id="index.xhtml" x="150" y="300" zoom="false"/>
-        <Node id="contabilidad/planCuentas.xhtml" x="296" y="127" zoom="true"/>
-        <Node id="contabilidad/asientos.xhtml" x="505" y="170" zoom="true"/>
-        <Node id="contabilidad/balanceGeneral.xhtml" x="547" y="224" zoom="true"/>
-        <Node id="contabilidad/homeContabilidad.xhtml" x="85" y="72" zoom="true"/>
-        <Node id="contabilidad/templates/menuTemplate.xhtml" x="479" y="80" zoom="true"/>
+        <Node id="contabilidad/libroMayor.xhtml" x="561" y="189" zoom="true"/>
+        <Node id="contabilidad/templates/menuPrincipal.xhtml" x="829" y="327" zoom="true"/>
+        <Node id="index.xhtml" x="110" y="189" zoom="true"/>
+        <Node id="contabilidad/planCuentas.xhtml" x="315" y="83" zoom="true"/>
+        <Node id="contabilidad/asientos.xhtml" x="36" y="450" zoom="true"/>
+        <Node id="contabilidad/balanceGeneral.xhtml" x="164" y="536" zoom="true"/>
+        <Node id="contabilidad/gananciasPerdidas.xhtml" x="379" y="495" zoom="true"/>
+        <Node id="contabilidad/templates/menuTemplate.xhtml" x="826" y="287" zoom="true"/>
+        <Node id="contabilidad/home.xhtml" x="36" y="29" zoom="true"/>
     </Scope>
     <Scope Scope="All Faces Configurations"/>
 </Scene>
