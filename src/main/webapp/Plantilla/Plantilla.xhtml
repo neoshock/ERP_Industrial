@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Modulo Cuenta Pagar</title>
+        <h:outputStylesheet name="css/main.css"/>
+        <h:outputStylesheet name="css/cssLayout.css" />
+        <h:outputStylesheet name="css/default.css"/>
+        <h:outputStylesheet name="css/estilo.css"/>
+        
+        
+        
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' />
+    </h:head>
+
+    <h:body>
+        
+        <ui:insert name="top">
+            <div class="navbar">
+                <a href="/Modulo_Cuenta_Pagar/">
+                    <h:graphicImage name="imag/erpLogo.png"  height="60px" style="margin-right: 10px"/>
+                </a>
+                <h2>ERP CONTABLE</h2>
+            </div>
+        </ui:insert>
+
+        <div>
+            <div id="left">
+                <ui:insert name="left"></ui:insert>
+                <div>
+                    <ui:insert name="left"> 
+                        <h:form>
+                            <p:growl>
+                                <p:autoUpdate/>
+                            </p:growl>
+                            <p:panelMenu  >
+                                <p:submenu label ="Activos Fijos" expanded="true">
+                                    <p:menuitem value="Tangibles"
+                                                icon="pi pi-file-o"
+                                                outcome="/View/ActivosTangibles"/>
+                                    <p:menuitem value="Intangibles"
+                                                icon="pi pi-file-o"
+                                                outcome="/View/ActivosIntangibles"/>
+                                    <p:menuitem value="Reporte de Periodos"
+                                                icon="pi pi-file-pdf"
+                                                outcome="/View/Periodos"/>
+                                    
+                                </p:submenu>    
+ 
+                            </p:panelMenu>
+                        </h:form>
+                    </ui:insert>
+                </div>
+            </div>
+            <div id="content" class="left_content">
+                <ui:insert name="content">
+
+                    <!-- Contenido por defecto. -->
+                    <div class="containerWelcome">
+                        <h:graphicImage name="imag/erpLogo.png"  height="100px" />
+                        <h2>Bienvenido a ERP Contable</h2>
+                        <p>Descripción del sistema</p>
+                    </div>
+                    
+                </ui:insert>
+            </div>
+        </div>
+        
+        
+    </h:body>
+
+</html>

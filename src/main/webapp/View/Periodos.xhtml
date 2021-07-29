@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:body>
+
+        <ui:composition template="./../Plantilla/Plantilla.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <div >
+                        <p:panel >
+                            <h1 style="text-align: center"> Periodos de Activos Fijos</h1>
+                            <p:dataTable value="" 
+                                         var="pago" id="proveedortabla">
+                                <p:column headerText="Observación" >
+                                    <p:outputLabel>Sin novedad</p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Estado" >
+                                    <p:outputLabel>Activo</p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Fecha Inicio">
+                                    <p:outputLabel>01/01/2020</p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Fecha Fin">
+                                    <p:outputLabel>31/12/2020</p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Monto" >
+                                    <p:outputLabel>$ 587</p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Año" >
+                                    <p:outputLabel>2020</p:outputLabel>
+                                </p:column>
+                                <p:column headerText="Reporte" >
+                                    <p:commandButton
+                                        value="Exportar PDF" 
+                                        ajax="false"
+                                        actionListener="#{beanGenerarCalendario.exportpdf()}"
+                                        icon="pi pi-file-pdf" 
+                                        styleClass="ui-button-raised" />
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

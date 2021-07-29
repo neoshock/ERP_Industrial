@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">  
+    <h:body>
+        <ui:composition template="./../Plantilla/Plantilla.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <p:panel>
+                        <h1 style="text-align: center; color: black;">Intangibles</h1>
+                        <div>
+                            <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
+                            <p:toolbar>
+                                <p:toolbarGroup>
+                                    <p:commandButton value="Nuevo" icon="pi pi-plus"   
+                                                     oncomplete="PF('NuevoIntangible').show()"   
+                                                     styleClass="ui-button-success" 
+                                                     style="margin-right: .3rem">                               
+                                    </p:commandButton>
+
+                                    <p:commandButton value="Editar" 
+                                                     icon="pi pi-pencil" 
+                                                     oncomplete="PF('EditarIntangible').show()"  
+                                                     styleClass="ui-button-info" 
+                                                     style="margin-right: .3rem" >                                
+                                    </p:commandButton>
+
+                                    <p:commandButton id="delete-products-button"
+                                                     value="Deshabilitar" 
+                                                     icon="pi pi-times"                                            
+                                                     styleClass="ui-button-danger"  
+                                                     style="margin-right: .3rem">
+                                        <p:confirm  header="Confirmation"
+                                                    message="Dese eliminar el 
+                                                    proveedor seleccionado?"
+                                                    icon="pi pi-exclamation-triangle" />
+
+                                    </p:commandButton>
+                                </p:toolbarGroup>                       
+                            </p:toolbar> 
+                            <!-- Tabla visual de datos  !-->
+                            <p:dataTable>
+                                <p:column headerText="Descripción"  >
+                                    <h:outputText value=""/>
+                                </p:column>
+
+                                <p:column headerText="Costo de Adquisición" >
+                                    <h:outputText value=""/>
+                                </p:column>                       
+
+                                <p:column headerText="Fecha de Adquisición">
+                                    <h:outputText value="" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </div>
+                        <p:dialog header="Nuevo Activo Intangible"  minHeight="40" 
+                                  height="auto" width="1000px" showEffect="fade"
+                                  modal="true" widgetVar="NuevoIntangible">
+                            <h:form >
+                                <div  style="display: flex;justify-content: center">
+                                    <h:panelGrid columns="4"  >
+                                        <p:outputLabel value="Descripción: "/>
+                                        <p:inputText value="" required="true" />
+
+                                        <p:outputLabel value="Costo Adquisición: "/>
+                                        <p:inputText type="number" value="" required="true" />
+
+                                        <p:outputLabel value="Fecha de Adquisición:    " />
+                                        <p:datePicker   showIcon="true"/>                                                         
+
+                                    </h:panelGrid>
+                                </div>
+
+                            </h:form>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Guardar" 
+                                                 icon="pi pi-check"/>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                 onclick="PF('NuevoIntangible').hide()"
+                                                 class="ui-button-secondary"/>
+                            </f:facet>
+                        </p:dialog> 
+                        <p:dialog header="Editar Activo Intangible"  minHeight="40" 
+                                  height="auto" width="1000px" showEffect="fade"
+                                  modal="true" widgetVar="EditarIntangible">
+                            <h:form >
+                                <div  style="display: flex;justify-content: center">
+                                    <h:panelGrid columns="4"  >
+                                        <p:outputLabel value="Descripción: "/>
+                                        <p:inputText value="" required="true" />
+
+                                        <p:outputLabel value="Costo Adquisición: "/>
+                                        <p:inputText type="number" value="" required="true" />
+
+
+                                        <p:outputLabel value="Fecha de Adquisición:    " />
+                                        <p:datePicker   showIcon="true"/>
+
+                                    </h:panelGrid>
+                                </div>
+
+                            </h:form>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="Guardar" 
+                                                 icon="pi pi-check"/>
+                                <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                 onclick="PF('EditarIntangible').hide()"
+                                                 class="ui-button-secondary"/>
+                            </f:facet>
+                        </p:dialog> 
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
