@@ -46,8 +46,8 @@ public class PlanCuentas implements Serializable {
 
     @PostConstruct
     public void init() {
-        cuentasContables = contableDAO.getSubCuentas();
-        grupos = contableDAO.getGrupos();
+        //cuentasContables = contableDAO.getSubCuentas();
+        //grupos = contableDAO.getGrupos();
         subCuenta = new SubCuenta();
     }
 
