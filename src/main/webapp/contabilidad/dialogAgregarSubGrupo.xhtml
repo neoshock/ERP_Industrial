@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Agregar SubGrupo</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/primeflex@2.0.0/primeflex.min.css"></link>
+    </h:head>
+    <h:body>
+        <h:form>
+            <div style="margin: 0px 10px">
+                <div class="ui-fluid p-formgrid p-grid" >
+                    <div class="p-field p-col-12">
+                        <p:outputLabel for="@next" value="Codigo: *"/>
+                        <p:inputText id="codigo" 
+                                     value="#{planCuentas.intoSubgrupo.codigo}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="p-field p-col-12">
+                        <p:outputLabel for="@next" value="Grupo: *"/>
+                        <p:inputText id="grupo" 
+                                     value="#{planCuentas.grupo.codigo.trim()} - #{planCuentas.grupo.nombre.trim()}"
+                                     readonly="true"/>
+                    </div>
+                    <div class="p-field p-col-12">
+                        <p:outputLabel for="@next" value="Nombre: *"/>
+                        <p:inputText id="nombre" 
+                                     value="#{planCuentas.intoSubgrupo.nombre}" />
+                    </div>
+                </div>
+                <div class="p-jc-end">
+                    <p:commandButton value="Guardar" icon="pi pi-check" 
+                                     action="#{planCuentas.registrarSubGrupo}"
+                                     styleClass="ui-button-success"/>
+                </div>
+            </div>
+        </h:form>
+    </h:body>
+</html>
+

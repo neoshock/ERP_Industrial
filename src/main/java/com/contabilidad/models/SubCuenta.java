@@ -65,4 +65,11 @@ public class SubCuenta {
     public void setImpuesto(int impuesto) {
         this.impuesto = impuesto;
     }
+
+    @Override
+    public String toString() {
+        return "SubCuenta{" + "id=" + id + ", cuenta=" + cuenta + ", codigo=" + codigo + ", nombre=" + nombre + ", tipo=" + tipo + '}';
+    }
+    
+    
 }

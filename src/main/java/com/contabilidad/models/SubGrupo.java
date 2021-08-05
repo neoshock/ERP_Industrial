@@ -12,6 +12,10 @@ public class SubGrupo {
         this.nombre = nombre;
     }
 
+    public SubGrupo() {
+        
+    }
+
     public int getId() {
         return id;
     }
@@ -42,6 +46,11 @@ public class SubGrupo {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @Override
+    public String toString() {
+        return "SubGrupo{" + "id=" + id + ", grupo=" + grupo + ", codigo=" + codigo + ", nombre=" + nombre + '}';
     }
     
     

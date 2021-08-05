@@ -11,7 +11,9 @@ public class Cuenta {
         this.codigo = codigo;
         this.nombre = nombre;
     }
-    
+
+    public Cuenta() {
+    }
     
     public int getId() {
         return id;
@@ -43,6 +45,11 @@ public class Cuenta {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @Override
+    public String toString() {
+        return "Cuenta{" + "id=" + id + ", subgrupo=" + subgrupo + ", codigo=" + codigo + ", nombre=" + nombre + '}';
     }
     
     

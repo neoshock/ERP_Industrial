@@ -16,12 +16,14 @@
 
                         <p:toolbar>
                             <p:toolbarGroup>
-                                <p:commandButton value="Nuevo" icon="pi pi-plus" 
+                                <!--<p:commandButton value="Nuevo" icon="pi pi-plus" 
                                                  update=":form:manage-product-content" oncomplete="PF('manageProductDialog').show()"
                                                  styleClass="ui-button-primary" 
                                                  style="margin-right: .5rem">
                                     <p:resetInput target=":form:manage-product-content"/>
-                                </p:commandButton>
+                                </p:commandButton>-->
+                                <p:button outcome="agregarCuenta" value="Nuevo" icon="pi pi-plus"
+                                          styleClass="ui-button-success" />
                             </p:toolbarGroup>
                         </p:toolbar>
 
@@ -46,6 +48,18 @@
                                                 <f:selectItems value="#{planCuentas.grupos}" var="grupo"
                                                                itemLabel="#{grupo.nombre}" itemValue="#{grupo.codigo}"/>
                                             </p:selectOneMenu>
+                                            <div class="p-grid mt-1">
+                                                <div class="p-col-10">
+                                                    <p:inputText id="intoGrupo" value="#{planCuentas.intoGrupo.nombre}" />
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:commandButton  icon="pi pi-plus" />
+                                                    <p:commandButton icon="pi pi-plus" 
+                                                                     action="#{planCuentas.registrarGrupo()}"
+                                                                     update="grupo, messages, intoGrupo" 
+                                                                     />
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="p-field p-col-4">
@@ -58,10 +72,18 @@
                                                 <f:selectItems value="#{planCuentas.subgrupos}" var="subgrupo"
                                                                itemLabel="#{subgrupo.nombre}" itemValue="#{subgrupo.codigo}"/>
                                             </p:selectOneMenu>
+                                            <div class="p-grid mt-1">
+                                                <div class="p-col-10">
+                                                    <p:inputText id="registrarSubgrupo" value="#{planCuentas.intoSubgrupo.nombre}" />
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:button icon="pi pi-plus" />
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Cuentas"/>
+                                            <p:outputLabel for="@next" value="Cuentas*"/>
                                             <p:selectOneMenu id="cuentas"
                                                              value="#{planCuentas.onSeletedCuenta}"
                                                              filter="true" filterMatchMode="startsWith">
@@ -70,6 +92,14 @@
                                                 <f:selectItems value="#{planCuentas.cuentas}" var="cuenta"
                                                                itemLabel="#{cuenta.nombre}" itemValue="#{cuenta.codigo}"/>
                                             </p:selectOneMenu>
+                                            <div class="p-grid mt-1">
+                                                <div class="p-col-10">
+                                                    <p:inputText id="registrarCuenta" value="#{planCuentas.intoCuenta.nombre}" />
+                                                </div>
+                                                <div class="p-col-2">
+                                                    <p:button icon="pi pi-plus" />
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="p-field p-col-4">
@@ -140,12 +170,12 @@
                                 <p:commandButton icon="pi pi-pencil" update=":form:manage-product-content"
                                                  oncomplete="PF('manageProductDialog').show()"
                                                  styleClass="edit-button rounded-button ui-button-primary" process="@this">
-                                    
+
                                     <p:resetInput target=":form:manage-product-content"/>
                                 </p:commandButton>
 
                                 <p:commandButton class="ui-button-help rounded-button" icon="pi pi-power-off" process="@this">
-                                    
+
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>

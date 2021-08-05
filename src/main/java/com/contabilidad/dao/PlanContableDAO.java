@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.contabilidad.dao;
 
 import com.contabilidad.models.CuentaContable;
@@ -26,7 +21,7 @@ public class PlanContableDAO {
     private List<Grupo> grupos;
     private List<SubGrupo> subgrupos;
     private List<Cuenta> cuentas;
-    
+
     private ResultSet result;
 
     public List<CuentaContable> getSubCuentas() {
@@ -53,14 +48,14 @@ public class PlanContableDAO {
 
     public List<Grupo> getGrupos() {
         grupos = new ArrayList<>();
-        result = conexion.consultar("select * from public.grupo;");
+        result = conexion.consultar("select * from public.grupocuenta;");
         try {
             //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
             while (result.next()) {
                 grupos.add(new Grupo(
-                        result.getInt("id_grupo"), 
-                        result.getString("codigo_grupo"), 
-                        result.getString("nombre_grupo")
+                        result.getInt("idgrupo"),
+                        result.getString("codigo"),
+                        result.getString("nombre")
                 ));
             }
         } catch (SQLException ex) {
@@ -70,17 +65,17 @@ public class PlanContableDAO {
         }
         return grupos;
     }
-    
+
     public List<SubGrupo> getSubGrupos(String codigo) {
         subgrupos = new ArrayList<>();
-        result = conexion.consultar("select * from public.subgrupo where id_grupo = "+codigo+"");
+        result = conexion.consultar("select * from public.subgrupo where idgrupo = "+codigo+"");
         try {
             while (result.next()) {
                 subgrupos.add(new SubGrupo(
-                        result.getInt("id_subgrupo"), 
-                        result.getInt("id_grupo"),
-                        result.getString("codigo_subgrupo"), 
-                        result.getString("nombre_subgrupo")
+                        result.getInt("idsubgrupo"),
+                        result.getInt("idgrupo"),
+                        result.getString("codigo"),
+                        result.getString("nombre")
                 ));
             }
         } catch (SQLException ex) {
@@ -90,18 +85,18 @@ public class PlanContableDAO {
         }
         return subgrupos;
     }
-    
+
     public List<Cuenta> getCuentas(String codigo) {
         cuentas = new ArrayList<>();
-        result = conexion.consultar("select * from public.cuenta where id_subgrupo = "+codigo+"");
+        result = conexion.consultar("select * from public.cuenta where idsubgrupo = "+codigo+"");
         try {
             // int id, int subgrupo, String codigo, String nombre
             while (result.next()) {
                 cuentas.add(new Cuenta(
-                        result.getInt("id_cuenta"), 
-                        result.getInt("id_subgrupo"),
-                        result.getString("codigo_cuenta"), 
-                        result.getString("nombre_cuenta")
+                        result.getInt("idcuenta"),
+                        result.getInt("idsubgrupo"),
+                        result.getString("codigo"),
+                        result.getString("nombre")
                 ));
             }
         } catch (SQLException ex) {
@@ -111,12 +106,12 @@ public class PlanContableDAO {
         }
         return cuentas;
     }
-    
+
     public int getCountSubCuentas(String codigo) {
         int count = -1;
-        System.out.println("####################################"+codigo);
+        System.out.println("####################################" + codigo);
         try {
-            result = conexion.consultar("select count(*) from public.subcuenta where id_cuenta = "+codigo+"");
+            result = conexion.consultar("select count(*) from public.subcuenta where idcuenta = "+codigo+"");
             while (result.next()) {
                 count = result.getInt("count");
             }
@@ -127,15 +122,55 @@ public class PlanContableDAO {
         }
         return count;
     }
-    
+
     public int insertSubCuenta(SubCuenta subcuenta) {
         try {
-            String sql = String.format("select public.insertcuenta('%1$d', '%2$s', '%3$s', '%4$s')", 
-                subcuenta.getCuenta(), subcuenta.getCodigo(), subcuenta.getNombre(), subcuenta.getTipo());
-            conexion.insertar(sql);
+            String sql = String.format("select insertsubcuenta('%1$d', '%2$s', '%3$s', '%4$s')",
+                    subcuenta.getCuenta(), subcuenta.getCodigo(), subcuenta.getNombre(), subcuenta.getTipo());
+            conexion.ejecutar(sql);
+            return 1;
         } catch (Exception e) {
-            System.out.println("Error" + e.getMessage());
+            System.out.println("Error al isert subcuenta: " + e.getMessage());
         }
-        return 1;
+        return -1;
+    }
+
+    public int insertGrupo(Grupo grupo) {
+        try {
+            String sql = String.format("select insertgrupo('%1$s', '%2$s')",
+                    grupo.getCodigo(), grupo.getNombre());
+            result = conexion.ejecutar(sql);
+            result.next();
+            return 1;
+        } catch (Exception e) {
+            System.out.println("Error insertar Grupo" + e.getMessage());
+        }
+        return -1;
+    }
+
+    public int insertSubGrupo(SubGrupo subGrupo) {
+        try {
+            String sql = String.format("select insertsubgrupo('%1$d', '%2$s', '%3$s')",
+                    subGrupo.getGrupo(), subGrupo.getCodigo(), subGrupo.getNombre());
+            result = conexion.ejecutar(sql);
+            result.next();
+            return 1;
+        } catch (Exception e) {
+            System.out.println("Error insertar Subgrupo: " + e.getMessage());
+        }
+        return -1;
+    }
+    
+    public int insertCuenta(Cuenta cuenta) {
+        try {
+            String sql = String.format("select insertcuenta('%1$d', '%2$s', '%3$s')",
+                    cuenta.getSubgrupo(), cuenta.getCodigo(), cuenta.getNombre());
+            result = conexion.ejecutar(sql);
+            result.next();
+            return 1;
+        } catch (Exception e) {
+            System.out.println("Error insertar Subgrupo: " + e.getMessage());
+        }
+        return -1;
     }
 }

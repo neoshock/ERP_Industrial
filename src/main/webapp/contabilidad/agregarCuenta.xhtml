@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./templates/menuPrincipal.xhtml">
+
+            <ui:define name="content">
+                <p:card>
+                    <f:facet name="title">
+                        Agregar Cuenta
+                    </f:facet>
+                    <h:form>
+                        <p:growl id="messages" showDetail="true"/>
+                        <div class="ui-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-4">
+                                <p:outputLabel for="@next" value="Código:"/>
+                                <p:inputText id="codigo" 
+                                             value="#{planCuentas.codigo}" 
+                                             readonly="true" />
+                            </div>
+
+                            <div class="p-field p-col-4">
+                                <p:outputLabel for="@next" value="Grupo: *"/>
+                                <div class="ui-inputgroup">
+                                    <p:selectOneMenu id="grupo" 
+                                                     value="#{planCuentas.onSeletedGrupo}"
+                                                     filter="true"
+                                                     >
+                                        <p:ajax listener="#{planCuentas.onGrupoChange}"
+                                                update="codigo, subgrupo" />
+                                        <f:selectItem itemLabel="Selecciona grupo" 
+                                                      itemValue="0"
+                                                      noSelectionOption="true"/>
+                                        <f:selectItems value="#{planCuentas.grupos}" 
+                                                       var="grupo"
+                                                       itemLabel="#{grupo.nombre}" 
+                                                       itemValue="#{grupo.codigo}"/>
+                                    </p:selectOneMenu>
+                                    <p:commandButton styleClass="ui-button-success"
+                                                     icon="pi pi-plus"
+                                                     action="#{planCuentas.formAgregarClasificacion('dialogAgregarGrupo')}"
+                                                     update="messages">
+                                        <p:ajax event="dialogReturn" listener="#{planCuentas.onActSelect}" 
+                                            update="grupo, messages" />
+                                    </p:commandButton>
+                                </div>
+                            </div>
+
+
+                            <div class="p-field p-col-4">
+                                <p:outputLabel for="@next" value="SubGrupo: *"/>
+                                <div class="ui-inputgroup">
+                                    <p:selectOneMenu id="subgrupo" 
+                                                     value="#{planCuentas.onSeletedSubgrupo}" 
+                                                     filter="true" filterMatchMode="startsWith">
+                                        <p:ajax listener="#{planCuentas.onSubGrupoChange}" 
+                                                update="codigo, cuentas" />
+                                        <f:selectItem itemLabel="Selecciona subgrupo" 
+                                                      itemValue="0" 
+                                                      noSelectionOption="true"/>
+                                        <f:selectItems value="#{planCuentas.subgrupos}" 
+                                                       var="subgrupo"
+                                                       itemLabel="#{subgrupo.nombre}" 
+                                                       itemValue="#{subgrupo.id}"/> <!-- codigo -->
+                                    </p:selectOneMenu>
+                                    <p:commandButton styleClass="ui-button-success" 
+                                                     icon="pi pi-plus"
+                                                     action="#{planCuentas.formAgregarSubGrupo()}">
+                                        <p:ajax event="dialogReturn" listener="#{planCuentas.onActSelectSubgrupo}" 
+                                            update="subgrupo, messages" />
+                                    </p:commandButton>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col-4">
+                                <p:outputLabel for="@next" value="Cuentas: *"/>
+                                <div class="ui-inputgroup">
+                                    <p:selectOneMenu id="cuentas"
+                                                     value="#{planCuentas.onSeletedCuenta}"
+                                                     filter="true" filterMatchMode="startsWith">
+                                        <p:ajax listener="#{planCuentas.onCuentaChange}" 
+                                                update="codigo" />
+                                        <f:selectItem itemLabel="Selecciona cuenta" 
+                                                      itemValue="0"
+                                                      noSelectionOption="true"/>
+                                        <f:selectItems value="#{planCuentas.cuentas}" 
+                                                       var="cuenta"
+                                                       itemLabel="#{cuenta.nombre}" 
+                                                       itemValue="#{cuenta.id}"/>
+                                    </p:selectOneMenu>
+                                    <p:commandButton styleClass="ui-button-success" 
+                                                     icon="pi pi-plus"
+                                                     action="#{planCuentas.formAgregarCuenta}">
+                                        <p:ajax event="dialogReturn" listener="#{planCuentas.onActSelectCuenta}" 
+                                            update="cuentas, messages" />
+                                    </p:commandButton>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-col-4">
+                                <p:outputLabel for="@next" value="SubCuenta: *"/>
+                                <p:inputText value="#{planCuentas.subCuenta.nombre}"/>
+                            </div>
+
+                            <div class="p-field p-col-12">
+                                <p:selectOneRadio id="saldo" layout="pageDirection" 
+                                                  columns="1" 
+                                                  value="#{planCuentas.subCuenta.tipo}">
+                                    <f:selectItem itemLabel="Saldo Deudor" 
+                                                  itemValue="Deudor"/>
+                                    <f:selectItem itemLabel="Saldo Acreedor" 
+                                                  itemValue="Acreedor"/>
+                                </p:selectOneRadio>
+                            </div>
+                        </div>
+
+                        <p:commandButton value="Guardar" icon="pi pi-check" 
+                                         styleClass="ui-button-success" 
+                                         action="#{planCuentas.registrarSubCuenta()}"
+                                         update="@form"/>
+                    </h:form>
+                </p:card>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -59,6 +59,7 @@ public class AsientoManagedBean implements Serializable {
     }
 
     public void newAsientoContable() {
+        System.out.println("####Cantidad: " + currentAsiento.getDetalle().length());
         if (currentAsiento.getIdAsiento() == 0) {
             if (!currentAsiento.getDocumento().isEmpty() && !currentAsiento.getDetalle().isEmpty()) {
                 asientoDAO.addAsientoContable(currentAsiento);

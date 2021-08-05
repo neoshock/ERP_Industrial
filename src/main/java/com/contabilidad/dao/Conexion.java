@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class Conexion {
 
-    private String user = "postgres", password = "123456789", database = "erp_global";
+    private String user = "postgres", password = "admin", database = "erp_global";
     private Connection connection;
     private Statement statement;
     private ResultSet result = null;
@@ -85,6 +85,16 @@ public class Conexion {
         en un DAO en especifico
     */
     public ResultSet consultar(String sql) {
+        try {
+            conectar();
+            result = statement.executeQuery(sql);
+        } catch (SQLException ex) {
+            System.out.println("Error: No se ejecuto la consulta: " + ex.getMessage());
+        }
+        return result;
+    }
+    
+    public ResultSet ejecutar(String sql) {
         try {
             conectar();
             result = statement.executeQuery(sql);
