@@ -31,7 +31,7 @@ public class PlanContableDAO {
 
     public List<CuentaContable> getSubCuentas() {
         cuentasContables = new ArrayList<>();
-        result = conexion.consultar("select * from contabilidad.getsubcuentas()");
+        result = conexion.consultar("select * from public.getsubcuentas()");
         try {
             //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
             while (result.next()) {
@@ -53,7 +53,7 @@ public class PlanContableDAO {
 
     public List<Grupo> getGrupos() {
         grupos = new ArrayList<>();
-        result = conexion.consultar("select * from contabilidad.grupo;");
+        result = conexion.consultar("select * from public.grupo;");
         try {
             //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
             while (result.next()) {
@@ -73,7 +73,7 @@ public class PlanContableDAO {
     
     public List<SubGrupo> getSubGrupos(String codigo) {
         subgrupos = new ArrayList<>();
-        result = conexion.consultar("select * from contabilidad.subgrupo where id_grupo = "+codigo+"");
+        result = conexion.consultar("select * from public.subgrupo where id_grupo = "+codigo+"");
         try {
             while (result.next()) {
                 subgrupos.add(new SubGrupo(
@@ -93,7 +93,7 @@ public class PlanContableDAO {
     
     public List<Cuenta> getCuentas(String codigo) {
         cuentas = new ArrayList<>();
-        result = conexion.consultar("select * from contabilidad.cuenta where id_subgrupo = "+codigo+"");
+        result = conexion.consultar("select * from public.cuenta where id_subgrupo = "+codigo+"");
         try {
             // int id, int subgrupo, String codigo, String nombre
             while (result.next()) {
@@ -116,7 +116,7 @@ public class PlanContableDAO {
         int count = -1;
         System.out.println("####################################"+codigo);
         try {
-            result = conexion.consultar("select count(*) from contabilidad.subcuenta where id_cuenta = "+codigo+"");
+            result = conexion.consultar("select count(*) from public.subcuenta where id_cuenta = "+codigo+"");
             while (result.next()) {
                 count = result.getInt("count");
             }
@@ -130,7 +130,7 @@ public class PlanContableDAO {
     
     public int insertSubCuenta(SubCuenta subcuenta) {
         try {
-            String sql = String.format("select contabilidad.insertcuenta('%1$d', '%2$s', '%3$s', '%4$s')", 
+            String sql = String.format("select public.insertcuenta('%1$d', '%2$s', '%3$s', '%4$s')", 
                 subcuenta.getCuenta(), subcuenta.getCodigo(), subcuenta.getNombre(), subcuenta.getTipo());
             conexion.insertar(sql);
         } catch (Exception e) {

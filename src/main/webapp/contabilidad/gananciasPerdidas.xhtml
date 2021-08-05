@@ -16,13 +16,13 @@
                             <p:commandButton type="button" value="Imprimir" title="Print" icon="pi pi-print" styleClass="ui-button-primary p-mr-2"/>
                         </p:toolbarGroup>
 
-                        <p:toolbarGroup align="right">
-                            <p:menuButton value="Período">
-                                <p:menuitem value="Hoy" action="#{toolbarView.save}" />
-                                <p:menuitem value="Fecha del último mes" action="#{toolbarView.update}" />
-                                <p:menuitem value="Fecha del último trimestre" action="#{toolbarView.delete}" ajax="false" />
-                                <p:menuitem value="Fecha de Fin de Año Financiero" url="http://www.primefaces.org" />
-                            </p:menuButton>
+                        <p:toolbarGroup align="right"> 
+                            <h5 class="mr-2">Fecha Desde:</h5>
+                            <p:datePicker locale="es" label="Al"/>
+                        </p:toolbarGroup>
+                        <p:toolbarGroup align="right"> 
+                            <h5 class="mr-2">Fecha Hasta:</h5>
+                            <p:datePicker locale="es" label="Hasta"/>
                         </p:toolbarGroup>
                     </p:toolbar>
                     <div class="container mb-5">

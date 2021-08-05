@@ -1,32 +1,89 @@
 package com.contabilidad.models;
 
-public class Asiento {
-    private String fecha;
-    private String numero;
-    private String referencia;
-    private String diario;
-    private String total;
-    private String estado;
+import java.util.Date;
+import java.util.List;
 
-    public Asiento() {
-        
+public class Asiento {
+    int idAsiento;
+    int idDiario;
+    String documento;
+    String detalle;
+    String estado;
+    Date fechaCreacion;
+    Date fechaCierre;
+    String numero;
+    String total;
+    List<Movimientos> movimientos;
+
+    public Asiento(int idAsiento, int idDiario, String documento, String detalle, String estado, Date fechaCreacion, Date fechaCierre, String numero, String total) {
+        this.idAsiento = idAsiento;
+        this.idDiario = idDiario;
+        this.documento = documento;
+        this.detalle = detalle;
+        this.estado = estado;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaCierre = fechaCierre;
+        this.numero = numero;
+        this.total = total;
     }
 
-    public Asiento(String fecha, String numero, String referencia, String diario, String total, String estado) {
-        this.fecha = fecha;
-        this.numero = numero;
-        this.referencia = referencia;
-        this.diario = diario;
-        this.total = total;
+    public Asiento() {
+    }
+    
+    public int getIdAsiento() {
+        return idAsiento;
+    }
+
+    public void setIdAsiento(int idAsiento) {
+        this.idAsiento = idAsiento;
+    }
+
+    public int getIdDiario() {
+        return idDiario;
+    }
+
+    public void setIdDiario(int idDiario) {
+        this.idDiario = idDiario;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
-    public String getFecha() {
-        return fecha;
+    public Date getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public Date getFechaCierre() {
+        return fechaCierre;
+    }
+
+    public void setFechaCierre(Date fechaCierre) {
+        this.fechaCierre = fechaCierre;
     }
 
     public String getNumero() {
@@ -37,22 +94,6 @@ public class Asiento {
         this.numero = numero;
     }
 
-    public String getReferencia() {
-        return referencia;
-    }
-
-    public void setReferencia(String referencia) {
-        this.referencia = referencia;
-    }
-
-    public String getDiario() {
-        return diario;
-    }
-
-    public void setDiario(String diario) {
-        this.diario = diario;
-    }
-
     public String getTotal() {
         return total;
     }
@@ -61,12 +102,12 @@ public class Asiento {
         this.total = total;
     }
 
-    public String getEstado() {
-        return estado;
+    public List<Movimientos> getMovimientos() {
+        return movimientos;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setMovimientos(List<Movimientos> movimientos) {
+        this.movimientos = movimientos;
     }
     
     

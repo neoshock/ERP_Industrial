@@ -1,16 +1,18 @@
-
 package com.contabilidad.models;
 
 public class SubCuenta {
-    private int id, cuenta;
+
+    private int id, cuenta, impuesto;
     private String codigo, nombre, tipo;
 
     public SubCuenta() {
+
     }
-    
-    public SubCuenta(int id, int cuenta, String codigo, String nombre, String tipo) {
+
+    public SubCuenta(int id, int cuenta, int impuesto, String codigo, String nombre, String tipo) {
         this.id = id;
         this.cuenta = cuenta;
+        this.impuesto = impuesto;
         this.codigo = codigo;
         this.nombre = nombre;
         this.tipo = tipo;
@@ -55,6 +57,12 @@ public class SubCuenta {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    
-    
+
+    public int getImpuesto() {
+        return impuesto;
+    }
+
+    public void setImpuesto(int impuesto) {
+        this.impuesto = impuesto;
+    }
 }

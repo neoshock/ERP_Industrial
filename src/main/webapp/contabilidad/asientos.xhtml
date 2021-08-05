@@ -4,111 +4,178 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <body>
-
         <ui:composition template="./templates/menuPrincipal.xhtml">
             <ui:define name="content">
-                   <h:form>
+                <h:form id="form">
+                    <p:growl id="msgs" showDetail="true"/>
                     <div class="card">
                         <p:toolbar>
                             <p:toolbarGroup>
-                                <p:commandButton value="Nuevo" icon="pi pi-plus" oncomplete="PF('detalleAsiento').show()">
+                                <p:commandButton value="Nuevo" action="#{asientoManagedBean.openNewAsiento()}"
+                                                 styleClass="ui-button-success" update="manage-asiento:" icon="pi pi-plus" 
+                                                 oncomplete="PF('detalleAsiento').show()">
+                                    <p:resetInput target="manage-asiento:"/>
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
-                        <p:dialog header="Nuevo Asiento Contable" showEffect="fade" modal="true"
-                                  widgetVar="detalleAsiento" responsive="true" width="70%"
+                        <p:dialog header="Asiento Contable" showEffect="fade" modal="true"
+                                  widgetVar="detalleAsiento" responsive="true" width="75%"
                                   draggable="false" height="450"> 
-                            <p:outputPanel id="manage-product-content" class="ui-fluid">
-                                <p:outputPanel>
+                            <p:outputPanel id="manage-asiento" class="ui-fluid">
+                                <p:outputPanel rendered="#{not empty asientoManagedBean.currentAsiento}">
                                     <div class="row">
                                         <div class="col-md-5 p-3" style=" margin-right: 90px;">
                                             <div class="row">
                                                 <div class="col-md-12 mb-2">
-                                                    <h5>Numero de asiento</h5>
-                                                    <p:inputText placeholder="Numero de Asiento"></p:inputText>
+                                                    <p:outputLabel value="Numero de Asiento:"></p:outputLabel>
+                                                    <p:inputText value="#{asientoManagedBean.currentAsiento.numero}" 
+                                                                 placeholder="Numero de Asiento" readonly="true"></p:inputText>
                                                 </div>
                                                 <div class="col-md-12 mb-2">
-                                                    <h5>Referencia</h5>
-                                                    <p:inputText placeholder="Referencia"></p:inputText>
+                                                    <p:outputLabel value="Documento: *"></p:outputLabel>
+                                                    
+                                                    <p:inputText disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}"
+                                                                 value="#{asientoManagedBean.currentAsiento.documento}" 
+                                                                 placeholder="Referencia"></p:inputText>
                                                 </div>
                                                 <div class="col-md-12 mb-1">
-                                                    <h5>Observaciones</h5>
-                                                    <p:inputTextarea rows="3" cols="33" autoResize="false"/>
+                                                    <p:outputLabel value="Detalle: *"></p:outputLabel>
+                                                    <p:inputTextarea disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}"
+                                                                     value="#{asientoManagedBean.currentAsiento.detalle}" 
+                                                                     rows="3" cols="33" autoResize="false"/>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-5 p-3">
                                             <div class="row">
                                                 <div class="col-md-12 mb-2">
-                                                    <h5>Fecha</h5>
-                                                    <p:datePicker locale="es"/>
+                                                    <p:outputLabel value="Fecha Creacion: *"></p:outputLabel>
+                                                    <p:calendar value="#{asientoManagedBean.currentAsiento.fechaCreacion}" 
+                                                                disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
+                                                        <p:ajax event="dateSelect" listener="#{asientoManagedBean.onFechaCreacionSelected}"/>
+                                                    </p:calendar>
                                                 </div>
                                                 <div class="col-md-12 mb-2">
-                                                    <h5>Diario</h5>
-                                                    <p:selectOneMenu id="city" value="#{selectOneMenuView.city}" editable="true">
-                                                        <f:selectItem itemLabel="CON-0001" itemValue=""/>
-                                                        <f:selectItem itemLabel="CON-0002" itemValue=""/>
-                                                        <f:selectItem itemLabel="CON-0003" itemValue=""/>
-                                                        <f:selectItem itemLabel="INV-0001" itemValue=""/>
-                                                        <f:selectItem itemLabel="INV-0002" itemValue=""/>
-                                                        <f:selectItem itemLabel="INV-0003" itemValue=""/>
+                                                    <p:outputLabel value="Fecha Cierre: *"></p:outputLabel>
+                                                    <p:calendar value="#{asientoManagedBean.currentAsiento.fechaCierre}" 
+                                                                disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
+                                                        <p:ajax event="dateSelect" listener="#{asientoManagedBean.onFechaCierreSelected}"/>
+                                                    </p:calendar>
+                                                </div>
+                                                <div class="col-md-12 mb-2">
+                                                    <p:outputLabel value="Diario:"></p:outputLabel>
+                                                    <p:selectOneMenu id="diario" value="#{asientoManagedBean.currentAsiento.idDiario}" editable="false" 
+                                                                     disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
+                                                        <f:selectItem itemLabel="DIA-CPC-01" itemValue="1"/>
                                                     </p:selectOneMenu>
                                                 </div>
                                                 <div class="col-md-12 mt-3">
-                                                    <p:selectOneRadio id="publicar" layout="responsive" columns="1">
-                                                        <f:selectItem itemLabel="Publicar" itemValue="publicar"/>
-                                                        <f:selectItem itemLabel="Por Revisar" itemValue="revisar"/>
-                                                    </p:selectOneRadio>
+                                                    <p:outputLabel value="Estado: *"></p:outputLabel>
+                                                    <p:selectOneMenu id="estado" value="#{asientoManagedBean.currentAsiento.estado}" editable="false" 
+                                                                     disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
+                                                        <f:selectItem itemLabel="Pendiente" itemValue="pendiente"/>
+                                                        <f:selectItem itemLabel="Publicado" itemValue="publicado"/>
+                                                        <f:selectItem itemLabel="Cerrado" itemValue="cerrado"/>
+                                                    </p:selectOneMenu>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
-                                        <div class="p-grid p-mt-3">
-                                            <div class="p-col-12">
-                                                <p:commandButton value="Añadir Fila"/>
-                                            </div>
+                                        <div class="col-md-2 mb-2">
+                                            <p:commandButton value="Agregar Fila"
+                                                             disabled="true"
+                                                             icon="pi pi-plus"  rendered="#{asientoManagedBean.currentAsiento.idAsiento != 0}"/>
                                         </div>
-                                        <p:dataTable id="dtCuentas" widgetVar="cuentasAsiento" var="product" value="#{dtAddRowView.products1}"
-                                                     editable="true">
+                                        <div class="col-md-12">
+                                            <p:dataTable id="dtMovimientos" var="movimiento" editable="true"
+                                                         value="#{asientoManagedBean.currentAsiento.movimientos}"
+                                                         rendered="#{asientoManagedBean.currentAsiento.idAsiento != 0}">
 
-                                            <p:column headerText="Cuenta">
-                                                <h:outputText value="#{product.code}" />
-                                            </p:column>
+                                                <p:ajax event="rowEdit" listener="#{asientoManagedBean.onLineaEdit}"/>
+                                                <p:ajax event="rowEditCancel"/>
 
-                                            <p:column headerText="Descripcion">
-                                                <h:outputText value="#{product.name}" />
-                                            </p:column>
+                                                <p:column headerText="Cuenta Contable">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output">
+                                                            <h:outputText value="#{asientoManagedBean.nombreCuenta(movimiento)}"></h:outputText>
+                                                        </f:facet>
+                                                        <f:facet name="input"> 
+                                                            <p:selectOneMenu id="cuentasContables" value="#{movimiento.idSubcuenta}">
+                                                                <f:selectItems value="#{asientoManagedBean.subCuentas}" var="subCuenta" 
+                                                                               itemLabel="#{subCuenta.codigo} #{subCuenta.nombre}" 
+                                                                               itemValue="#{subCuenta.id}"></f:selectItems>
+                                                            </p:selectOneMenu>
+                                                        </f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
 
-                                            <p:column headerText="Debe">
-                                                <h:outputText value="#{product.category}" />
-                                            </p:column>
+                                                <p:column headerText="Detalle">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output">
+                                                            <h:outputText value="#{movimiento.tipoMovimiento}"></h:outputText>
+                                                        </f:facet>
+                                                        <f:facet name="input"> 
+                                                            <p:inputText value="#{movimiento.tipoMovimiento}"></p:inputText>
+                                                        </f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
 
-                                            <p:column headerText="Haber">
-                                                <h:outputText value="#{product.quantity}" />
-                                            </p:column>
-                                        </p:dataTable>
-                                        <div class="row justify-content-end w-100">
-                                            <div class="col-md-2 d-flex mr-5">
-                                                <h:outputText value="$0.00"></h:outputText>
-                                            </div>
-                                            <p:divider layout="vertical"></p:divider>
-                                            <div class="col-md-3 d-flex">
-                                                <h:outputText value="$0.00"></h:outputText>
-                                            </div>
+                                                <p:column headerText="Debe">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output">
+                                                            <h:outputText value="#{movimiento.debe}"></h:outputText>
+                                                        </f:facet>
+                                                        <f:facet name="input"> 
+                                                            <p:inputNumber value="#{movimiento.debe}">
+                                                                <p:ajax event="blur" update=":form:manage-asiento" process="@this" listener="#{asientoManagedBean.updateTotalDebe}"/>
+                                                            </p:inputNumber>
+                                                        </f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+
+                                                <p:column headerText="Haber">
+                                                    <p:cellEditor>
+                                                        <f:facet name="output">
+                                                            <h:outputText value="#{movimiento.haber}"></h:outputText>
+                                                        </f:facet>
+                                                        <f:facet name="input"> 
+                                                            <p:inputNumber value="#{movimiento.haber}">
+                                                                <p:ajax event="blur" update=":form:manage-asiento" process="@this" listener="#{asientoManagedBean.updateTotalHaber}"/>
+                                                            </p:inputNumber>
+                                                        </f:facet>
+                                                    </p:cellEditor>
+                                                </p:column>
+
+                                                <p:column rendered="#{asientoManagedBean.currentAsiento.estado != 'cerrado'}" style="width:6rem">
+                                                    <p:rowEditor editTitle="Edit Row" cancelTitle="Cancel Edit" saveTitle="Save Row"/>
+                                                </p:column>
+
+                                                <f:facet name="footer">
+                                                    <div class="row justify-content-end" style="width: 90%">
+                                                        <div class="col-md-3">
+                                                            <p:inputNumber id="tDebe" label="Total Debe" value="#{asientoManagedBean.totalDebe}" readonly="true"></p:inputNumber>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <p:inputNumber id="tHaber" label="Total Haber" value="#{asientoManagedBean.totalHaber}" readonly="true"></p:inputNumber>
+                                                        </div>
+                                                    </div>
+                                                </f:facet>
+                                            </p:dataTable>
                                         </div>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
                             <f:facet name="footer">
-                                <p:commandButton value="Agregar" icon="pi pi-check" update="manage-product-content" 
-                                                 process="manage-product-content @this"/>
-                                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('detalleAsiento').hide()"
-                                                 class="ui-button-secondary"/>
+                                <p:commandButton value="Guardar" actionListener="#{asientoManagedBean.newAsientoContable}" 
+                                                 icon="pi pi-check" update=":form:manage-asiento, :form:dtAsientos, msgs"
+                                                 process="manage-asiento @this" styleClass="ui-button-success"/>
+                                <p:commandButton value="Cerrar" icon="pi pi-times" onclick="PF('detalleAsiento').hide()" 
+                                                 styleClass="ui-button-danger"/>
                             </f:facet>
                         </p:dialog>
                         <p:dataTable id="dtAsientos" widgetVar="asientosTable" var="asiento" 
@@ -123,21 +190,23 @@
                                     </span>
                                 </div>
                             </f:facet>
-                            
-                            <p:column headerText="Fecha" sortBy="#{asiento.fecha}">
-                                <h:outputText value="#{asiento.fecha}" />
+
+                            <p:column headerText="Fecha" sortBy="#{asiento.fechaCreacion}">
+                                <h:outputText value="#{asiento.fechaCreacion}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
                             </p:column>
 
                             <p:column headerText="Numero" sortBy="#{asiento.numero}">
                                 <h:outputText value="#{asiento.numero}" />
                             </p:column>
 
-                            <p:column headerText="Referencia" sortBy="#{asiento.referencia}">
-                                <h:outputText value="#{asiento.referencia}" />
+                            <p:column headerText="Referencia" sortBy="#{asiento.documento}">
+                                <h:outputText value="#{asiento.documento}" />
                             </p:column>
 
-                            <p:column headerText="Diario" sortBy="#{asiento.diario}">
-                                <h:outputText value="#{asiento.diario}" />
+                            <p:column headerText="Diario" sortBy="#{asiento.idDiario}">
+                                <h:outputText value="#{asiento.idDiario}" />
                             </p:column>
 
                             <p:column headerText="Total" sortBy="#{asiento.total}">
@@ -145,21 +214,28 @@
                             </p:column>
 
                             <p:column headerText="Estado" sortBy="#{asiento.estado}">
-                                <p:chip rendered="#{asiento.estado eq 'Publicado'}" styleClass="p-mr-2 custom-chip" class="bg-success">
+                                <p:chip rendered="#{asiento.estado eq 'publicado'}" styleClass="p-mr-2 custom-chip" class="bg-success">
                                     <h:outputText class="text-light" value="#{asiento.estado}"/>
                                 </p:chip>
-                                <p:chip rendered="#{asiento.estado eq 'Pendiente'}" styleClass="p-mr-2 custom-chip" class="bg-warning">
+                                <p:chip rendered="#{asiento.estado eq 'pendiente'}" styleClass="p-mr-2 custom-chip" class="bg-warning">
                                     <h:outputText class="text-light" value="#{asiento.estado}"/>
                                 </p:chip>
-                                <p:chip rendered="#{asiento.estado eq 'Deshabilitado'}" styleClass="p-mr-2 custom-chip" class="bg-danger">
+                                <p:chip rendered="#{asiento.estado eq 'cerrado'}" styleClass="p-mr-2 custom-chip" class="bg-danger">
                                     <h:outputText class="text-light" value="#{asiento.estado}"/>
                                 </p:chip>
+                            </p:column>
+                            <p:column headerText="Acciones">
+                                <p:commandButton icon="pi pi-pencil" update=":form:manage-asiento"
+                                                 oncomplete="PF('detalleAsiento').show()" action="#{asientoManagedBean.calculateTotal()}" 
+                                                 styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                    <f:setPropertyActionListener value="#{asiento}" target="#{asientoManagedBean.currentAsiento}"/>
+                                    <p:resetInput target=":form:manage-asiento"/>
+                                </p:commandButton>
                             </p:column>
                         </p:dataTable>
                     </div>
                 </h:form>
             </ui:define>
-
         </ui:composition>
 
     </body>

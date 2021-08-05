@@ -1,19 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 * {
     padding: 0px;
     margin: 0px;
+    font-family: 'Roboto', sans-serif;
 }
 
-.navbar {
+.navbar-principal {
     height: 75px;
     color: #E2EAF6;
     background-color: #445976;
     margin-bottom: 10px;
-    
-
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border-radius: 2px;
+}
+
+.navbar-principal h2 {
+    font-size: 27px;
+    font-weight: bold;
 }
 
 .containerWelcome {

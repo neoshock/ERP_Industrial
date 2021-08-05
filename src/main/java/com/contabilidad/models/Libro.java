@@ -2,33 +2,43 @@ package com.contabilidad.models;
 
 public class Libro {
     
-    private String cuenta;
+    private String codigo;
+    private String nombre;
     private String Fecha;
     private String Asiento;
     private String Descripcion;
-    private String debe;
-    private String haber;
-    private String saldo;
+    private double debe;
+    private double haber;
+    private double saldo;
 
-    public Libro(String cuenta, String Fecha, String Asiento, String Descripcion, String debe, String haber, String saldo) {
-        this.cuenta = cuenta;
+    public Libro(String codigo, String nombre, String Fecha, String Asiento, String Descripcion, double debe, double haber) {
+        this.codigo = codigo;
+        this.nombre = nombre;
         this.Fecha = Fecha;
         this.Asiento = Asiento;
         this.Descripcion = Descripcion;
         this.debe = debe;
         this.haber = haber;
-        this.saldo = saldo;
     }
 
     public Libro() {
-    }
-    
-    public String getCuenta() {
-        return cuenta;
+        
     }
 
-    public void setCuenta(String cuenta) {
-        this.cuenta = cuenta;
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getFecha() {
@@ -55,28 +65,29 @@ public class Libro {
         this.Descripcion = Descripcion;
     }
 
-    public String getDebe() {
+    public double getDebe() {
         return debe;
     }
 
-    public void setDebe(String debe) {
+    public void setDebe(double debe) {
         this.debe = debe;
     }
 
-    public String getHaber() {
+    public double getHaber() {
         return haber;
     }
 
-    public void setHaber(String haber) {
+    public void setHaber(double haber) {
         this.haber = haber;
     }
 
-    public String getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(String saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
-
+    
+    
 }
