@@ -12,7 +12,7 @@
 **5/08/2021** 
 - Se puede registrar **Cuentas Contables** 
 - Registro y generación de **Asiento Contables** 
-- Generar imforme de ***Libro Mayor*** (Pendiente de Revisión)
+- Generar informe de ***Libro Mayor*** (Pendiente de Revisión)
 
 ### Actualizaciones Pendientes
 | Función o Proceso | Descripción |
