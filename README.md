@@ -18,5 +18,5 @@
 | Función o Proceso | Descripción |
 | ------------- | ------------- |
 | Asiento Contable | Agregar mas filas al realizar operaciones con los Asientos |
-| Imforme de Libro Mayor | Poder genera el Imforme en archivo PDF |
+| Informe de Libro Mayor | Poder genera el Imforme en archivo PDF |
 | Cuenta contables | Bugs Pendientes de reparar |
