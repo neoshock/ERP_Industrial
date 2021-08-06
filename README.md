@@ -1,6 +1,6 @@
 ## Modulo de contabilidad.
 
-### integrantes: 
+### Integrantes: 
 1. Alcivar Lino
 2. De la Cruz Luis
 
