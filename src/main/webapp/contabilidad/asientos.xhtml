@@ -202,8 +202,9 @@
                                              onclick="PF('editarAsiento').hide()"/>
                         </p:confirmDialog>
                         <p:dataTable id="dtAsientos" widgetVar="asientosTable" var="asiento" 
-                                     value="#{asientoManagedBean.asientos}" reflow="true" paginator="true" 
-                                     rows="7" rowSelectMode="add" paginatorPosition="bottom">
+                                     value="#{asientoManagedBean.asientos}" reflow="true" paginator="true"
+                                     selection="#{asientoManagedBean.currentAsiento}"
+                                     rows="7" rowSelectMode="add" paginatorPosition="bottom" rowKey="#{asiento.numero}" >
                             <f:facet name="header">
                                 <div class="products-table-header">
                                     <span style="font-weight: bold; margin-right: 6px;">Asientos Contables</span>

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AsientoDAO {
-
+    
     private Conexion conexion = new Conexion();
     private Connection connection;
     private Statement statement;

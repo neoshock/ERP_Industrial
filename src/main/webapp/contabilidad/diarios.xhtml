@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./templates/menuPrincipal.xhtml">
+
+            <ui:define name="content">
+                <h:form id="diario-form">
+                    <p:growl id="growl" showDetail="true"/>
+                    <p:toolbar>
+                        <p:toolbarGroup>
+                            <p:commandButton value="Nuevo" styleClass="ui-button-success" icon="pi pi-plus"
+                                             update=":diario-form:manage-diario-form" actionListener="#{diarioManagedBean.openNewDiario}"
+                                             oncomplete="PF('diarioFormDialog').show()"></p:commandButton>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                    <div class="card">
+                        <p:dataTable id="dtDiarioContable" var="diario" value="#{diarioManagedBean.diariosContables}" reflow="true"
+                                     paginator="true" rows="10" paginatorPosition="bottom">
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{diario.nombre}" />
+                            </p:column>
+
+                            <p:column headerText="Fecha Apertura">
+                                <h:outputText value="#{diario.fechaApertura}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Fecha Cierre">
+                                <h:outputText value="#{diario.fechaCierre}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column headerText="Descripcion">
+                                <h:outputText value="#{diario.descripcion}" />
+                            </p:column>
+
+                            <p:column exportable="false">
+                                <p:commandButton icon="pi pi-pencil" update=":diario-form:manage-diario-form"
+                                                 oncomplete="PF('diarioFormDialog').show()"
+                                                 styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                    <f:setPropertyActionListener value="#{diario}" target="#{diarioManagedBean.onSelectedDiaio}"/>
+                                    <p:resetInput target=":diario-form:manage-diario-form"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <p:dialog header="Diario Contable" widgetVar="diarioFormDialog" 
+                                  showEffect="fade" modal="true" responsive="true" 
+                                  width="50%" draggable="false">
+                            <p:outputPanel id="manage-diario-form" class="ui-fluid">
+                                <p:outputPanel rendered="#{not empty diarioManagedBean.onSelectedDiaio}">
+                                    <div class="p-field">
+                                        <p:outputLabel>Nombre: *</p:outputLabel>
+                                        <p:inputText value="#{diarioManagedBean.onSelectedDiaio.nombre}" maxlength="15" placeholder="Siglas del diario"></p:inputText>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel>Fecha Apertura: *</p:outputLabel>
+                                        <p:calendar value="#{diarioManagedBean.onSelectedDiaio.fechaApertura}"></p:calendar>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel>Fecha de Cierre: *</p:outputLabel>
+                                        <p:calendar value="#{diarioManagedBean.onSelectedDiaio.fechaCierre}"></p:calendar>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel>Descripción:</p:outputLabel>
+                                        <p:inputTextarea value="#{diarioManagedBean.onSelectedDiaio.descripcion}" maxlength="45" placeholder="Breve descripción del Diario maximo 45 caracteres"></p:inputTextarea>
+                                    </div>
+                                    <div class="p-grid p-jc-end">
+                                        <div class="p-col-3">
+                                            <p:commandButton value="Guardar" actionListener="#{diarioManagedBean.saveDiario}"
+                                                             update="manage-diario-form, :diario-form:dtDiarioContable, :diario-form:growl"
+                                                             process="manage-diario-form @this" icon="pi pi-check" 
+                                                             styleClass="ui-button-success"></p:commandButton>
+                                        </div>
+                                        <div class="p-col-3">
+                                            <p:commandButton value="Cancelar" update="manage-diario-form" 
+                                                             onclick="PF('diarioFormDialog').hide()" icon="pi pi-times" 
+                                                             styleClass="ui-button-danger"></p:commandButton>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </div>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
