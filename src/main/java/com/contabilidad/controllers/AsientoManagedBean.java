@@ -2,7 +2,7 @@ package com.contabilidad.controllers;
 
 import com.contabilidad.dao.AsientoDAO;
 import com.contabilidad.models.Asiento;
-import com.contabilidad.models.Movimientos;
+import com.contabilidad.models.Movimiento;
 import com.contabilidad.models.SubCuenta;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -12,9 +12,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.html.HtmlSelectOneMenu;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
@@ -29,6 +27,7 @@ public class AsientoManagedBean implements Serializable {
     private Date fechaCreacion;
     private Date fechaCierre;
     private List<SubCuenta> subCuentas = new ArrayList<>();
+    private Movimiento selectedMovimiento;
     private double totalDebe;
     private double totalHaber;
 
@@ -59,17 +58,24 @@ public class AsientoManagedBean implements Serializable {
     }
 
     public void newAsientoContable() {
-        System.out.println("####Cantidad: " + currentAsiento.getDetalle().length());
         if (currentAsiento.getIdAsiento() == 0) {
-            if (!currentAsiento.getDocumento().isEmpty() && !currentAsiento.getDetalle().isEmpty()) {
-                asientoDAO.addAsientoContable(currentAsiento);
-                currentAsiento = new Asiento();
-                fechaCreacion = new Date();
-                fechaCierre = new Date();
-                asientos = asientoDAO.getAsientosContables();
-                showInfo("Se ha registrado un nuevo Asiento");
-                openNewAsiento();
-            }else{
+            if (!currentAsiento.getDocumento().isEmpty() && !currentAsiento.getDetalle().isEmpty()
+                    && currentAsiento.getFechaCreacion() != null && currentAsiento.getFechaCierre() != null
+                    && currentAsiento.getMovimientos().size() > 0) {
+                if (totalDebe == totalHaber && totalDebe != 0 && totalHaber != 0) {
+                    currentAsiento.setTotal(Double.toString(totalDebe));
+                    asientoDAO.addAsientoContable(currentAsiento);
+                    currentAsiento = new Asiento();
+                    fechaCreacion = new Date();
+                    fechaCierre = new Date();
+                    asientos = asientoDAO.getAsientosContables();
+                    showInfo("Se ha registrado un nuevo Asiento");
+                    openNewAsiento();
+                }else {
+                    showWarn("Los valores del debe y el haber deben coincidir, y ser diferentes a cero");
+                }
+
+            } else {
                 showWarn("Uno o mas datos no han sido registrados");
             }
         } else {
@@ -83,8 +89,8 @@ public class AsientoManagedBean implements Serializable {
             }
         }
     }
-    
-    public String nombreCuenta(Movimientos movimiento){
+
+    public String nombreCuenta(Movimiento movimiento) {
         SubCuenta cuenta = asientoDAO.getCuentaByID(movimiento.getIdSubcuenta());
         String codigo = cuenta.getCodigo();
         String nombre = cuenta.getNombre();
@@ -95,6 +101,9 @@ public class AsientoManagedBean implements Serializable {
         currentAsiento = new Asiento();
         String numero = "ASC-0" + (asientoDAO.getCountAsientos() + 1);
         currentAsiento.setNumero(numero);
+        currentAsiento.setMovimientos(new ArrayList<>());
+        totalDebe = 0;
+        totalHaber = 0;
     }
 
     public void onFechaCreacionSelected(SelectEvent<Date> event) {
@@ -135,12 +144,34 @@ public class AsientoManagedBean implements Serializable {
         totalHaber = th;
     }
 
+    public void cleanNotChangeAsientos() {
+        currentAsiento.getMovimientos().forEach((m) -> {
+            if (m.getIdMovimiento() == 0) {
+                currentAsiento.getMovimientos().remove(m);
+            }
+        });
+    }
+
+    public void addNewFila() {
+        Movimiento movimiento = new Movimiento();
+        movimiento.setIdMovimiento(0);
+        currentAsiento.getMovimientos().add(movimiento);
+        updateTotalDebe();
+        updateTotalHaber();
+    }
+
+    public void deleteFila() {
+        currentAsiento.getMovimientos().remove(this.selectedMovimiento);
+        updateTotalDebe();
+        updateTotalHaber();
+    }
+
     public void calculateTotal() {
         updateTotalDebe();
         updateTotalHaber();
     }
 
-    public void onLineaEdit(RowEditEvent<Movimientos> event) {
+    public void onLineaEdit(RowEditEvent<Movimiento> event) {
 
     }
 
@@ -194,6 +225,14 @@ public class AsientoManagedBean implements Serializable {
 
     public void setTotalHaber(double totalHaber) {
         this.totalHaber = totalHaber;
+    }
+
+    public Movimiento getSelectedMovimiento() {
+        return selectedMovimiento;
+    }
+
+    public void setSelectedMovimiento(Movimiento selectedMovimiento) {
+        this.selectedMovimiento = selectedMovimiento;
     }
 
 }

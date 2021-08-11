@@ -13,7 +13,7 @@ public class Asiento {
     Date fechaCierre;
     String numero;
     String total;
-    List<Movimientos> movimientos;
+    List<Movimiento> movimientos;
 
     public Asiento(int idAsiento, int idDiario, String documento, String detalle, String estado, Date fechaCreacion, Date fechaCierre, String numero, String total) {
         this.idAsiento = idAsiento;
@@ -102,11 +102,11 @@ public class Asiento {
         this.total = total;
     }
 
-    public List<Movimientos> getMovimientos() {
+    public List<Movimiento> getMovimientos() {
         return movimientos;
     }
 
-    public void setMovimientos(List<Movimientos> movimientos) {
+    public void setMovimientos(List<Movimiento> movimientos) {
         this.movimientos = movimientos;
     }
     
