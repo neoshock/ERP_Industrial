@@ -50,6 +50,10 @@
                                     <f:setPropertyActionListener value="#{diario}" target="#{diarioManagedBean.onSelectedDiaio}"/>
                                     <p:resetInput target=":diario-form:manage-diario-form"/>
                                 </p:commandButton>
+                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
+                                                 oncomplete="PF('deleteDiarioDialog').show()">
+                                    <f:setPropertyActionListener value="#{diario}" target="#{diarioManagedBean.onSelectedDiaio}"/>
+                                </p:commandButton>
                             </p:column>
                         </p:dataTable>
                         <p:dialog header="Diario Contable" widgetVar="diarioFormDialog" 
@@ -89,6 +93,15 @@
                                 </p:outputPanel>
                             </p:outputPanel>
                         </p:dialog>
+                        
+                        <p:confirmDialog widgetVar="deleteDiarioDialog" showEffect="fade" width="40%"
+                                         message="Seguro desea eliminar el Diario seleccionado? #{diarioManagedBean.onSelectedDiaio.nombre}" header="Eliminar Diario" severity="warn">
+                            <p:commandButton value="Si" icon="pi pi-check" actionListener="#{diarioManagedBean.deleteDiario}"
+                                             update=":diario-form:dtDiarioContable, :diario-form:growl"
+                                             process="@this" oncomplete="PF('deleteDiarioDialog').hide()"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                             onclick="PF('deleteDiarioDialog').hide()"/>
+                        </p:confirmDialog>
                     </div>
                 </h:form>
             </ui:define>

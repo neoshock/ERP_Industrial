@@ -104,4 +104,18 @@ public class DiarioDAO {
             return false;
         }
     }
+
+    public String deleteDiario(int idDiario) {
+        conexion.conectar();
+        String sql = String.format("delete from diariocontable where iddiario = '%1$d'", idDiario);
+        try {
+            connection = conexion.getConnection();
+            statement = connection.createStatement();
+            statement.executeUpdate(sql);
+            return "Eliminacion Exitosa";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return e.getMessage();
+        }
+    }
 }

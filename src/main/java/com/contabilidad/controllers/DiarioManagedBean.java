@@ -78,6 +78,16 @@ public class DiarioManagedBean implements Serializable {
             }
         }
     }
+    
+    public void deleteDiario(){
+        String result = diarioAccess.deleteDiario(onSelectedDiaio.getIdDiario());
+        if (result.equals("Eliminacion Exitosa")) {
+            showInfo("Diario Eliminado exitosamente");
+            diariosContables = diarioAccess.getDiariosContables();
+        }else{
+            showWarn(String.format("El Diario %1$s tiene Asientos registrados",onSelectedDiaio.getNombre()));
+        }
+    }
 
     public boolean validateDiario() {
         String actualNombre = onSelectedDiaio.getNombre();

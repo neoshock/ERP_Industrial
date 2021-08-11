@@ -73,7 +73,9 @@
                                                     <p:outputLabel value="Diario:"></p:outputLabel>
                                                     <p:selectOneMenu id="diario" value="#{asientoManagedBean.currentAsiento.idDiario}" editable="false" 
                                                                      disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
-                                                        <f:selectItem itemLabel="DIA-CPC-01" itemValue="1"/>
+                                                        <f:selectItems value="#{asientoManagedBean.diarios}" var="diario" 
+                                                                       itemLabel="#{diario.nombre}" 
+                                                                       itemValue="#{diario.idDiario}"></f:selectItems>
                                                     </p:selectOneMenu>
                                                 </div>
                                                 <div class="col-md-12 mt-2">

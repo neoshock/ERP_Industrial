@@ -1,7 +1,9 @@
 package com.contabilidad.controllers;
 
 import com.contabilidad.dao.AsientoDAO;
+import com.contabilidad.dao.DiarioDAO;
 import com.contabilidad.models.Asiento;
+import com.contabilidad.models.Diario;
 import com.contabilidad.models.Movimiento;
 import com.contabilidad.models.SubCuenta;
 import java.io.Serializable;
@@ -27,9 +29,11 @@ public class AsientoManagedBean implements Serializable {
     private Date fechaCreacion;
     private Date fechaCierre;
     private List<SubCuenta> subCuentas = new ArrayList<>();
+    private DiarioDAO diarioAccess = new DiarioDAO();
     private Movimiento selectedMovimiento;
     private double totalDebe;
     private double totalHaber;
+    List<Diario> diarios = new ArrayList<>();
 
     @PostConstruct
     public void main() {
@@ -102,6 +106,7 @@ public class AsientoManagedBean implements Serializable {
         String numero = "ASC-0" + (asientoDAO.getCountAsientos() + 1);
         currentAsiento.setNumero(numero);
         currentAsiento.setMovimientos(new ArrayList<>());
+        diarios = diarioAccess.getDiariosContables();
         totalDebe = 0;
         totalHaber = 0;
     }
@@ -235,4 +240,11 @@ public class AsientoManagedBean implements Serializable {
         this.selectedMovimiento = selectedMovimiento;
     }
 
+    public List<Diario> getDiarios() {
+        return diarios;
+    }
+
+    public void setDiarios(List<Diario> diarios) {
+        this.diarios = diarios;
+    }
 }
