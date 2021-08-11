@@ -14,6 +14,9 @@
 - Registro y generación de **Asiento Contables** 
 - Generar informe de ***Libro Mayor*** (Pendiente de Revisión)
 
+**11/08/2021** 
+- Optimizacion de procesos para la creacion de **Asiento Contables** 
+
 ### Actualizaciones Pendientes
 | Función o Proceso | Descripción |
 | ------------- | ------------- |
