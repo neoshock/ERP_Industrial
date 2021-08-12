@@ -23,6 +23,7 @@ public class SubGrupoDAO {
     
     public List<SubGrupo> getSubGrupos() {
         result = conexion.consultar("select getsubgruposcuenta()");
+        listaSubgrupo = new ArrayList<>();
         try {
             while (result.next()) {
                 //System.out.println(result.getString("getgrupocuenta"));

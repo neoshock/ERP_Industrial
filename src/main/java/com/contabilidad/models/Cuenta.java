@@ -2,33 +2,34 @@
 package com.contabilidad.models;
 
 public class Cuenta {
-    private int id, subgrupo;
+    private int idcuenta, idsubgrupo;
     private String codigo, nombre;
 
-    public Cuenta(int id, int subgrupo, String codigo, String nombre) {
-        this.id = id;
-        this.subgrupo = subgrupo;
+    public Cuenta(int idcuenta, int idsubgrupo, String codigo, String nombre) {
+        this.idcuenta = idcuenta;
+        this.idsubgrupo = idsubgrupo;
         this.codigo = codigo;
         this.nombre = nombre;
     }
 
+    
     public Cuenta() {
     }
-    
-    public int getId() {
-        return id;
+
+    public int getIdcuenta() {
+        return idcuenta;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdcuenta(int idcuenta) {
+        this.idcuenta = idcuenta;
     }
 
-    public int getSubgrupo() {
-        return subgrupo;
+    public int getIdsubgrupo() {
+        return idsubgrupo;
     }
 
-    public void setSubgrupo(int subgrupo) {
-        this.subgrupo = subgrupo;
+    public void setIdsubgrupo(int idsubgrupo) {
+        this.idsubgrupo = idsubgrupo;
     }
 
     public String getCodigo() {
@@ -49,7 +50,7 @@ public class Cuenta {
 
     @Override
     public String toString() {
-        return "Cuenta{" + "id=" + id + ", subgrupo=" + subgrupo + ", codigo=" + codigo + ", nombre=" + nombre + '}';
+        return "Cuenta{" + "idcuenta=" + idcuenta + ", idsubgrupo=" + idsubgrupo + ", codigo=" + codigo + ", nombre=" + nombre + '}';
     }
     
     
