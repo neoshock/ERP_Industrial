@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./templates/menuPrincipal.xhtml">
+
+            <ui:define name="content">
+                <h:form id="form-subgrupos">
+                    <p:growl id="messages" showDetail="true" />
+
+                    <p:dialog modal="true" draggable="false" id="dialog-form-subgrupo"
+                              header="Agregar Subgrupo" widgetVar="dialogFormSubGrupo"
+                              responsive="true" width="60%" closeOnEscape="true">
+                        <p:outputPanel id="manage-subgrupo-content">
+                            <div class="ui-fluid" >
+                                <div class="p-field">
+                                    <p:outputLabel for="@next" value="Grupo: *" />
+                                    <p:selectOneMenu id="subgrupo" 
+                                                     value="#{planCuentas.onSeletedSubgrupo}" 
+                                                     filter="true" filterMatchMode="startsWith">
+                                        <p:ajax listener="#{planCuentas.onSubGrupoChange}" 
+                                                update="codigo" />
+                                        <f:selectItem itemLabel="Selecciona subgrupo" 
+                                                      itemValue="0" 
+                                                      noSelectionOption="true"/>
+                                        <f:selectItems value="#{planCuentas.subgrupos}" 
+                                                       var="subgrupo"
+                                                       itemLabel="#{subgrupo.nombre}" 
+                                                       itemValue="#{subgrupo.id}"/> <!-- codigo -->
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="p-field">
+                                    <p:outputLabel for="@next" value="Código: *"/>
+                                    <p:inputText id="codigo" 
+                                                 value="#{grupoMB.grupo.codigo}"
+                                                 readonly="true"/>
+                                </div>
+                                <div class="p-field">
+                                    <p:outputLabel for="@next" value="Nombre *"/>
+                                    <p:inputText id="nombre" 
+                                                 value="#{grupoMB.grupo.nombre}"
+                                                 />
+                                </div>
+                            </div>
+                            <div class="p-jc-end">
+                                <p:commandButton rendered="#{grupoMB.action eq 'create'}" 
+                                                 value="Guardar" icon="pi pi-check" 
+                                                 action="#{grupoMB.create()}"
+                                                 styleClass="ui-button-success"
+                                                 update="messages, tblSubgrupo"
+                                                 />
+                                <p:commandButton rendered="#{grupoMB.action eq 'update'}" 
+                                                 value="Actualizar" icon="pi pi-check" 
+                                                 action="#{grupoMB.edit()}"
+                                                 styleClass="ui-button-success"
+                                                 update="messages, tblSubgrupo"
+                                                 />
+                            </div>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <p:commandButton styleClass="ui-button-success"
+                                                 icon="pi pi-plus" value="Nuevo"
+                                                 action="#{subGrupoMB.form(false)}"
+                                                 update="dialog-form-subgrupo">
+                                    <f:setPropertyActionListener value="create" 
+                                                                 target="#{subGrupoMB.action}" />
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+                        <p:dataTable var="subgrupo" value="#{subGrupoMB.listaSubGrupos}" 
+                                     paginator="true" rows="5" paginatorPosition="bottom" 
+                                     sortMode="single" id="tblSubgrupo">
+                            <p:column headerText="Código" sortBy="#{subgrupo.codigo}">
+                                <h:outputText value="#{subgrupo.codigo}" />
+                            </p:column>
+                            <p:column headerText="Grupo" sortBy="#{subgrupo.grupo}">
+                                <h:outputText value="#{subgrupo.grupo}" />
+                            </p:column>
+                            <p:column headerText="Nombre" sortBy="#{subgrupo.nombre}">
+                                <h:outputText value="#{subgrupo.nombre}" />
+                            </p:column>
+                            <p:column exportable="false" width="10%">
+                                <p:commandButton icon="pi pi-pencil"
+                                                 styleClass="edit-button rounded-button ui-button-primary" process="@this">
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

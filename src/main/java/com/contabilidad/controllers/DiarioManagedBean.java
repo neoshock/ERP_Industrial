@@ -22,6 +22,7 @@ public class DiarioManagedBean implements Serializable {
 
     @PostConstruct
     public void init() {
+        System.out.println("PostConstruct");
         diariosContables = diarioAccess.getDiariosContables();
     }
 

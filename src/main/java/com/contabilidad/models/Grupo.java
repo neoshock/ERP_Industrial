@@ -1,6 +1,8 @@
 
 package com.contabilidad.models;
 
+import java.io.Serializable;
+
 public class Grupo {
     private int id;
     private String codigo, nombre;
@@ -37,4 +39,11 @@ public class Grupo {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    @Override
+    public String toString() {
+        return "Grupo{" + "id=" + id + ", codigo=" + codigo + ", nombre=" + nombre + '}';
+    }
+    
+    
 }
