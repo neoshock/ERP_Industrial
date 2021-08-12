@@ -31,3 +31,15 @@
     display: block;
     margin: 0px auto;
 }
+
+
+
+@media screen and (max-width: 550px) {
+    .modal-grupo {
+        width: 90% !important;
+    }
+
+    .form-grupo {
+        width: 500px !important;
+    }
+}

@@ -142,7 +142,7 @@ public class PlanContableDAO {
             result = conexion.ejecutar(sql);
             result.next();
             return 1;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Error insertar Grupo" + e.getMessage());
         }
         return -1;

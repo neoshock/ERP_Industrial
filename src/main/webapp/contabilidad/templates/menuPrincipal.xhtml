@@ -31,14 +31,19 @@
             <div id="left">
                 <ui:insert name="left">
                     <h:form>
-                        <p:growl>
+                        <!--<p:growl>
                             <p:autoUpdate/>
-                        </p:growl>
+                        </p:growl>-->
                         <p:panelMenu>
                             <p:submenu label="Contabilidad">
                                 <p:menuitem value="Inicio" outcome="home"/>
                                 <p:menuitem value="Cuentas" outcome="planCuentas" />
                                 <p:menuitem value="Asientos" outcome="asientos"/>
+                                <p:submenu label="Plan de Cuentas">
+                                    <p:menuitem value="Grupos" outcome="pcGrupos"></p:menuitem>
+                                    <p:menuitem value="Subgrupos" outcome="pcSubgrupos"></p:menuitem>
+                                    <p:menuitem value="Cuentas" outcome="pcCuentas"></p:menuitem>
+                                </p:submenu>
                                 <p:submenu label="Informes">
                                     <p:menuitem value="Balance General" outcome="balanceGeneral"></p:menuitem>
                                     <p:menuitem value="Ganancias y Perdidas" outcome="gananciasPerdidas"></p:menuitem>
@@ -50,8 +55,7 @@
                 </ui:insert>
             </div>
             <div id="content" class="left_content">
-                <ui:insert name="content">
-                </ui:insert>
+                <ui:insert name="content"></ui:insert>
             </div>
         </div>
     </h:body>

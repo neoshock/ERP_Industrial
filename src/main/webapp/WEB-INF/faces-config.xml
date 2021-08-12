@@ -49,6 +49,18 @@
             <from-outcome>libroMayor</from-outcome>
             <to-view-id>/contabilidad/libroMayor.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>pcGrupos</from-outcome>
+            <to-view-id>/contabilidad/pcGrupos.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>pcSubgrupos</from-outcome>
+            <to-view-id>/contabilidad/pcSubgrupos.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>pcCuentas</from-outcome>
+            <to-view-id>/contabilidad/pcCuentas.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     <application>
         <action-listener>org.primefaces.application.DialogActionListener</action-listener>

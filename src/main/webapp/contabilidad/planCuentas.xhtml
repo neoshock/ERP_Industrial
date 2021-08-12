@@ -27,125 +27,20 @@
                             </p:toolbarGroup>
                         </p:toolbar>
 
-                        <p:dialog header="Cuenta" showEffect="fade" modal="true"
-                                  widgetVar="manageProductDialog" responsive="true"
-                                  draggable="false" width="70%">
-                            <p:outputPanel id="manage-product-content" class="ui-fluid">
-                                <p:outputPanel>
-                                    <div class="ui-fluid p-formgrid p-grid">
-                                        <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Código"/>
-                                            <p:inputText id="codigo" value="#{planCuentas.codigo}" readonly="true" />
-                                        </div>
+                        <p:dataTable var="pc" value="#{planCuentas.cuentasContables}" paginator="true"
+                                     rows="7" paginatorPosition="bottom" sortMode="single"
+                                     id="planCuentaDt" widgetVar="dtPlanCuentas" reflow="true">
+                            <f:facet name="header">
+                                <div class="products-table-header">
+                                    <span style="font-weight: bold">Cuentas</span>
 
-                                        <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Grupo*"/>
-                                            <p:selectOneMenu id="grupo" value="#{planCuentas.onSeletedGrupo}"
-                                                             panelStyle="width:180px"
-                                                             filter="true" filterMatchMode="startsWith">
-                                                <p:ajax listener="#{planCuentas.onGrupoChange}" update="codigo, subgrupo" />
-                                                <f:selectItem itemLabel="Selecciona grupo" itemValue="" noSelectionOption="true"/>
-                                                <f:selectItems value="#{planCuentas.grupos}" var="grupo"
-                                                               itemLabel="#{grupo.nombre}" itemValue="#{grupo.codigo}"/>
-                                            </p:selectOneMenu>
-                                            <div class="p-grid mt-1">
-                                                <div class="p-col-10">
-                                                    <p:inputText id="intoGrupo" value="#{planCuentas.intoGrupo.nombre}" />
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:commandButton  icon="pi pi-plus" />
-                                                    <p:commandButton icon="pi pi-plus" 
-                                                                     action="#{planCuentas.registrarGrupo()}"
-                                                                     update="grupo, messages, intoGrupo" 
-                                                                     />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Subgrupo*"/>
-                                            <p:selectOneMenu id="subgrupo" 
-                                                             value="#{planCuentas.onSeletedSubgrupo}" 
-                                                             filter="true" filterMatchMode="startsWith">
-                                                <p:ajax listener="#{planCuentas.onSubGrupoChange}" update="codigo, cuentas" />
-                                                <f:selectItem itemLabel="Selecciona subgrupo" itemValue="" noSelectionOption="true"/>
-                                                <f:selectItems value="#{planCuentas.subgrupos}" var="subgrupo"
-                                                               itemLabel="#{subgrupo.nombre}" itemValue="#{subgrupo.codigo}"/>
-                                            </p:selectOneMenu>
-                                            <div class="p-grid mt-1">
-                                                <div class="p-col-10">
-                                                    <p:inputText id="registrarSubgrupo" value="#{planCuentas.intoSubgrupo.nombre}" />
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:button icon="pi pi-plus" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Cuentas*"/>
-                                            <p:selectOneMenu id="cuentas"
-                                                             value="#{planCuentas.onSeletedCuenta}"
-                                                             filter="true" filterMatchMode="startsWith">
-                                                <p:ajax listener="#{planCuentas.onCuentaChange}" update="codigo" />
-                                                <f:selectItem itemLabel="Selecciona cuenta" itemValue="" noSelectionOption="true"/>
-                                                <f:selectItems value="#{planCuentas.cuentas}" var="cuenta"
-                                                               itemLabel="#{cuenta.nombre}" itemValue="#{cuenta.codigo}"/>
-                                            </p:selectOneMenu>
-                                            <div class="p-grid mt-1">
-                                                <div class="p-col-10">
-                                                    <p:inputText id="registrarCuenta" value="#{planCuentas.intoCuenta.nombre}" />
-                                                </div>
-                                                <div class="p-col-2">
-                                                    <p:button icon="pi pi-plus" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Subcuenta*"/>
-                                            <p:inputText value="#{planCuentas.subCuenta.nombre}"/>
-                                        </div>
-
-                                        <!--<div class="p-field p-col-4">
-                                            <p:outputLabel for="@next" value="Auxiliar"/>
-                                            <p:inputText value="" />
-                                        </div>-->
-
-                                        <div class="p-field p-col-12">
-                                            <p:selectOneRadio id="saldo" layout="pageDirection" columns="1" value="#{planCuentas.subCuenta.tipo}">
-                                                <f:selectItem itemLabel="Saldo Deudor" itemValue="Deudor"/>
-                                                <f:selectItem itemLabel="Saldo Acreedor" itemValue="Acreedor"/>
-                                            </p:selectOneRadio>
-                                        </div>
-                                    </div>
-                                </p:outputPanel>
-                            </p:outputPanel>
-
-                            <f:facet name="footer">
-                                <p:commandButton value="Guardar" icon="pi pi-check" 
-                                                 actionListener="#{planCuentas.registrarSubCuenta()}"
-                                                 update="manage-product-content, messages, planCuentaDt" 
-                                                 process="manage-product-content @this"
-                                                 />
-                                <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                 onclick="PF('manageProductDialog').hide()"
-                                                 class="ui-button-secondary"/>
+                                    <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" onkeyup="PF('dtPlanCuentas').filter()" placeholder="Search"/>
+                                    </span>
+                                </div>
                             </f:facet>
-                        </p:dialog>
 
-                        <p:confirmDialog widgetVar="deleteClientDialog" showEffect="fade" width="300"
-                                         message="¿Desea eliminar el cliente?" header="Confirmar" severity="warn">
-                            <p:commandButton value="Si" icon="pi pi-check"
-                                             process="@this" oncomplete="PF('deleteClientDialog').hide()"/>
-                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                             onclick="PF('deleteClientDialog').hide()"/>
-                        </p:confirmDialog>
-
-                        <p:dataTable var="pc" value="#{planCuentas.cuentasContables}"
-                                     style="margin-top: 10px" paginator="true"
-                                     rows="5" paginatorPosition="bottom" sortMode="single"
-                                     id="planCuentaDt">
                             <p:column sortBy="#{pc.codigo}" headerText="Código">
                                 <h:outputText value="#{pc.codigo}" />
                             </p:column>
@@ -162,21 +57,20 @@
                                 <h:outputText value="#{pc.cuenta}" />
                             </p:column>
 
-                            <p:column sortBy="#{pc.subcuenta}" headerText="Subcuenta">
+                            <p:column headerText="Subcuenta">
                                 <h:outputText value="#{pc.subcuenta}" />
                             </p:column>
 
                             <p:column exportable="false">
-                                <p:commandButton icon="pi pi-pencil" update=":form:manage-product-content"
-                                                 oncomplete="PF('manageProductDialog').show()"
-                                                 styleClass="edit-button rounded-button ui-button-primary" process="@this">
-
-                                    <p:resetInput target=":form:manage-product-content"/>
+                                <p:commandButton icon="pi pi-pencil"
+                                                 styleClass="edit-button rounded-button ui-button-primary"
+                                                 action="#{planCuentas.editarCuentaContable(pc)}"
+                                                 >
                                 </p:commandButton>
 
-                                <p:commandButton class="ui-button-help rounded-button" icon="pi pi-power-off" process="@this">
+                                <!--<p:commandButton class="ui-button-danger rounded-button" icon="pi pi-times" process="@this">
 
-                                </p:commandButton>
+                                </p:commandButton>-->
                             </p:column>
                         </p:dataTable>
                     </div>

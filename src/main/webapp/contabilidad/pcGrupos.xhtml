@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./templates/menuPrincipal.xhtml">
+
+            <ui:define name="content">
+                <h:form id="form-grupos">
+                    <p:growl id="messages" showDetail="true" />
+
+                    <p:dialog modal="true" draggable="false" id="dialog-form-grupo"
+                              header="Agregar Grupo" widgetVar="dialogFormGrupo"
+                              responsive="true" width="60%" closeOnEscape="true">
+                        <p:outputPanel id="manage-grupo-content">
+                            <div class="ui-fluid" >
+                                <div class="p-field">
+                                    <p:outputLabel for="@next" value="Código: *"/>
+                                    <p:inputText id="codigo" 
+                                                 value="#{grupoMB.grupo.codigo}"
+                                                 readonly="true"/>
+                                </div>
+                                <div class="p-field">
+                                    <p:outputLabel for="@next" value="Nombre *"/>
+                                    <p:inputText id="nombre" 
+                                                 value="#{grupoMB.grupo.nombre}"
+                                                 />
+                                </div>
+                            </div>
+                            <div class="p-jc-end">
+                                <p:commandButton rendered="#{grupoMB.action eq 'create'}" 
+                                                 value="Guardar" icon="pi pi-check" 
+                                                 action="#{grupoMB.create()}"
+                                                 styleClass="ui-button-success"
+                                                 update="messages, tblGrupos"
+                                                 />
+                                <p:commandButton rendered="#{grupoMB.action eq 'update'}" 
+                                                 value="Actualizar" icon="pi pi-check" 
+                                                 action="#{grupoMB.edit()}"
+                                                 styleClass="ui-button-success"
+                                                 update="messages, tblGrupos"
+                                                 />
+                            </div>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                    <p:confirmDialog widgetVar="deleteDialogGrupo" showEffect="fade" width="40%"
+                                     message="Seguro desea eliminar el Grupo seleccionado?" header="Eliminar Grupo" severity="warn">
+                        <p:commandButton value="Si" icon="pi pi-check" actionListener="#{grupoMB.destroy()}"
+                                         update="tblGrupos, messages"
+                                         process="@this" oncomplete="PF('deleteDialogGrupo').hide()"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteDialogGrupo').hide()"/>
+                    </p:confirmDialog>
+
+                    <div class="card">
+                        <p:toolbar>
+                            <p:toolbarGroup>
+                                <p:commandButton styleClass="ui-button-success"
+                                                 icon="pi pi-plus" value="Nuevo"
+                                                 action="#{grupoMB.form(false)}"
+                                                 update="dialog-form-grupo">
+                                    <f:setPropertyActionListener value="create" 
+                                                                 target="#{grupoMB.action}" />
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+
+                        <p:dataTable var="grupo" value="#{grupoMB.listaGrupos}" 
+                                     paginator="true" rows="5" paginatorPosition="bottom" 
+                                     sortMode="single" id="tblGrupos">
+                            <p:column headerText="Código" sortBy="#{grupo.codigo}">
+                                <h:outputText value="#{grupo.codigo}" />
+                            </p:column>
+                            <p:column headerText="Nombre" sortBy="#{grupo.nombre}">
+                                <h:outputText value="#{grupo.nombre}" />
+                            </p:column>
+                            <p:column exportable="false" width="10%">
+                                <p:commandButton icon="pi pi-pencil"
+                                                 styleClass="edit-button rounded-button ui-button-primary" 
+                                                 action="#{grupoMB.form(true)}"
+                                                 update=":form-grupos:dialog-form-grupo"
+                                                 process="@this">
+                                    <f:setPropertyActionListener value="#{grupo}" target="#{grupoMB.grupo}" />
+                                    <f:setPropertyActionListener value="update" target="#{grupoMB.action}" />
+                                </p:commandButton>
+                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
+                                                 oncomplete="PF('deleteDialogGrupo').show()">
+                                    <f:setPropertyActionListener value="#{grupo}" target="#{grupoMB.grupo}"/>
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>  
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

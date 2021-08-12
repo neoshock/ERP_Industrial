@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
@@ -254,6 +255,17 @@ public class PlanCuentas implements Serializable {
         } else {
             showWarn("Campo nombre esta vacío");
         }
+    }
+    
+    public String editarCuentaContable(CuentaContable cuentaContable) {
+        System.out.println("Cuenta: " + cuentaContable.getSubcuenta());
+        this.cuentaContable = cuentaContable;
+        this.codigo = cuentaContable.getCodigo();
+        this.onSeletedGrupo = cuentaContable.getGrupo();
+        this.onSeletedSubgrupo = cuentaContable.getSubgrupo();
+        this.onSeletedCuenta = cuentaContable.getCuenta();
+        this.subCuenta.setNombre(cuentaContable.getSubcuenta());
+        return "agregarCuenta";
     }
     
     public void abrirModal(String outcome) {
