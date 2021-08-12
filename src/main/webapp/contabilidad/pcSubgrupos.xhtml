@@ -15,55 +15,68 @@
                     <p:growl id="messages" showDetail="true" />
 
                     <p:dialog modal="true" draggable="false" id="dialog-form-subgrupo"
-                              header="Agregar Subgrupo" widgetVar="dialogFormSubGrupo"
+                              header="Subgrupo" widgetVar="dialogFormSubGrupo"
                               responsive="true" width="60%" closeOnEscape="true">
                         <p:outputPanel id="manage-subgrupo-content">
+                            <p:staticMessage rendered="#{subGrupoMB.action eq 'create'}" severity="warn" summary="Atención" 
+                                                     detail="Una vez registrada una subcuenta solo se puede modificar el nombre" style="width: 100%; margin-bottom: 3%;"/>
+                            
                             <div class="ui-fluid" >
                                 <div class="p-field">
                                     <p:outputLabel for="@next" value="Grupo: *" />
-                                    <p:selectOneMenu id="subgrupo" 
-                                                     value="#{planCuentas.onSeletedSubgrupo}" 
+                                    <p:selectOneMenu id="grupo"
+                                                     disabled="#{subGrupoMB.subGrupo.id != 0}"
+                                                     value="#{subGrupoMB.subGrupo.grupo}" 
                                                      filter="true" filterMatchMode="startsWith">
-                                        <p:ajax listener="#{planCuentas.onSubGrupoChange}" 
+                                        <p:ajax listener="#{subGrupoMB.onGrupoChange}" 
                                                 update="codigo" />
-                                        <f:selectItem itemLabel="Selecciona subgrupo" 
+                                        <f:selectItem itemLabel="Selecciona grupo" 
                                                       itemValue="0" 
                                                       noSelectionOption="true"/>
-                                        <f:selectItems value="#{planCuentas.subgrupos}" 
-                                                       var="subgrupo"
-                                                       itemLabel="#{subgrupo.nombre}" 
-                                                       itemValue="#{subgrupo.id}"/> <!-- codigo -->
+                                        <f:selectItems value="#{subGrupoMB.listaGrupos}" 
+                                                       var="grupo"
+                                                       itemLabel="#{grupo.nombre}" 
+                                                       itemValue="#{grupo.id}"/>
                                     </p:selectOneMenu>
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel for="@next" value="Código: *"/>
                                     <p:inputText id="codigo" 
-                                                 value="#{grupoMB.grupo.codigo}"
+                                                 value="#{subGrupoMB.subGrupo.codigo}"
                                                  readonly="true"/>
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel for="@next" value="Nombre *"/>
                                     <p:inputText id="nombre" 
-                                                 value="#{grupoMB.grupo.nombre}"
+                                                 value="#{subGrupoMB.subGrupo.nombre}"
                                                  />
                                 </div>
                             </div>
                             <div class="p-jc-end">
-                                <p:commandButton rendered="#{grupoMB.action eq 'create'}" 
+                                <p:commandButton rendered="#{subGrupoMB.action eq 'create'}" 
                                                  value="Guardar" icon="pi pi-check" 
-                                                 action="#{grupoMB.create()}"
+                                                 action="#{subGrupoMB.create()}"
                                                  styleClass="ui-button-success"
                                                  update="messages, tblSubgrupo"
                                                  />
-                                <p:commandButton rendered="#{grupoMB.action eq 'update'}" 
+                                <p:commandButton rendered="#{subGrupoMB.action eq 'update'}" 
                                                  value="Actualizar" icon="pi pi-check" 
-                                                 action="#{grupoMB.edit()}"
+                                                 action="#{subGrupoMB.edit()}"
                                                  styleClass="ui-button-success"
                                                  update="messages, tblSubgrupo"
                                                  />
                             </div>
                         </p:outputPanel>
                     </p:dialog>
+                    
+                    <p:confirmDialog widgetVar="deleteDialogSubGrupo" showEffect="fade" width="40%"
+                                     message="Seguro desea eliminar el SubGrupo seleccionado?" header="Eliminar SubGrupo" severity="warn">
+                        <p:commandButton value="Si" icon="pi pi-check" actionListener="#{subGrupoMB.destroy()}"
+                                         update="tblSubgrupo, messages"
+                                         process="@this" oncomplete="PF('deleteDialogSubGrupo').hide()"/>
+                        <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                         onclick="PF('deleteDialogSubGrupo').hide()"/>
+                    </p:confirmDialog>
 
                     <div class="card">
                         <p:toolbar>
@@ -92,7 +105,16 @@
                             </p:column>
                             <p:column exportable="false" width="10%">
                                 <p:commandButton icon="pi pi-pencil"
-                                                 styleClass="edit-button rounded-button ui-button-primary" process="@this">
+                                                 styleClass="edit-button rounded-button ui-button-primary" 
+                                                 action="#{subGrupoMB.form(true)}"
+                                                 update=":form-subgrupos:dialog-form-subgrupo"
+                                                 process="@this">
+                                    <f:setPropertyActionListener value="#{subgrupo}" target="#{subGrupoMB.subGrupo}" />
+                                    <f:setPropertyActionListener value="update" target="#{subGrupoMB.action}" />
+                                </p:commandButton>
+                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
+                                                 oncomplete="PF('deleteDialogSubGrupo').show()">
+                                    <f:setPropertyActionListener value="#{subgrupo}" target="#{subGrupoMB.subGrupo}"/>
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>

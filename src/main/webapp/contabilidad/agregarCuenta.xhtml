@@ -17,15 +17,19 @@
                     </f:facet>
                     <h:form>
                         <p:growl id="messages" showDetail="true"/>
+                        
                         <div class="ui-fluid p-formgrid p-grid">
-                            <div class="p-field p-col-4">
+                            <p:staticMessage severity="warn" summary="Atención" 
+                                             detail="Una vez registrada una subcuenta solo se puede modificar el nombre" 
+                                             style="width: 100%; margin-bottom: 3%;"/>
+                            <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="Código:"/>
                                 <p:inputText id="codigo" 
                                              value="#{planCuentas.codigo}" 
                                              readonly="true" />
                             </div>
 
-                            <div class="p-field p-col-4">
+                            <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="Grupo: *"/>
                                 <div class="ui-inputgroup">
                                     <p:selectOneMenu id="grupo" 
@@ -52,8 +56,7 @@
                                 </div>
                             </div>
 
-
-                            <div class="p-field p-col-4">
+                            <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="SubGrupo: *"/>
                                 <div class="ui-inputgroup">
                                     <p:selectOneMenu id="subgrupo" 
@@ -77,8 +80,8 @@
                                     </p:commandButton>
                                 </div>
                             </div>
-
-                            <div class="p-field p-col-4">
+                            
+                            <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="Cuentas: *"/>
                                 <div class="ui-inputgroup">
                                     <p:selectOneMenu id="cuentas"
@@ -103,7 +106,7 @@
                                 </div>
                             </div>
 
-                            <div class="p-field p-col-4">
+                            <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="SubCuenta: *"/>
                                 <p:inputText value="#{planCuentas.subCuenta.nombre}"/>
                             </div>

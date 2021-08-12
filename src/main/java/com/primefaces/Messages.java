@@ -11,14 +11,14 @@ public class Messages {
     }
 
     public static void showInfo(String message) {
-        addMessage(FacesMessage.SEVERITY_INFO, "Info Message", message);
+        addMessage(FacesMessage.SEVERITY_INFO, "Éxito", message);
     }
 
     public static void showWarn(String message) {
-        addMessage(FacesMessage.SEVERITY_WARN, "Warn Message", message);
+        addMessage(FacesMessage.SEVERITY_WARN, "Advertencia", message);
     }
 
     public static void showError(String message) {
-        addMessage(FacesMessage.SEVERITY_ERROR, "Error Message", message);
+        addMessage(FacesMessage.SEVERITY_ERROR, "Error", message);
     }
 }

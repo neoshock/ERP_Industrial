@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class Conexion {
 
-    private String user = "postgres", password = "123456", database = "erp_global";
+    private String user = "postgres", password = "admin", database = "erp_global";
     private Connection connection;
     private Statement statement;
     private ResultSet result = null;
