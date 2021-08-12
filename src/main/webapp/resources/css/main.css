@@ -43,3 +43,9 @@
         width: 500px !important;
     }
 }
+
+@media screen and (max-width: 579px) {
+    .ui-dialog {
+        width: 95% !important;
+    }
+}
