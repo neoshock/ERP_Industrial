@@ -1,7 +1,7 @@
 
 package com.contabilidad.models;
 
-public class Movimientos {
+public class Movimiento {
     int idMovimiento;
     String tipoMovimiento;
     double debe;
@@ -9,7 +9,7 @@ public class Movimientos {
     int idAsiento;
     int idSubcuenta;
 
-    public Movimientos(int idMovimiento, String tipoMovimiento, double debe, double haber, int idAsiento, 
+    public Movimiento(int idMovimiento, String tipoMovimiento, double debe, double haber, int idAsiento, 
             int idSubcuenta) {
         this.idMovimiento = idMovimiento;
         this.tipoMovimiento = tipoMovimiento;
@@ -19,7 +19,7 @@ public class Movimientos {
         this.idSubcuenta = idSubcuenta;
     }
 
-    public Movimientos() {
+    public Movimiento() {
     }
     
     

@@ -14,7 +14,7 @@
                     <p:toolbar>
                         <p:toolbarGroup>
                             <p:commandButton value="Guardar" icon="pi pi-download" ajax="true" styleClass="ui-button-primary p-mr-2">
-                                <p:dataExporter type="pdf" target=":form:dt-libros" fileName="libro"/>
+                                <p:dataExporter type="pdf" target="dt-libros" fileName="libro"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Imprimir" title="Print" icon="pi pi-print" styleClass="ui-button-primary p-mr-2"/>
                         </p:toolbarGroup>
@@ -33,6 +33,7 @@
                         <p:dataTable id="dt-libros" widgetVar="dtLibros" var="libro"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                                      value="#{libroManagedBean.libros}" sortBy="#{libro.codigo}">
+
                             <f:facet name="header">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -48,9 +49,9 @@
                             <p:headerRow field="codigo"
                                          expandable="true" expanded="true">
 
-                                <p:column colspan="6">
+                                <p:column colspan="3">
                                     <div class="p-d-inline-flex p-ai-center" style="vertical-align: middle">
-                                        <h:outputText styleClass="p-ml-2" value="#{libro.codigo}"/>
+                                        <h:outputText styleClass="p-ml-2" value="#{libro.codigo} #{libro.nombre}"/>
                                     </div>
                                 </p:column>
                             </p:headerRow>
@@ -59,15 +60,15 @@
                                 <h:outputText value="#{libro.codigo}" />
                             </p:column>
 
-                            <p:column headerText="Fecha">
-                                <h:outputText value="#{libro.fecha}" />
+                            <p:column headerText="Fecha" responsivePriority="4">
+                                <h:outputText value="#{libro.fecha}"/>
                             </p:column>
 
-                            <p:column headerText="Asiento">
+                            <p:column headerText="Asiento" responsivePriority="2">
                                 <h:outputText value="#{libro.asiento}"/>
                             </p:column>
 
-                            <p:column headerText="Descripcion">
+                            <p:column headerText="Descripcion" responsivePriority="3">
                                 <h:outputText value="#{libro.descripcion}" />
                             </p:column>
                             <p:column headerText="Debe">
@@ -81,16 +82,16 @@
                             </p:column>
                             <f:facet name="footer">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-6 col-sm-12">
                                         <h4>Balance total</h4>
                                     </div>
-                                    <div class="col-md-1" style="margin-left: 7%">
+                                    <div class="col-md-2 col-sm-12" style="margin-left: 2%">
                                         <h:outputText value="#{libroManagedBean.totalSaldoDebe}"></h:outputText>
                                     </div>
-                                    <div class="col-md-1" style="margin-left: 6%">
+                                    <div class="col-md-2 col-sm-12" style="margin-left: 2%">
                                         <h:outputText value="#{libroManagedBean.totalSaldoHaber}"></h:outputText>
                                     </div>
-                                    <div class="col-md-1" style="margin-left: 6%">
+                                    <div class="col-md-1 col-sm-12" style="margin-left: 2%">
                                         <h:outputText value="#{libroManagedBean.saldoTotal}"></h:outputText>
                                     </div>
                                 </div>

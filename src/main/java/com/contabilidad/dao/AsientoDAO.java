@@ -1,7 +1,7 @@
 package com.contabilidad.dao;
 
 import com.contabilidad.models.Asiento;
-import com.contabilidad.models.Movimientos;
+import com.contabilidad.models.Movimiento;
 import com.contabilidad.models.SubCuenta;
 import com.contabilidad.dao.Conexion;
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AsientoDAO {
-
+    
     private Conexion conexion = new Conexion();
     private Connection connection;
     private Statement statement;
@@ -92,9 +92,9 @@ public class AsientoDAO {
     }
 
     //Obtener lista de movimientos en base al codigo del asiento contable
-    public List<Movimientos> getMovimientoByAsiento(int idAsiento) {
+    public List<Movimiento> getMovimientoByAsiento(int idAsiento) {
         conexion.conectar();
-        List<Movimientos> movimientos = new ArrayList<>();
+        List<Movimiento> movimientos = new ArrayList<>();
         String sql = String.format("select * from getMovimientos('%1$d');", idAsiento);
         try {
             connection = conexion.getConnection();
@@ -102,7 +102,7 @@ public class AsientoDAO {
             resultSet = statement.executeQuery(sql);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                movimientos.add(new Movimientos(resultSet.getInt("idMovimiento"), resultSet.getString("detalle"),
+                movimientos.add(new Movimiento(resultSet.getInt("idMovimiento"), resultSet.getString("detalle"),
                         resultSet.getDouble("debe"), resultSet.getDouble("haber"), resultSet.getInt("idAsient"),
                         resultSet.getInt("idSubcuenta")));
             }
@@ -113,7 +113,7 @@ public class AsientoDAO {
         }
     }
 
-    private void setMovimientoDefault() {
+    private int setMovimientoDefault() {
         String queryOne = "select idAsiento from public.asiento order by idAsiento desc limit 1;";
         Asiento asientoRef = new Asiento();
         try {
@@ -124,9 +124,11 @@ public class AsientoDAO {
             while (resultSet.next()) {
                 asientoRef.setIdAsiento(resultSet.getInt("idAsiento"));
             }
-            registrarMovimiento(asientoRef.getIdAsiento());
+            return asientoRef.getIdAsiento();
+            //registrarMovimiento(asientoRef.getIdAsiento());
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            return -1;
         }
     }
 
@@ -184,15 +186,17 @@ public class AsientoDAO {
     //Agrega un nuevo asiento contable a la base de datos
     public boolean addAsientoContable(Asiento asiento) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String sql = String.format("select addAsientoContable('%1$s','%2$d','0','%3$s','%4$s','%5$s','%6$s','%7$s');",
+        String sql = String.format("select addAsientoContable('%1$s','%2$d','%8$s','%3$s','%4$s','%5$s','%6$s','%7$s');",
                 asiento.getNumero(), asiento.getIdDiario(), asiento.getDocumento(), asiento.getDetalle(), dateFormat.format(asiento.getFechaCreacion()),
-                dateFormat.format(asiento.getFechaCierre()), asiento.getEstado());
+                dateFormat.format(asiento.getFechaCierre()), asiento.getEstado(), asiento.getTotal());
         try {
             connection = conexion.getConnection();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(sql);
             resultSet.next();
-            setMovimientoDefault();
+            asiento.getMovimientos().forEach((m) -> {
+                updateMovimientos(m, setMovimientoDefault());
+            });
             return true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -201,16 +205,23 @@ public class AsientoDAO {
     }
 
     //Actualiza movimientos cuado se edita un asiento contable.
-    public void updateMovimientos(Movimientos movimiento, int idAsiento) {
-        String sql = String.format("UPDATE public.movimiento SET idsubcuenta= '%1$d', "
-                + "tipo= '%2$s', debe= %3$s , haber= %4$s, detalle= '%5$s' "
-                + "WHERE idmovimiento = '%6$d' and idasiento = '%7$d'", movimiento.getIdSubcuenta(),
-                "Factura", Double.toString(movimiento.getDebe()), Double.toString(movimiento.getHaber()),
-                movimiento.getTipoMovimiento(), movimiento.getIdMovimiento(), idAsiento);
+    public void updateMovimientos(Movimiento movimiento, int idAsiento) {
+        String sql;
+        if (movimiento.getIdMovimiento() == 0) {
+            sql = String.format("select addmovimiento('%1$d','%2$d','%3$s','%4$s','%5$s')", movimiento.getIdSubcuenta(),
+                    idAsiento, Double.toString(movimiento.getDebe()), Double.toString(movimiento.getHaber()), movimiento.getTipoMovimiento());
+        } else {
+            sql = String.format("UPDATE public.movimiento SET idsubcuenta= '%1$d', "
+                    + "tipo= '%2$s', debe= %3$s , haber= %4$s, detalle= '%5$s' "
+                    + "WHERE idmovimiento = '%6$d' and idasiento = '%7$d'", movimiento.getIdSubcuenta(),
+                    "Factura", Double.toString(movimiento.getDebe()), Double.toString(movimiento.getHaber()),
+                    movimiento.getTipoMovimiento(), movimiento.getIdMovimiento(), idAsiento);
+        }
         try {
             connection = conexion.getConnection();
             statement = connection.createStatement();
-            statement.executeQuery(sql);
+            resultSet = statement.executeQuery(sql);
+            resultSet.next();
         } catch (Exception e) {
             System.out.println("Error Previsto: " + e.getMessage());
         }

@@ -2,22 +2,23 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project">
-        <Node id="contabilidad/dialogAgregarSubGrupo.xhtml" x="510" y="129" zoom="true"/>
-        <Node id="contabilidad/templates/menuPrincipal.xhtml" x="574" y="430" zoom="true"/>
-        <Node id="index.xhtml" x="280" y="277" zoom="true"/>
-        <Node id="contabilidad/planCuentas.xhtml" x="331" y="55" zoom="true"/>
-        <Node id="contabilidad/balanceGeneral.xhtml" x="164" y="536" zoom="true"/>
-        <Node id="contabilidad/gananciasPerdidas.xhtml" x="379" y="495" zoom="true"/>
-        <Node id="contabilidad/templates/menuTemplate.xhtml" x="573" y="380" zoom="true"/>
-        <Node id="contabilidad/home.xhtml" x="36" y="29" zoom="true"/>
-        <Node id="contabilidad/libroMayor.xhtml" x="512" y="186" zoom="true"/>
-        <Node id="contabilidad/agregarCuenta.xhtml" x="514" y="92" zoom="true"/>
-        <Node id="contabilidad/pcCuentas.xhtml" x="154" y="149" zoom="true"/>
-        <Node id="contabilidad/dialogAgregarGrupo.xhtml" x="697" y="256" zoom="true"/>
-        <Node id="contabilidad/dialogAgregarCuenta.xhtml" x="143" y="109" zoom="true"/>
-        <Node id="contabilidad/asientos.xhtml" x="36" y="450" zoom="true"/>
-        <Node id="contabilidad/pcGrupos.xhtml" x="540" y="304" zoom="true"/>
-        <Node id="contabilidad/pcSubgrupos.xhtml" x="45" y="319" zoom="true"/>
+        <Node id="contabilidad/templates/menuPrincipal.xhtml" x="-6" y="42" zoom="true"/>
+        <Node id="contabilidad/dialogAgregarSubGrupo.xhtml" x="-6" y="81" zoom="true"/>
+        <Node id="contabilidad/diarios.xhtml" x="893" y="180" zoom="true"/>
+        <Node id="index.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="contabilidad/planCuentas.xhtml" x="707" y="115" zoom="true"/>
+        <Node id="contabilidad/balanceGeneral.xhtml" x="928" y="354" zoom="true"/>
+        <Node id="contabilidad/gananciasPerdidas.xhtml" x="20" y="303" zoom="true"/>
+        <Node id="contabilidad/templates/menuTemplate.xhtml" x="-13" y="119" zoom="true"/>
+        <Node id="contabilidad/home.xhtml" x="365" y="18" zoom="true"/>
+        <Node id="contabilidad/libroMayor.xhtml" x="544" y="58" zoom="true"/>
+        <Node id="contabilidad/agregarCuenta.xhtml" x="2" y="455" zoom="true"/>
+        <Node id="contabilidad/pcCuentas.xhtml" x="700" y="427" zoom="true"/>
+        <Node id="contabilidad/dialogAgregarGrupo.xhtml" x="893" y="58" zoom="true"/>
+        <Node id="contabilidad/dialogAgregarCuenta.xhtml" x="-7" y="159" zoom="true"/>
+        <Node id="contabilidad/asientos.xhtml" x="16" y="401" zoom="true"/>
+        <Node id="contabilidad/pcGrupos.xhtml" x="25" y="211" zoom="true"/>
+        <Node id="contabilidad/pcSubgrupos.xhtml" x="694" y="280" zoom="true"/>
     </Scope>
     <Scope Scope="All Faces Configurations"/>
 </Scene>
