@@ -164,7 +164,7 @@ public class PlanContableDAO {
     public int insertCuenta(Cuenta cuenta) {
         try {
             String sql = String.format("select insertcuenta('%1$d', '%2$s', '%3$s')",
-                    cuenta.getSubgrupo(), cuenta.getCodigo(), cuenta.getNombre());
+                    cuenta.getIdsubgrupo(), cuenta.getCodigo(), cuenta.getNombre());
             result = conexion.ejecutar(sql);
             result.next();
             return 1;

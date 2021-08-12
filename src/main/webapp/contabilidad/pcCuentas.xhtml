@@ -3,42 +3,112 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
-
         <ui:composition template="./templates/menuPrincipal.xhtml">
 
             <ui:define name="content">
-                <h:form>
+                <h:form id="cuenta-form">
                     <div class="card">
+                        <p:growl id="growl" showDetail="true"/>
                         <p:toolbar>
                             <p:toolbarGroup>
-                                <p:commandButton styleClass="ui-button-success"
-                                                 icon="pi pi-plus" value="Nuevo"
-                                                 action="#{cuentaMB.form()}">
+                                <p:commandButton styleClass="ui-button-success" actionListener="#{cuentaMB.newCuenta}" 
+                                                 update=":cuenta-form:manage-cuenta-form" 
+                                                 oncomplete="PF('cuentaFormDialog').show()"
+                                                 icon="pi pi-plus" value="Nuevo">
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
 
-                        <p:dataTable var="cuenta" value="#{cuentaMB.listaCuentas}" 
+                        <p:dataTable var="cuenta" value="#{cuentaMB.listaCuentas}"
                                      paginator="true" rows="5" paginatorPosition="bottom" 
                                      sortMode="single" id="tblCuenta">
                             <p:column headerText="Código" sortBy="#{cuenta.codigo}">
                                 <h:outputText value="#{cuenta.codigo}" />
                             </p:column>
-                            <p:column headerText="SubGrupo" sortBy="#{cuenta.subgrupo}">
-                                <h:outputText value="#{cuenta.subgrupo}" />
+                            <p:column headerText="SubGrupo" sortBy="#{cuenta.idsubgrupo}">
+                                <h:outputText value="#{cuenta.idsubgrupo}" />
                             </p:column>
                             <p:column headerText="Nombre" sortBy="#{cuenta.nombre}">
                                 <h:outputText value="#{cuenta.nombre}" />
                             </p:column>
+
                             <p:column exportable="false" width="10%">
-                                <p:commandButton icon="pi pi-pencil"
-                                                 styleClass="edit-button rounded-button ui-button-primary" process="@this">
+                                <p:commandButton icon="pi pi-pencil" update=":cuenta-form:manage-cuenta-form"
+                                                 oncomplete="PF('cuentaFormDialog').show()"
+                                                 styleClass="edit-button rounded-button ui-button-info" process="@this">
+                                    <f:setPropertyActionListener value="#{cuenta}" target="#{cuentaMB.onselectedCuenta}"/>
+                                    <p:resetInput target=":cuenta-form:manage-cuenta-form"/>
+                                </p:commandButton>
+
+                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash" process="@this"
+                                                 oncomplete="PF('deleteCuentaDialog').show()">
+                                    <f:setPropertyActionListener value="#{cuenta}" target="#{cuentaMB.onselectedCuenta}"/>
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
+
+                        <p:dialog header="Cuenta Contable" widgetVar="cuentaFormDialog" 
+                                  showEffect="fade" modal="true" responsive="true" 
+                                  width="50%" draggable="false">
+                            <p:outputPanel id="manage-cuenta-form" class="ui-fluid">
+                                <p:outputPanel rendered="#{not empty cuentaMB.onselectedCuenta}">
+                                    <p:staticMessage severity="warn" summary="Atención" 
+                                                     detail="Una vez registrada una cuenta solo se puede modificar el nombre" style="width: 100%; margin-bottom: 3%;"/>
+                                    <div class="p-field">
+                                        <p:outputLabel>Codigo: *</p:outputLabel>
+                                        <p:inputText id="codigo" value="#{cuentaMB.onselectedCuenta.codigo}" readonly="true"></p:inputText>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel>SubGrupo: *</p:outputLabel>
+                                        <div class="ui-inputgroup">
+                                            <p:selectOneMenu id="subgrupo" disabled="#{cuentaMB.onselectedCuenta.idcuenta != 0}" 
+                                                             value="#{cuentaMB.onselectedCuenta.idsubgrupo}" 
+                                                             filter="true" filterMatchMode="startsWith">
+                                                <f:selectItem itemLabel="Selecciona subgrupo" 
+                                                              itemValue="0" 
+                                                              noSelectionOption="true"/>
+                                                <p:ajax listener="#{cuentaMB.onChangeSubgrupo}" 
+                                                        update="codigo" />
+                                                <f:selectItems value="#{cuentaMB.subGrupos}" 
+                                                               var="subgrupo"
+                                                               itemLabel="#{subgrupo.nombre}" 
+                                                               itemValue="#{subgrupo.id}"/> <!-- codigo -->
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                    <div class="p-field">
+                                        <p:outputLabel>Nombre: *</p:outputLabel>
+                                        <p:inputText value="#{cuentaMB.onselectedCuenta.nombre}" placeholder="Nombre de la cuenta" maxlength="50"></p:inputText>
+                                    </div>
+                                    <div class="p-grid p-jc-end">
+                                        <div class="p-col-3">
+                                            <p:commandButton value="Guardar" actionListener="#{cuentaMB.saveCuentaContable}"
+                                                             update="manage-cuenta-form, :cuenta-form:tblCuenta, :cuenta-form:growl"
+                                                             process="manage-cuenta-form @this" icon="pi pi-check" 
+                                                             styleClass="ui-button-success"></p:commandButton>
+                                        </div>
+                                        <div class="p-col-3">
+                                            <p:commandButton value="Cancelar" update="manage-cuenta-form" 
+                                                             onclick="PF('cuentaFormDialog').hide()" icon="pi pi-times" 
+                                                             styleClass="ui-button-danger"></p:commandButton>
+                                        </div>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+
+                        <p:confirmDialog widgetVar="deleteCuentaDialog" showEffect="fade" width="40%"
+                                         message="Seguro desea eliminar la cuenta seleccionada?" header="Eliminar Cuenta" severity="warn">
+                            <p:commandButton value="Si" icon="pi pi-check" actionListener="#{cuentaMB.deleteCuenta}"
+                                             update=":cuenta-form:tblCuenta, :cuenta-form:growl"
+                                             process="@this" oncomplete="PF('deleteCuentaDialog').hide()"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                                             onclick="PF('deleteCuentaDialog').hide()"/>
+                        </p:confirmDialog>
                     </div>
                 </h:form>
             </ui:define>

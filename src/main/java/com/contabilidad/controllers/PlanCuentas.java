@@ -96,7 +96,7 @@ public class PlanCuentas implements Serializable {
         if (onSeletedCuenta != null && !onSeletedCuenta.trim().equals("0")) {
             System.out.println("######## CuentaCodigo:" + onSeletedCuenta);
             cuentas.forEach(g -> { 
-                if (g.getId() == Integer.parseInt(onSeletedCuenta) ){
+                if (g.getIdcuenta() == Integer.parseInt(onSeletedCuenta) ){
                     codigo = g.getCodigo();
                 }
             });
@@ -167,7 +167,7 @@ public class PlanCuentas implements Serializable {
             System.out.println("pasamos a la cuentaaaaaaa");
             intoCuenta = new Cuenta();
             intoCuenta.setCodigo(codigo.trim() + "." + String.valueOf(cuentas.size() + 1));
-            intoCuenta.setSubgrupo(Integer.parseInt(onSeletedSubgrupo.trim()));
+            intoCuenta.setIdsubgrupo(Integer.parseInt(onSeletedSubgrupo.trim()));
             subgrupos.forEach(g -> { 
                 if (g.getId() == Integer.parseInt(onSeletedSubgrupo.trim()) ){
                     subGrupo = g;
