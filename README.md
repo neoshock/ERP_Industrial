@@ -16,10 +16,14 @@
 
 **11/08/2021** 
 - Optimizacion de procesos para la creacion de **Asiento Contables** 
+- CRUD para las diferentes clasificacion de cuentas(En proceso)
+- Validacion de campos para Asiento contable 
+- CRUD para diarios contables
+- Validacion de campos para diarios contables
 
 ### Actualizaciones Pendientes
 | Función o Proceso | Descripción |
 | ------------- | ------------- |
-| Asiento Contable | Agregar mas filas al realizar operaciones con los Asientos |
 | Informe de Libro Mayor | Poder genera el Imforme en archivo PDF |
 | Cuenta contables | Bugs Pendientes de reparar |
+| Diario Contables | Pendiente de revision |
