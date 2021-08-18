@@ -43,6 +43,18 @@ public class LibroManagedBean implements Serializable {
         saldoTotal = totalSaldoDebe - totalSaldoHaber;
     }
 
+    public double calculateSaldoCuenta(String codigo) {
+        double saldoDeudor = 0;
+        double saldoAcreedor = 0;
+        for (Libro item : libros) {
+            if (item.getCodigo().equals(codigo)) {
+                saldoDeudor += item.getDebe();
+                saldoAcreedor += item.getHaber();
+            }
+        }
+        return saldoDeudor - saldoAcreedor;
+    }
+
     public Date getDateNow() {
         Date fecha = new Date();
         return fecha;

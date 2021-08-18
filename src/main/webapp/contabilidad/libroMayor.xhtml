@@ -47,11 +47,17 @@
                                 </div>
                             </f:facet>
                             <p:headerRow field="codigo"
-                                         expandable="true" expanded="true">
+                                         expandable="true" expanded="false">
 
-                                <p:column colspan="3">
+                                <p:column colspan="6">
                                     <div class="p-d-inline-flex p-ai-center" style="vertical-align: middle">
                                         <h:outputText styleClass="p-ml-2" value="#{libro.codigo} #{libro.nombre}"/>
+                                    </div>
+                                </p:column>
+                                
+                                <p:column>
+                                    <div class="p-d-inline-flex p-ai-center" style="vertical-align: middle">
+                                        <h:outputText styleClass="p-ml-2" value="#{libroManagedBean.calculateSaldoCuenta(libro.codigo)}"/>
                                     </div>
                                 </p:column>
                             </p:headerRow>
