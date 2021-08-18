@@ -49,10 +49,10 @@ public class LibroManagedBean implements Serializable {
         for (Libro item : libros) {
             if (item.getCodigo().equals(codigo)) {
                 saldoDeudor += item.getDebe();
-                saldoAcreedor += item.getHaber();
+                saldoAcreedor += -item.getHaber();
             }
         }
-        return saldoDeudor - saldoAcreedor;
+        return saldoDeudor + saldoAcreedor;
     }
 
     public Date getDateNow() {
