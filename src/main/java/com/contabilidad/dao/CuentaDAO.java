@@ -43,12 +43,12 @@ public class CuentaDAO {
         result = conexion.consultar(String.format("select getCuenta('%1$d')", id));
         try {
             if (result.next()) {
-                String cadenaJSON = result.getString("getgrupocuentabyid");
+                String cadenaJSON = result.getString("getcuenta");
                 cuenta = gson.fromJson(cadenaJSON, Cuenta.class);
                 cuenta.setCodigo(cuenta.getCodigo().trim());
             }
         } catch (SQLException ex) {
-            System.out.println("Error getgrupocuenta: " + ex.getMessage());
+            System.out.println("Error getcuenta: " + ex.getMessage());
         }
         return cuenta;
     }
