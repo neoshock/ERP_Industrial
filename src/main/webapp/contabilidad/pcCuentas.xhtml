@@ -90,13 +90,13 @@
                                         <p:inputText value="#{cuentaMB.onselectedCuenta.nombre}" placeholder="Nombre de la cuenta" maxlength="50"></p:inputText>
                                     </div>
                                     <div class="p-grid p-jc-end">
-                                        <div class="p-col-3">
+                                        <div class="p-col-12 p-md-6 p-lg-3">
                                             <p:commandButton value="Guardar" actionListener="#{cuentaMB.saveCuentaContable}"
                                                              update="manage-cuenta-form, :cuenta-form:tblCuenta, :cuenta-form:growl"
                                                              process="manage-cuenta-form @this" icon="pi pi-check" 
                                                              styleClass="ui-button-success"></p:commandButton>
                                         </div>
-                                        <div class="p-col-3">
+                                        <div class="p-col-12 p-md-6 p-lg-3">
                                             <p:commandButton value="Cancelar" update="manage-cuenta-form" 
                                                              onclick="PF('cuentaFormDialog').hide()" icon="pi pi-times" 
                                                              styleClass="ui-button-danger"></p:commandButton>

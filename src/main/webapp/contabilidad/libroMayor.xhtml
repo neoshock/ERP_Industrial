@@ -13,10 +13,9 @@
                 <h:form id="form">
                     <p:toolbar>
                         <p:toolbarGroup>
-                            <p:commandButton value="Guardar" icon="pi pi-download" ajax="true" styleClass="ui-button-primary p-mr-2">
-                                <p:dataExporter type="pdf" target="dt-libros" fileName="libro"/>
+                            <p:commandButton value="Guardar" icon="pi pi-download" styleClass="ui-button-primary p-mr-2">
+                                <p:dataExporter preProcessor="#{libroManagedBean.preProcessPDF}" options="#{libroManagedBean.pdfOpt}" type="pdf" target="dt-libros" fileName="LibroMayor-#{libroManagedBean.dateNow}"/>
                             </p:commandButton>
-                            <p:commandButton type="button" value="Imprimir" title="Print" icon="pi pi-print" styleClass="ui-button-primary p-mr-2"/>
                         </p:toolbarGroup>
                         <p:toolbarGroup align="right" style="width: 27%;">
                             <p:selectOneMenu style="width: 100%;" id="labeled" value="#{libroManagedBean.onSelectedDiario.idDiario}" label="Seleccione un diario" editable="false">
@@ -29,7 +28,6 @@
                     </p:toolbar>
 
                     <div class="card p-2">
-                        <h3 style="margin: 1% 0px;">Libro mayor</h3>
                         <p:dataTable id="dt-libros" widgetVar="dtLibros" var="libro"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                                      value="#{libroManagedBean.libros}" sortBy="#{libro.codigo}">
@@ -74,7 +72,7 @@
                                 <h:outputText value="#{libro.asiento}"/>
                             </p:column>
 
-                            <p:column headerText="Descripcion" responsivePriority="3">
+                            <p:column headerText="Descripción" responsivePriority="3" exportable="false">
                                 <h:outputText value="#{libro.descripcion}" />
                             </p:column>
                             <p:column headerText="Debe">

@@ -1,21 +1,34 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.contabilidad.controllers;
 
 import com.contabilidad.dao.DiarioDAO;
 import com.contabilidad.dao.ImformeContableDAO;
 import com.contabilidad.models.Diario;
 import com.contabilidad.models.Libro;
+import com.lowagie.text.BadElementException;
+import com.lowagie.text.Chapter;
+import com.lowagie.text.Chunk;
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
+import com.lowagie.text.FontFactory;
+import com.lowagie.text.HeaderFooter;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Rectangle;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.component.export.PDFOptions;
+import org.primefaces.component.export.PDFOrientationType;
 
 @Named
 @ViewScoped
@@ -32,10 +45,16 @@ public class LibroManagedBean implements Serializable {
     private Diario onSelectedDiario;
     private List<Diario> diarios;
 
+    //Opciones para creacion de pdf
+    private PDFOptions pdfOpt;
+    private static final Font chapterFont = FontFactory.getFont(FontFactory.HELVETICA, 26, Font.BOLDITALIC);
+    private static final Font paragraphFont = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL);
+
     @PostConstruct
     public void mainLibroMayor() {
         llenarLibro();
         loadDiarios();
+        customizeLibroMayor();
     }
 
     public void loadDiarios() {
@@ -81,9 +100,43 @@ public class LibroManagedBean implements Serializable {
         if (onSelectedDiario.getIdDiario() != 0) {
             libros = imformes.filtrateLibroByDiario(onSelectedDiario.getIdDiario());
             saldoTotal = getSaldoTotal(libros);
-        }else{
+        } else {
             llenarLibro();
         }
+    }
+
+    public void customizeLibroMayor() {
+        pdfOpt = new PDFOptions();
+        pdfOpt.setFacetBgColor("#CFFFFF");
+        pdfOpt.setFacetFontStyle("BOLD");
+        pdfOpt.setCellFontSize("12");
+        pdfOpt.setOrientation(PDFOrientationType.PORTRAIT);
+    }
+
+    public void preProcessPDF(Object document) throws IOException, BadElementException, DocumentException {
+        System.out.println("Entra a esta instancia");
+        Document pdf = (Document) document;
+
+        pdf.open();
+
+        pdf.addTitle("Libro Mayor: " + getDateNow());
+        pdf.setPageSize(PageSize.A4);
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String logo = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "images" + File.separator + "headerlibro.png";
+
+        Image img = Image.getInstance(logo);
+        img.scalePercent(30);
+        
+        pdf.add(img);
+    }
+
+    public PDFOptions getPdfOpt() {
+        return pdfOpt;
+    }
+
+    public void setPdfOpt(PDFOptions pdfOpt) {
+        this.pdfOpt = pdfOpt;
     }
 
     public List<Libro> getLibros() {
