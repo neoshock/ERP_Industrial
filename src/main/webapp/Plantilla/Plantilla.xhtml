@@ -6,20 +6,22 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
+
     <h:head>
-        <title>Modulo Cuenta Pagar</title>
+        <title>Modulo Activos Fijos</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <h:outputStylesheet name="css/main.css"/>
         <h:outputStylesheet name="css/cssLayout.css" />
         <h:outputStylesheet name="css/default.css"/>
         <h:outputStylesheet name="css/estilo.css"/>
-        
-        
-        
+        <h:outputStylesheet name="css/primeflex.min.css" />
         <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' />
+        <h:outputScript name="html2pdf.bundle.js"/>
+        <h:outputScript name="jspdfexport.js"/>
     </h:head>
 
     <h:body>
-        
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <ui:insert name="top">
             <div class="navbar">
                 <a href="/Modulo_Cuenta_Pagar/">
@@ -29,8 +31,8 @@
             </div>
         </ui:insert>
 
-        <div>
-            <div id="left">
+        <div class="p-grid">
+            <div class="p-col-12 p-md-12 p-lg-3 p-p-3">
                 <ui:insert name="left"></ui:insert>
                 <div>
                     <ui:insert name="left"> 
@@ -49,15 +51,15 @@
                                     <p:menuitem value="Reporte de Periodos"
                                                 icon="pi pi-file-pdf"
                                                 outcome="/View/Periodos"/>
-                                    
+
                                 </p:submenu>    
- 
+
                             </p:panelMenu>
                         </h:form>
                     </ui:insert>
                 </div>
             </div>
-            <div id="content" class="left_content">
+            <div class="p-col-12 p-md-12 p-lg-9" >
                 <ui:insert name="content">
 
                     <!-- Contenido por defecto. -->
@@ -65,13 +67,14 @@
                         <h:graphicImage name="imag/erpLogo.png"  height="100px" />
                         <h2>Bienvenido a ERP Contable</h2>
                         <p>Descripción del sistema</p>
+
                     </div>
-                    
+
                 </ui:insert>
             </div>
         </div>
-        
-        
+
+
     </h:body>
 
 </html>

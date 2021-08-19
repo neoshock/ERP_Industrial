@@ -6,41 +6,41 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <h:body>
-
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <ui:composition template="./../Plantilla/Plantilla.xhtml">
 
             <ui:define name="content">
-                <h:form>
+                <h:form id="periodos">
                     <div >
                         <p:panel >
                             <h1 style="text-align: center"> Periodos de Activos Fijos</h1>
-                            <p:dataTable value="" 
-                                         var="pago" id="proveedortabla">
-                                <p:column headerText="Observación" >
-                                    <p:outputLabel>Sin novedad</p:outputLabel>
-                                </p:column>
-                                <p:column headerText="Estado" >
-                                    <p:outputLabel>Activo</p:outputLabel>
-                                </p:column>
+                            <p:dataTable id="listarperiodo"
+                                         value="#{periodosactivosfijosMB.periodosactivosfijosdao.listarperiodosactivofijo()}" 
+                                         var="periodoactivofijo"
+                                         rowKey="#{periodoactivofijo.anio}" editable="true" 
+                                         rowIndexVar="row" >
                                 <p:column headerText="Fecha Inicio">
-                                    <p:outputLabel>01/01/2020</p:outputLabel>
+                                    <h:outputText value="#{periodoactivofijo.inicio}"/>
                                 </p:column>
                                 <p:column headerText="Fecha Fin">
-                                    <p:outputLabel>31/12/2020</p:outputLabel>
+                                    <h:outputText value="#{periodoactivofijo.fin}"/>
                                 </p:column>
                                 <p:column headerText="Monto" >
-                                    <p:outputLabel>$ 587</p:outputLabel>
+                                    <h:outputText value="#{periodoactivofijo.monto_total}">
+                                    <f:convertNumber currencySymbol="$" type="currency"/>
+                                    </h:outputText>
                                 </p:column>
                                 <p:column headerText="Año" >
-                                    <p:outputLabel>2020</p:outputLabel>
+                                    <h:outputText value="#{periodoactivofijo.anio}" />  
                                 </p:column>
-                                <p:column headerText="Reporte" >
+                                <p:column headerText="Reporte" exportValue="false">
                                     <p:commandButton
                                         value="Exportar PDF" 
                                         ajax="false"
-                                        actionListener="#{beanGenerarCalendario.exportpdf()}"
+                                        actionListener="#{periodosactivosfijosMB.exportpdf(row)}"
                                         icon="pi pi-file-pdf" 
                                         styleClass="ui-button-raised" />
                                 </p:column>
@@ -50,5 +50,6 @@
                 </h:form>
             </ui:define>
         </ui:composition>
+
     </h:body>
 </html>

@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
-
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -21,6 +20,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.primefaces.PrimeFaces;
 
 /**
  *
@@ -41,11 +41,10 @@ public class BeanGenerarCalendario implements Serializable {
     // Datos a consultar en la db
     private ManagerCalendario managerCalendario;
 
-    public BeanGenerarCalendario()  {
+    public BeanGenerarCalendario() {
         System.out.println("Iniciamos la class");
-        
+
         //System.out.println(database.getInstancia().getPersonas());
-        
         System.out.println("pasamos db");
         managerCalendario = new ManagerCalendario();
     }
@@ -101,47 +100,9 @@ public class BeanGenerarCalendario implements Serializable {
     // Metodo funcional para exportar pdf
     public void exportpdf() throws IOException, JRException {
 
-        FacesContext fc = FacesContext.getCurrentInstance();
-        ExternalContext ec = fc.getExternalContext();
-
-        // Cabecera de la respuesta.
-        ec.responseReset();
-        ec.setResponseContentType("application/pdf");
-        ec.setResponseHeader("Content-disposition", "attachment; filename=hola.pdf");
-
-        // tomamos el stream para llenarlo con el pdf.
-        try (OutputStream stream = ec.getResponseOutputStream()) {
-            ManagerCalendario mc = new ManagerCalendario();
-
-            // Parametros para el reporte.
-            Map<String, Object> parametros = new HashMap<String, Object>();
-            parametros.put("titulo", "Reporte desde java");
-
-            // leemos la plantilla para el reporte.
-            File filetext = new File(FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .getRealPath("/PlantillasReportes/Calendario.jasper"));
-
-            // llenamos la plantilla con los datos.
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    filetext.getPath(),
-                    parametros,
-                    new JRBeanCollectionDataSource(mc.getListCuotas())
-            );
-
-            // exportamos a pdf.
-            JasperExportManager.exportReportToPdfStream(jasperPrint, stream);
-            //JasperExportManager.exportReportToXmlStream(jasperPrint, outputStream);
-
-            stream.flush();
-            stream.close();
-        }
-
-        // enviamos la respuesta.
-        fc.responseComplete();
-
-        System.out.println("fin proccess");
+        //RequestContext requestContext = RequestContext.getCurrentInstance();
+        //requestContext.execute("window.print();");
+        PrimeFaces.current().executeScript("window.print();");
     }
 
 }

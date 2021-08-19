@@ -6,456 +6,729 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <body>
 
+    <h:body>
         <ui:composition template="./../Plantilla/Plantilla.xhtml">
 
             <ui:define name="content">
-                <h:form >
-                    <p:panel>
-                        <h1 style="text-align: center; color: black;">Tangibles</h1>
-                        <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
-                        <div>
-                            <p:tabView class="formulario">
-                                <p:tab title="Depreciables">
-                                    <h:form>
-                                        <p:panel>
-                                            <div>
-                                                <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
-                                                <p:toolbar>
-                                                    <p:toolbarGroup>
-                                                        <p:commandButton value="Nuevo" icon="pi pi-plus"   
-                                                                         oncomplete="PF('NuevoDepreciable').show()"   
-                                                                         styleClass="ui-button-success" 
-                                                                         style="margin-right: .3rem">                               
-                                                        </p:commandButton>
 
-                                                        <p:commandButton value="Editar" 
-                                                                         icon="pi pi-pencil" 
-                                                                         oncomplete="PF('EditarDepreciable').show()"  
-                                                                         styleClass="ui-button-info" 
-                                                                         style="margin-right: .3rem" >                                
-                                                        </p:commandButton>
+                <p:panel>
+                    <h1 style="text-align: center; color: black;">Tangibles</h1>
+                    <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+                    <div>
+                        <p:tabView class="formulario" id="tabladepreciable" prependId="false">
+                            <p:tab title="Depreciables" >
 
-                                                        <p:commandButton id="delete-products-button"
-                                                                         value="Deshabilitar" 
-                                                                         icon="pi pi-times"                                            
-                                                                         styleClass="ui-button-danger"  
-                                                                         style="margin-right: .3rem">
-                                                            <p:confirm  header="Confirmation"
-                                                                        message="Dese eliminar el 
-                                                                        proveedor seleccionado?"
-                                                                        icon="pi pi-exclamation-triangle" />
+                                <p:panel>
+                                    <div>
+                                        <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
+                                        <p:toolbar>
+                                            <p:toolbarGroup>
+                                                <h:form id="botonNuevoDepreciables">
+                                                    <p:commandButton value="Nuevo" icon="pi pi-plus"   
+                                                                     oncomplete="PF('NuevoDepreciable').show()"   
+                                                                     styleClass="ui-button-success" 
+                                                                     style="margin-right: .3rem">                               
+                                                    </p:commandButton>
+                                                    <p:commandButton value="Deshabilitados" 
 
-                                                        </p:commandButton>
-                                                    </p:toolbarGroup>                       
-                                                </p:toolbar> 
-                                                <!-- Tabla visual de datos  !-->
-                                                <p:dataTable>
+
+                                                                     icon="pi pi-pencil"
+                                                                     oncomplete="PF('deshabilitadosdepreciables').show()"  
+                                                                     styleClass="ui-button-info" 
+                                                                     style="margin-right: .3rem " >                                
+                                                    </p:commandButton>
+                                                </h:form>
+                                            </p:toolbarGroup>                       
+                                        </p:toolbar> 
+                                        <!-- Tabla visual de datos  !-->
+                                        <h:form id="formDepreciable">
+                                            <p:dataTable id="verListaDepreciable"
+                                                         reflow="true"
+                                                         value="#{activosFijosMB.tangibleDAO.Listardepreciable()}" var="depreciable" 
+                                                         rowKey="#{depreciable.id_activo_fijo}" editable="true">
+                                                <p:column headerText="Descripción"  >
+                                                    <h:outputText value="#{depreciable.detalle_de_activo}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Costo" >
+                                                    <h:outputText value="#{depreciable.valor_adquisicion}" style="font-weight: 700">
+                                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                                    </h:outputText>
+                                                </p:column>                       
+
+                                                <p:column headerText="Depreciación en Meses" >
+                                                    <h:outputText value="#{depreciable.depreciacion_meses}" />
+                                                </p:column>
+
+                                                <p:column headerText="% de Depreciación">
+                                                    <h:outputText value="#{depreciable.porcentaje_depreciacion}" style="font-weight: 700">
+                                                        <f:convertNumber currencySymbol="%" type="currency"/>
+                                                    </h:outputText>
+                                                </p:column>
+
+                                                <p:column headerText="Depreciación Acumulada">
+                                                    <h:outputText value="#{depreciable.cuota_depresiacion}" style="font-weight: 700">
+                                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                                    </h:outputText>
+                                                </p:column>  
+                                                <p:column headerText="Valor Neto en Libros">
+                                                    <h:outputText value="#{depreciable.valor_neto_libros}" style="font-weight: 700">
+                                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                                    </h:outputText>
+                                                </p:column>  
+                                                <p:column headerText="Fecha de Adquisición">
+                                                    <h:outputText value="#{depreciable.fecha_adquisicion}"/>
+                                                </p:column> 
+                                                <p:column headerText="N° Factura"  >
+                                                    <h:outputText value="#{depreciable.numero_factura}"/>
+                                                </p:column>
+                                                <p:column headerText="Proveedor"  >
+                                                    <h:outputText value="#{depreciable.proveedor}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Opciones" colspan="2">
+
+                                                    <p:commandButton  
+                                                        actionListener="#{activosFijosMB.obtenerdatos(depreciable)}"
+                                                        update="editarDepreciable"
+                                                        icon="pi pi-pencil"
+                                                        oncomplete="PF('EditarDepreciable').show()" 
+                                                        style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px " >  
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </h:form>
+
+                                    </div>    
+                                    <h:form id="formverdeshabilitadodepreciable" >
+                                        <p:dialog header="Activo  Depreciables Deshabilitados"  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="deshabilitadosdepreciables"
+                                                  id="dialogoingresarNodepreciable">
+                                            <div  style="display: flex;justify-content: center">
+                                                <p:dataTable id="verListaDepreciable"
+                                                             reflow="true"
+                                                             value="#{activosFijosMB.tangibleDAO.listaradepreciablesdeshabilitados()}" var="depreciable" 
+                                                             rowKey="#{depreciable.id_activo_fijo}" editable="true">
                                                     <p:column headerText="Descripción"  >
-                                                        <h:outputText value=""/>
+                                                        <h:outputText value="#{depreciable.detalle_de_activo}"/>
                                                     </p:column>
 
-                                                    <p:column headerText="Costo de Adquisición" >
-                                                        <h:outputText value="" style="font-weight: 700">
+                                                    <p:column headerText="Costo" >
+                                                        <h:outputText value="#{depreciable.valor_adquisicion}" style="font-weight: 700">
                                                             <f:convertNumber currencySymbol="$" type="currency"/>
                                                         </h:outputText>
                                                     </p:column>                       
 
-                                                    <p:column headerText="Tiempo de depreciación en Meses" >
-                                                        <h:outputText value="" />
+                                                    <p:column headerText="Depreciación en Meses" >
+                                                        <h:outputText value="#{depreciable.depreciacion_meses}" />
                                                     </p:column>
 
-                                                    <p:column headerText="Porcentaje de Depreciación">
-                                                        <h:outputText value="" style="font-weight: 700">
+                                                    <p:column headerText="% de Depreciación">
+                                                        <h:outputText value="#{depreciable.porcentaje_depreciacion}" style="font-weight: 700">
                                                             <f:convertNumber currencySymbol="%" type="currency"/>
                                                         </h:outputText>
                                                     </p:column>
 
                                                     <p:column headerText="Depreciación Acumulada">
-                                                        <h:outputText value="" style="font-weight: 700">
+                                                        <h:outputText value="#{depreciable.cuota_depresiacion}" style="font-weight: 700">
                                                             <f:convertNumber currencySymbol="$" type="currency"/>
                                                         </h:outputText>
                                                     </p:column>  
                                                     <p:column headerText="Valor Neto en Libros">
-                                                        <h:outputText value="" style="font-weight: 700">
+                                                        <h:outputText value="#{depreciable.valor_neto_libros}" style="font-weight: 700">
                                                             <f:convertNumber currencySymbol="$" type="currency"/>
                                                         </h:outputText>
                                                     </p:column>  
                                                     <p:column headerText="Fecha de Adquisición">
-                                                        <h:outputText value=""/>
-                                                    </p:column>  
+                                                        <h:outputText value="#{depreciable.fecha_adquisicion}"/>
+                                                    </p:column> 
+                                                    <p:column headerText="N° Factura"  >
+                                                        <h:outputText value="#{depreciable.numero_factura}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Proveedor"  >
+                                                        <h:outputText value="#{depreciable.proveedor}"/>
+                                                    </p:column>
+
+                                                    <p:column headerText="Habilitar">
+
+                                                        <p:commandButton action="#{activosFijosMB.setHabilitarintangible(depreciable.id_activo_fijo)}" ajax="false"
+                                                                         update="formDepreciable formverdeshabilitadodepreciable"
+                                                                         oncomplete="ActivosTangibles.xhtml.show()"  
+                                                                         icon="pi pi-check"
+                                                                         styleClass="rounded-button" 
+                                                                         style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px"
+                                                                         >  
+                                                        </p:commandButton>
+                                                    </p:column>
                                                 </p:dataTable>
                                             </div>
-                                            <p:dialog header="Nuevo Activo Depreciable"  minHeight="40" 
-                                                      height="auto" width="1000px" showEffect="fade"
-                                                      modal="true" widgetVar="NuevoDepreciable">
-                                                <h:form >
-                                                    <div  style="display: flex;justify-content: center">
-                                                        <h:panelGrid columns="4"  >
-                                                            <p:outputLabel value="Descripción: "/>
-                                                            <p:inputText value="" required="true" />
-
-                                                            <p:outputLabel value="Costo Adquisición: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Tiempo de depreciación en Meses: "/>
-                                                            <p:inputText type="number" value="" required="true"/>
-
-                                                            <p:outputLabel value="Porcentaje de Depreciación: %"/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Depreciación Acumulada: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Valor Neto en Libros: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Fecha de Adquisición:    " />
-                                                            <p:datePicker   showIcon="true"/>
-
-                                                        </h:panelGrid>
-                                                    </div>
-
-                                                </h:form>
-
-                                                <f:facet name="footer">
-                                                    <p:commandButton value="Guardar" 
-                                                                     icon="pi pi-check"/>
-                                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                                     onclick="PF('NuevoDepreciable').hide()"
-                                                                     class="ui-button-secondary"/>
-                                                </f:facet>
-                                            </p:dialog> 
-                                            <p:dialog header="Editar Activo Depreciable"  minHeight="40" 
-                                                      height="auto" width="1000px" showEffect="fade"
-                                                      modal="true" widgetVar="EditarDepreciable">
-                                                <h:form >
-                                                    <div  style="display: flex;justify-content: center">
-                                                        <h:panelGrid columns="4"  >
-                                                            <p:outputLabel value="Descripción: "/>
-                                                            <p:inputText value="" required="true" />
-
-                                                            <p:outputLabel value="Costo Adquisición: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Tiempo de depreciación en Meses: "/>
-                                                            <p:inputText type="number" value="" required="true"/>
-
-                                                            <p:outputLabel value="Porcentaje de Depreciación: %"/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Depreciación Acumulada: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Valor Neto en Libros: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Fecha de Adquisición:    " />
-                                                            <p:datePicker   showIcon="true"/>
-
-                                                        </h:panelGrid>
-                                                    </div>
-
-                                                </h:form>
-
-                                                <f:facet name="footer">
-                                                    <p:commandButton value="Guardar" 
-                                                                     icon="pi pi-check"/>
-                                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                                     onclick="PF('EditarDepreciable').hide()"
-                                                                     class="ui-button-secondary"/>
-                                                </f:facet>
-                                            </p:dialog> 
-                                        </p:panel>
+                                        </p:dialog> 
                                     </h:form>
-                                </p:tab>
-                                <p:tab title="No Depreciables">
-                                    <h:form>
-                                        <p:panel>
-                                            <div>
-                                                <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
-                                                <p:toolbar>
-                                                    <p:toolbarGroup>
-                                                        <p:commandButton value="Nuevo" icon="pi pi-plus"   
-                                                                         oncomplete="PF('NuevoNoDepreciable').show()"   
-                                                                         styleClass="ui-button-success" 
-                                                                         style="margin-right: .3rem">                               
-                                                        </p:commandButton>
+                                    <h:form id="formnuevoDepreciable">
+                                        <p:dialog header="Nuevo Activo Depreciable"  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="NuevoDepreciable"
+                                                  id="ingresodepreciable">
+                                            <div  style="display: flex;justify-content: center" class="p-grid">
 
-                                                        <p:commandButton value="Editar" 
-                                                                         icon="pi pi-pencil" 
-                                                                         oncomplete="PF('EditarNoDepreciable').show()"  
-                                                                         styleClass="ui-button-info" 
-                                                                         style="margin-right: .3rem" >                                
-                                                        </p:commandButton>
+                                                <h:panelGrid columns="4" class="p-col" >
+                                                    <p:outputLabel value="Descripción: "/>
+                                                    <p:inputText value="#{activosFijosMB.activos.detalle_de_activo}"   />
 
-                                                        <p:commandButton id="delete-products-button"
-                                                                         value="Deshabilitar" 
-                                                                         icon="pi pi-times"                                            
-                                                                         styleClass="ui-button-danger"  
-                                                                         style="margin-right: .3rem">
-                                                            <p:confirm  header="Confirmation"
-                                                                        message="Dese eliminar el 
-                                                                        proveedor seleccionado?"
-                                                                        icon="pi pi-exclamation-triangle" />
+                                                    <p:outputLabel value="Costo Adquisición: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.activos.valor_adquisicion}" />
 
-                                                        </p:commandButton>
-                                                    </p:toolbarGroup>                       
-                                                </p:toolbar> 
-                                                <!-- Tabla visual de datos  !-->
-                                                <p:dataTable>
+                                                    <p:outputLabel value="Tiempo de depreciación en Meses: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.activodepreciable.depreciacion_meses}" />
+
+                                                    <p:outputLabel value="Porcentaje de Depreciación: %"/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.activodepreciable.porcentaje_depreciacion}"  />
+
+                                                    <p:outputLabel value="Número de Factura: "/>
+                                                    <p:inputText   value="#{activosFijosMB.activos.numero_factura}" />
+
+                                                    <p:outputLabel value="Proveedor: "/>
+                                                    <p:inputText  value="#{activosFijosMB.activos.proveedor}"  />
+
+                                                    <p:outputLabel value="Fecha de Adquisición:    " />
+                                                    <p:datePicker  value="#{activosFijosMB.activos.fecha_adquisicion}" showIcon="true"/>
+
+                                                </h:panelGrid>
+                                                <div > 
+                                                    <f:facet name="footer">
+                                                        <p:commandButton value="Guardar" 
+                                                                         icon="pi pi-check" action="#{activosFijosMB.setRegistrar}" ajax="false"
+                                                                         />
+                                                        <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                                         onclick="PF('NuevoDepreciable').hide()"
+                                                                         class="ui-button-secondary"/>
+                                                    </f:facet>
+                                                </div>   
+
+
+                                            </div>
+
+                                        </p:dialog> 
+                                    </h:form>
+                                    <h:form id="editarDepreciable">
+                                        <p:dialog header="Editar Activo Depreciable "  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="EditarDepreciable"
+                                                  id="dialogeditardepreciable">
+                                            <div  style="display: flex;justify-content: center">
+                                                <h:panelGrid columns="4"  >
+                                                    <p:outputLabel value="Descripción: "/>
+                                                    <p:inputText  value="#{activosFijosMB.listadepreciable.detalle_de_activo}"  />
+
+                                                    <p:outputLabel value="Costo Adquisición: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.listadepreciable.valor_adquisicion}"  />
+
+                                                    <p:outputLabel value="Tiempo de depreciación en Meses: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.listadepreciable.depreciacion_meses}" />
+
+                                                    <p:outputLabel value="Porcentaje de Depreciación: %"/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.listadepreciable.porcentaje_depreciacion}"  />
+
+                                                    <p:outputLabel value="Número de Factura: "/>
+                                                    <p:inputText   value="#{activosFijosMB.listadepreciable.numero_factura}" />
+
+                                                    <p:outputLabel value="Proveedor: "/>
+                                                    <p:inputText  value="#{activosFijosMB.listadepreciable.proveedor}"  />
+
+                                                    <p:outputLabel value="Fecha de Adquisición:    " />
+                                                    <p:datePicker  value="#{activosFijosMB.listadepreciable.fecha_adquisicion}" showIcon="true"/>
+
+                                                </h:panelGrid>
+                                                <div > 
+                                                    <f:facet name="footer">
+                                                        <p:commandButton value="Guardar" 
+                                                                         icon="pi pi-check" 
+                                                                         action="#{activosFijosMB.setEditar}" ajax="false"/>
+                                                        <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                                         onclick="PF('EditarDepreciable').hide()"
+                                                                         class="ui-button-secondary"/>
+                                                        <p:commandButton 
+                                                            value="Deshabilitar"
+                                                            action="#{activosFijosMB.setDeshabilitarintangible}"
+                                                            icon="pi pi-times"                                            
+                                                            styleClass="ui-button-danger"  
+                                                            update="formDepreciable formverdeshabilitadodepreciable"
+                                                            onclick="PF('EditarDepreciable').hide()"
+
+                                                            />
+                                                    </f:facet>    
+                                                </div>
+
+                                            </div>
+                                        </p:dialog> 
+                                    </h:form>
+
+                                </p:panel>
+
+                            </p:tab>
+                            <p:tab title="No Depreciables" id="tabNodepreciable" >
+
+                                <p:panel>
+                                    <div>
+                                        <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
+                                        <p:toolbar>
+                                            <p:toolbarGroup>
+                                                <p:commandButton value="Nuevo" icon="pi pi-plus"   
+                                                                 oncomplete="PF('NuevoNoDepreciable').show()"   
+                                                                 styleClass="ui-button-success" 
+                                                                 style="margin-right: .3rem">                               
+                                                </p:commandButton>
+                                                <p:commandButton value="Deshabilitados" 
+
+
+                                                                 icon="pi pi-pencil"
+                                                                 oncomplete="PF('deshabilitadosnodepreciables').show()"  
+                                                                 styleClass="ui-button-info" 
+                                                                 style="margin-right: .3rem " >                                
+                                                </p:commandButton>
+
+                                            </p:toolbarGroup>                       
+                                        </p:toolbar> 
+                                        <!-- Tabla visual de datos  !-->
+                                        <h:form id="fromverNodepreciable"> 
+                                            <p:dataTable id="visualizarNoDepreciable"  value="#{activosFijosMB.nodepreciabledao.ListarNodepreciable()}" var="nodepreciable" 
+                                                         rowKey="#{nodepreciable.id_activo_fijo}" editable="true">
+                                                <p:column headerText="Descripción"  >
+                                                    <h:outputText value="#{nodepreciable.detalle_de_activo}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Costo de Adquisición" >
+                                                    <h:outputText value="#{nodepreciable.valor_adquisicion}">
+                                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                                    </h:outputText>
+
+                                                </p:column>                       
+
+                                                <p:column headerText="Fecha de Adquisición">
+                                                    <h:outputText value="#{nodepreciable.fecha_adquisicion}" />
+                                                </p:column>
+
+                                                <p:column headerText="% de Capitalización">
+                                                    <h:outputText value="#{nodepreciable.porcentaje_amortizacion}" style="font-weight: 700">
+                                                        <f:convertNumber currencySymbol="%" type="currency"/>
+                                                    </h:outputText>
+                                                </p:column>  
+
+                                                <p:column headerText="Revalorizar">
+                                                    <h:outputText value="#{nodepreciable.revalorizar}" style="font-weight: 700">
+                                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                                    </h:outputText>
+                                                </p:column>  
+                                                <p:column headerText="Plusvalia">
+                                                    <h:outputText value="#{nodepreciable.plusvalia}" style="font-weight: 700">
+                                                        <f:convertNumber currencySymbol="%" type="currency"/>
+                                                    </h:outputText>
+                                                </p:column> 
+                                                <p:column headerText="N° Factura"  >
+                                                    <h:outputText value="#{nodepreciable.numero_factura}"/>
+                                                </p:column>
+                                                <p:column headerText="Proveedor"  >
+                                                    <h:outputText value="#{nodepreciable.proveedor}"/>
+                                                </p:column>
+                                                <p:column headerText="Opciones  ">
+
+                                                    <p:commandButton 
+                                                        actionListener="#{activosFijosMB.obtenerdatosNodepreciables(nodepreciable)}"
+                                                        update="formeditarNoDepreciable"
+                                                        icon="pi pi-pencil"
+                                                        oncomplete="PF('EditarNoDepreciable').show()"  
+                                                        styleClass="ui-button-info" 
+                                                        style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px " >                                
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </h:form>
+                                    </div>
+                                    <h:form id="formverdeshabilitadonodepreciable" >
+
+                                        <p:dialog header="Activo No Depreciables Deshabilitados"  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="deshabilitadosnodepreciables"
+                                                  id="dialogoingresarNodepreciable">
+                                            <div  style="display: flex;justify-content: center">
+                                                <p:dataTable id="visualizarNoDepreciable"  value="#{activosFijosMB.nodepreciabledao.ListarNodepreciableDeshabilitados()}" var="nodepreciable" 
+                                                             rowKey="#{nodepreciable.id_activo_fijo}" editable="true">
                                                     <p:column headerText="Descripción"  >
-                                                        <h:outputText value=""/>
+                                                        <h:outputText value="#{nodepreciable.detalle_de_activo}"/>
                                                     </p:column>
 
                                                     <p:column headerText="Costo de Adquisición" >
-                                                        <h:outputText value=""/>
+                                                        <h:outputText value="#{nodepreciable.valor_adquisicion}">
+                                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                                        </h:outputText>
+
                                                     </p:column>                       
 
-                                                    <p:column headerText="Tiempo de Amortización en Meses" >
-                                                        <h:outputText value="" />
-                                                    </p:column>
-
                                                     <p:column headerText="Fecha de Adquisición">
-                                                        <h:outputText value="" />
+                                                        <h:outputText value="#{nodepreciable.fecha_adquisicion}" />
                                                     </p:column>
 
-                                                    <p:column headerText="Porcentaje de Amortizacion">
-                                                        <h:outputText value="" style="font-weight: 700">
+                                                    <p:column headerText="% de Capitalización">
+                                                        <h:outputText value="#{nodepreciable.porcentaje_amortizacion}" style="font-weight: 700">
                                                             <f:convertNumber currencySymbol="%" type="currency"/>
                                                         </h:outputText>
                                                     </p:column>  
-                                                    <p:column headerText="Tiempo de Capitalización en meses">
-                                                        <h:outputText value="" />
-                                                    </p:column>  
+
                                                     <p:column headerText="Revalorizar">
-                                                        <h:outputText value="" style="font-weight: 700">
+                                                        <h:outputText value="#{nodepreciable.revalorizar}" style="font-weight: 700">
                                                             <f:convertNumber currencySymbol="$" type="currency"/>
                                                         </h:outputText>
                                                     </p:column>  
                                                     <p:column headerText="Plusvalia">
-                                                        <h:outputText value="" style="font-weight: 700">
-                                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                                        <h:outputText value="#{nodepreciable.plusvalia}" style="font-weight: 700">
+                                                            <f:convertNumber currencySymbol="%" type="currency"/>
                                                         </h:outputText>
-                                                    </p:column>  
+                                                    </p:column> 
+                                                    <p:column headerText="N° Factura"  >
+                                                        <h:outputText value="#{nodepreciable.numero_factura}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Proveedor"  >
+                                                        <h:outputText value="#{nodepreciable.proveedor}"/>
+                                                    </p:column> 
+                                                    <p:column headerText="Habilitar  ">
+                                                        <p:commandButton action="#{activosFijosMB.setHabilitarintangibleNoDepreciable(nodepreciable.id_activo_fijo)}" ajax="false"
+                                                                         update="fromverNodepreciable formverdeshabilitadonodepreciable"
+                                                                         oncomplete="ActivosTangibles.xhtml.show()"  
+                                                                         icon="pi pi-check"
+                                                                         styleClass="rounded-button" 
+                                                                         style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px "
+                                                                         >                                
+                                                        </p:commandButton>
+                                                    </p:column>
                                                 </p:dataTable>
                                             </div>
-                                            <p:dialog header="Nuevo Activo No Depreciable"  minHeight="40" 
-                                                      height="auto" width="1000px" showEffect="fade"
-                                                      modal="true" widgetVar="NuevoNoDepreciable">
-                                                <h:form >
-                                                    <div  style="display: flex;justify-content: center">
-                                                        <h:panelGrid columns="4"  >
-                                                            <p:outputLabel value="Descripción: "/>
-                                                            <p:inputText value="" required="true" />
-
-                                                            <p:outputLabel value="Costo Adquisición: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Tiempo de Amortización en Meses: "/>
-                                                            <p:inputText type="number" value="" required="true"/>
-
-                                                            <p:outputLabel value="Fecha de Adquisición:    " />
-                                                            <p:datePicker   showIcon="true"/>
-
-                                                            <p:outputLabel value="Porcentaje de Amortizacion: %"/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Tiempo de Capitalización en meses:"/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Revalorizar: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Plusvalia"/>
-                                                            <p:inputText type="number" value="" required="true" />                                                            
-
-                                                        </h:panelGrid>
-                                                    </div>
-
-                                                </h:form>
-
-                                                <f:facet name="footer">
-                                                    <p:commandButton value="Guardar" 
-                                                                     icon="pi pi-check"/>
-                                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                                     onclick="PF('NuevoNoDepreciable').hide()"
-                                                                     class="ui-button-secondary"/>
-                                                </f:facet>
-                                            </p:dialog> 
-                                            <p:dialog header="Editar Activo No Depreciable"  minHeight="40" 
-                                                      height="auto" width="1000px" showEffect="fade"
-                                                      modal="true" widgetVar="EditarNoDepreciable">
-                                                <h:form >
-                                                    <div  style="display: flex;justify-content: center">
-                                                        <h:panelGrid columns="4"  >
-                                                            <p:outputLabel value="Descripción: "/>
-                                                            <p:inputText value="" required="true" />
-
-                                                            <p:outputLabel value="Costo Adquisición: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Tiempo de Amortización en Meses: "/>
-                                                            <p:inputText type="number" value="" required="true"/>
-
-                                                            <p:outputLabel value="Fecha de Adquisición:    " />
-                                                            <p:datePicker   showIcon="true"/>
-
-                                                            <p:outputLabel value="Porcentaje de Amortizacion: %"/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Tiempo de Capitalización en meses:"/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Revalorizar Valor: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Plusvalia"/>
-                                                            <p:inputText type="number" value="" required="true" />                                                            
-
-                                                        </h:panelGrid>
-                                                    </div>
-
-                                                </h:form>
-
-                                                <f:facet name="footer">
-                                                    <p:commandButton value="Guardar" 
-                                                                     icon="pi pi-check"/>
-                                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                                     onclick="PF('EditarNoDepreciable').hide()"
-                                                                     class="ui-button-secondary"/>
-                                                </f:facet>
-                                            </p:dialog> 
-                                        </p:panel>
+                                        </p:dialog> 
                                     </h:form>
-                                </p:tab>
-                                <p:tab title="Agotables">
-                                    <h:form>
-                                        <p:panel>
-                                            <div>
-                                                <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
-                                                <p:toolbar>
-                                                    <p:toolbarGroup>
-                                                        <p:commandButton value="Nuevo" icon="pi pi-plus"   
-                                                                         oncomplete="PF('NuevoAgotable').show()"   
-                                                                         styleClass="ui-button-success" 
-                                                                         style="margin-right: .3rem">                               
-                                                        </p:commandButton>
+                                    <h:form id="formnuevoNodepreciable" >
 
-                                                        <p:commandButton value="Editar" 
-                                                                         icon="pi pi-pencil" 
-                                                                         oncomplete="PF('EditarAgotable').show()"  
-                                                                         styleClass="ui-button-info" 
-                                                                         style="margin-right: .3rem" >                                
-                                                        </p:commandButton>
+                                        <p:dialog header="Nuevo Activo No Depreciable"  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="NuevoNoDepreciable"
+                                                  id="dialogoingresarNodepreciable">
+                                            <div  style="display: flex;justify-content: center">
+                                                <h:panelGrid columns="4"  >
+                                                    <p:outputLabel value="Descripción: "/>
+                                                    <p:inputText value="#{activosFijosMB.activos.detalle_de_activo}"  />
 
-                                                        <p:commandButton id="delete-products-button"
-                                                                         value="Deshabilitar" 
-                                                                         icon="pi pi-times"                                            
-                                                                         styleClass="ui-button-danger"  
-                                                                         style="margin-right: .3rem">
-                                                            <p:confirm  header="Confirmation"
-                                                                        message="Dese eliminar el 
-                                                                        proveedor seleccionado?"
-                                                                        icon="pi pi-exclamation-triangle" />
+                                                    <p:outputLabel value="Costo Adquisición: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.activos.valor_adquisicion}"  />
 
-                                                        </p:commandButton>
-                                                    </p:toolbarGroup>                       
-                                                </p:toolbar> 
-                                                <!-- Tabla visual de datos  !-->
-                                                <p:dataTable>
+                                                    <p:outputLabel value="Fecha de Adquisición:    " />
+                                                    <p:datePicker  value="#{activosFijosMB.activos.fecha_adquisicion}" showIcon="true"/>
+
+                                                    <p:outputLabel value="Plusvalia"/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.activoNoDepreciable.plusvalia}"  />                                                            
+
+                                                    <p:outputLabel value="N° Factura"/>
+                                                    <p:inputText  value="#{activosFijosMB.activos.numero_factura}"  />                                                            
+
+                                                    <p:outputLabel value="Proveedor"/>
+                                                    <p:inputText value="#{activosFijosMB.activos.proveedor}"  />                                                            
+
+                                                </h:panelGrid>
+
+                                                <div > 
+                                                    <f:facet name="footer">
+                                                        <p:commandButton value="Guardar" 
+                                                                         icon="pi pi-check" action="#{activosFijosMB.setRegistrarNoDepreciable}" ajax="false"/>
+                                                        <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                                         onclick="PF('NuevoNoDepreciable').hide()"
+                                                                         class="ui-button-secondary"/>
+                                                    </f:facet>
+                                                </div>    
+
+                                            </div>
+
+
+
+                                        </p:dialog> 
+                                    </h:form>
+                                    <h:form id="formeditarNoDepreciable">
+
+                                        <p:dialog header="Editar Activo No Depreciable"  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="EditarNoDepreciable"
+                                                  id="dialogeditarNoDepreciable">
+                                            <div  style="display: flex;justify-content: center">
+                                                <h:panelGrid columns="4"  >
+                                                    <p:outputLabel value="Descripción: "/>
+                                                    <p:inputText value="#{activosFijosMB.listanodepreciable.detalle_de_activo}"  />
+
+                                                    <p:outputLabel value="Costo Adquisición: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.listanodepreciable.valor_adquisicion}"  />
+
+                                                    <p:outputLabel value="Fecha de Adquisición:    " />
+                                                    <p:datePicker  value="#{activosFijosMB.listanodepreciable.fecha_adquisicion}" showIcon="true"/>
+
+                                                    <p:outputLabel value="Plusvalia"/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.listanodepreciable.plusvalia}"  />                                                            
+
+                                                    <p:outputLabel value="N° Factura"/>
+                                                    <p:inputText  value="#{activosFijosMB.listanodepreciable.numero_factura}"  />                                                            
+
+                                                    <p:outputLabel value="Proveedor"/>
+                                                    <p:inputText value="#{activosFijosMB.listanodepreciable.proveedor}"  />                                                            
+
+                                                </h:panelGrid>
+                                                <div > 
+                                                    <f:facet name="footer">         
+                                                        <p:commandButton value="Guardar" 
+                                                                         icon="pi pi-check"
+                                                                         action="#{activosFijosMB.setEditar1}" ajax="false"/>
+                                                        <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                                         onclick="PF('EditarNoDepreciable').hide()"
+                                                                         class="ui-button-secondary"/>
+                                                        <p:commandButton 
+                                                            value="Deshabilitar"
+                                                            action="#{activosFijosMB.setDeshabilitarnodepreciable}"
+                                                            icon="pi pi-times"                                            
+                                                            styleClass="ui-button-danger"  
+                                                            update="fromverNodepreciable formverdeshabilitadonodepreciable"
+                                                            onclick="PF('EditarNoDepreciable').hide()"
+
+                                                            />
+                                                    </f:facet>
+                                                </div>    
+
+                                            </div>
+
+
+
+                                        </p:dialog> 
+                                    </h:form>
+
+                                </p:panel>
+
+                            </p:tab>
+                            <p:tab title="Agotables" id="tablaAgotable">
+
+                                <p:panel>
+                                    <div>
+                                        <!-- Botones de comando Nuevo,Editar,Deshabilitar,Buscar  !-->
+                                        <p:toolbar>
+                                            <p:toolbarGroup>
+                                                <p:commandButton value="Nuevo" icon="pi pi-plus"   
+                                                                 oncomplete="PF('NuevoAgotable').show()"   
+                                                                 styleClass="ui-button-success" 
+                                                                 style="margin-right: .3rem">                               
+                                                </p:commandButton>
+                                                <p:commandButton value="Deshabilitados" 
+
+
+                                                                 icon="pi pi-pencil"
+                                                                 oncomplete="PF('deshabilitadosagotables').show()"  
+                                                                 styleClass="ui-button-info" 
+                                                                 style="margin-right: .3rem " >                                
+                                                </p:commandButton>
+
+
+                                            </p:toolbarGroup>                       
+                                        </p:toolbar> 
+                                        <h:form id="formagotable">
+                                            <!-- Tabla visual de datos  !-->
+                                            <p:dataTable id="visualizarAgotable" value="#{activosFijosMB.agotablesdao.listaragotables()}" var="agotables" 
+                                                         rowKey="#{agotables.id_activo_fijo}" editable="true">
+                                                <p:column headerText="Descripción"  >
+                                                    <h:outputText value="#{agotables.detalle_de_activo}"/>
+                                                </p:column>
+
+                                                <p:column headerText="Costo de Adquisición" >
+                                                    <h:outputText value="#{agotables.valor_adquisicion}">
+                                                        <f:convertNumber currencySymbol="$" type="currency"/>
+                                                    </h:outputText>
+                                                </p:column>                       
+
+                                                <p:column headerText="Cantidad en Stock" >
+                                                    <h:outputText value="#{agotables.stock}" style="font-weight: 700">
+
+                                                    </h:outputText>
+                                                </p:column>
+
+                                                <p:column headerText="Fecha de Adquisición">
+                                                    <h:outputText value="#{agotables.fecha_adquisicion}" />
+                                                </p:column>
+                                                <p:column headerText="N° Factura"  >
+                                                    <h:outputText value="#{agotables.numero_factura}"/>
+                                                </p:column>
+                                                <p:column headerText="Proveedor"  >
+                                                    <h:outputText value="#{agotables.proveedor}"/>
+                                                </p:column>
+                                                <p:column headerText="Opciones">  
+                                                    <p:commandButton 
+                                                        actionListener="#{activosFijosMB.obtenerdatosAgotables(agotables)}"
+                                                        update="formeditarAgotable"
+                                                        icon="pi pi-pencil"
+                                                        oncomplete="PF('EditarAgotable').show()"  
+                                                        styleClass="ui-button-info" 
+                                                        style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px " >                                
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </h:form>
+                                    </div>
+                                    <h:form id="formverdeshabilitadoagotable" >
+
+                                        <p:dialog header="Activos  Agotables Deshabilitados"  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="deshabilitadosagotables"
+                                                  id="dialogoingresarNodepreciable">
+                                            <div  style="display: flex;justify-content: center">
+                                                <p:dataTable id="visualizarAgotable" value="#{activosFijosMB.agotablesdao.listaragotablesDeshabilitados()}" var="agotables" 
+                                                             rowKey="#{agotables.id_activo_fijo}" editable="true">
                                                     <p:column headerText="Descripción"  >
-                                                        <h:outputText value=""/>
+                                                        <h:outputText value="#{agotables.detalle_de_activo}"/>
                                                     </p:column>
 
                                                     <p:column headerText="Costo de Adquisición" >
-                                                        <h:outputText value=""/>
+                                                        <h:outputText value="#{agotables.valor_adquisicion}">
+                                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                                        </h:outputText>
                                                     </p:column>                       
 
                                                     <p:column headerText="Cantidad en Stock" >
-                                                        <h:outputText value="" style="font-weight: 700">
-                                                            <f:convertNumber currencySymbol="$" type="currency"/>
+                                                        <h:outputText value="#{agotables.stock}" style="font-weight: 700">
+
                                                         </h:outputText>
                                                     </p:column>
 
                                                     <p:column headerText="Fecha de Adquisición">
-                                                        <h:outputText value="" />
+                                                        <h:outputText value="#{agotables.fecha_adquisicion}" />
                                                     </p:column>
+                                                    <p:column headerText="N° Factura"  >
+                                                        <h:outputText value="#{agotables.numero_factura}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Proveedor"  >
+                                                        <h:outputText value="#{agotables.proveedor}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Habilitar  ">
+                                                        <p:commandButton 
+                                                            action="#{activosFijosMB.setHabilitarintangibleAgotables(agotables.id_activo_fijo)}" ajax="false"
+                                                            update="formagotable formverdeshabilitadoagotable"
+                                                            oncomplete="ActivosTangibles.xhtml.show()"  
+                                                            icon="pi pi-check"
+                                                            styleClass="rounded-button" 
+                                                            style="margin-right: .3rem;padding-top: 10px;padding-bottom:10px " >                                
+                                                        </p:commandButton>
 
+                                                    </p:column>
                                                 </p:dataTable>
                                             </div>
-                                            <p:dialog header="Nuevo Activo Agotable"  minHeight="40" 
-                                                      height="auto" width="1000px" showEffect="fade"
-                                                      modal="true" widgetVar="NuevoAgotable">
-                                                <h:form >
-                                                    <div  style="display: flex;justify-content: center">
-                                                        <h:panelGrid columns="4"  >
-                                                            <p:outputLabel value="Descripción: "/>
-                                                            <p:inputText value="" required="true" />
-
-                                                            <p:outputLabel value="Costo Adquisición: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Cantidad en Stock: "/>
-                                                            <p:inputText type="number" value="" required="true"/>
-
-                                                            <p:outputLabel value="Fecha de Adquisición:    " />
-                                                            <p:datePicker   showIcon="true"/>                                                         
-
-                                                        </h:panelGrid>
-                                                    </div>
-
-                                                </h:form>
-
-                                                <f:facet name="footer">
-                                                    <p:commandButton value="Guardar" 
-                                                                     icon="pi pi-check"/>
-                                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                                     onclick="PF('NuevoAgotable').hide()"
-                                                                     class="ui-button-secondary"/>
-                                                </f:facet>
-                                            </p:dialog> 
-                                            <p:dialog header="Editar Activo Agotable"  minHeight="40" 
-                                                      height="auto" width="1000px" showEffect="fade"
-                                                      modal="true" widgetVar="EditarAgotable">
-                                                <h:form >
-                                                    <div  style="display: flex;justify-content: center">
-                                                        <h:panelGrid columns="4"  >
-                                                            <p:outputLabel value="Descripción: "/>
-                                                            <p:inputText value="" required="true" />
-
-                                                            <p:outputLabel value="Costo Adquisición: "/>
-                                                            <p:inputText type="number" value="" required="true" />
-
-                                                            <p:outputLabel value="Cantidad en Stock: "/>
-                                                            <p:inputText type="number" value="" required="true"/>
-
-                                                            <p:outputLabel value="Fecha de Adquisición:    " />
-                                                            <p:datePicker   showIcon="true"/>
-
-                                                        </h:panelGrid>
-                                                    </div>
-
-                                                </h:form>
-
-                                                <f:facet name="footer">
-                                                    <p:commandButton value="Guardar" 
-                                                                     icon="pi pi-check"/>
-                                                    <p:commandButton value="Cancelar" icon="pi pi-times" 
-                                                                     onclick="PF('EditarAgotable').hide()"
-                                                                     class="ui-button-secondary"/>
-                                                </f:facet>
-                                            </p:dialog> 
-                                        </p:panel>
+                                        </p:dialog> 
                                     </h:form>
-                                </p:tab>
-                            </p:tabView>
-                        </div>
+                                    <h:form id="formnuevoagotable" >
 
-                    </p:panel>
-                </h:form>
+                                        <p:dialog header="Nuevo Activo Agotable"  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="NuevoAgotable"
+                                                  id="dialogingresoAgotable">
+                                            <div  style="display: flex;justify-content: center">
+                                                <h:panelGrid columns="4"  >
+                                                    <p:outputLabel value="Descripción: "/>
+                                                    <p:inputText value="#{activosFijosMB.activos.detalle_de_activo}"  />
+
+                                                    <p:outputLabel value="Costo Adquisición: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.activos.valor_adquisicion}" />
+
+                                                    <p:outputLabel value="Cantidad en Stock: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.activosagotables.stock}" />
+
+                                                    <p:outputLabel value="Fecha de Adquisición:    " />
+                                                    <p:datePicker   value="#{activosFijosMB.activos.fecha_adquisicion}" showIcon="true"/>                                                         
+
+                                                    <p:outputLabel value="N° Factura"/>
+                                                    <p:inputText  value="#{activosFijosMB.activos.numero_factura}"  />                                                            
+
+                                                    <p:outputLabel value="Proveedor"/>
+                                                    <p:inputText value="#{activosFijosMB.activos.proveedor}"  /> 
+                                                </h:panelGrid>
+                                                <div > 
+                                                    <f:facet name="footer">
+                                                        <p:commandButton value="Guardar" 
+                                                                         icon="pi pi-check" action="#{activosFijosMB.setRegistrarAgotables}" ajax="false"/>
+                                                        <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                                         onclick="PF('NuevoAgotable').hide()"
+                                                                         class="ui-button-secondary"/>
+                                                    </f:facet>
+                                                </div>
+                                            </div>
+
+
+                                        </p:dialog> 
+                                    </h:form>
+                                    <h:form id="formeditarAgotable" >
+
+                                        <p:dialog header="Editar Activo Agotable"  minHeight="40" 
+                                                  height="auto" width="1000px" showEffect="fade"
+                                                  modal="true" widgetVar="EditarAgotable"
+                                                  id="dialogeditarAgotable">
+                                            <div  style="display: flex;justify-content: center">
+
+                                                <h:panelGrid columns="4"  >
+                                                    <p:outputLabel value="Descripción: "/>
+                                                    <p:inputText value="#{activosFijosMB.listaragotables.detalle_de_activo}" required="true" />
+
+                                                    <p:outputLabel value="Costo Adquisición: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.listaragotables.valor_adquisicion}" required="true" />
+
+                                                    <p:outputLabel value="Cantidad en Stock: "/>
+                                                    <p:inputText type="number" value="#{activosFijosMB.listaragotables.stock}" required="true"/>
+
+                                                    <p:outputLabel value="Fecha de Adquisición:    " />
+                                                    <p:datePicker  value="#{activosFijosMB.listaragotables.fecha_adquisicion}" showIcon="true"/>
+
+
+                                                    <p:outputLabel value="N° Factura"/>
+                                                    <p:inputText  value="#{activosFijosMB.listaragotables.numero_factura}"  />                                                            
+
+                                                    <p:outputLabel value="Proveedor"/>
+                                                    <p:inputText value="#{activosFijosMB.listaragotables.proveedor}"  />                                                            
+
+                                                </h:panelGrid> 
+
+                                            </div>
+
+
+                                            <f:facet name="footer">
+                                                <p:commandButton value="Guardar" 
+                                                                 icon="pi pi-check"
+                                                                 action="#{activosFijosMB.setEditar2}" ajax="false"/>
+                                                <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                                                 onclick="PF('EditarAgotable').hide()"
+                                                                 class="ui-button-secondary"/>
+                                                <p:commandButton 
+                                                    value="Deshabilitar"
+                                                    action="#{activosFijosMB.setDeshabilitaragotable}"
+                                                    icon="pi pi-times"                                            
+                                                    styleClass="ui-button-danger"  
+                                                    update="formagotable formverdeshabilitadoagotable"
+                                                    onclick="PF('EditarAgotable').hide()"
+
+                                                    />
+                                            </f:facet>
+                                        </p:dialog> 
+                                    </h:form>
+
+                                </p:panel>
+
+                            </p:tab>
+                        </p:tabView>
+                    </div>
+
+                </p:panel>
+
             </ui:define>
         </ui:composition>
-    </body>
+        <script type="text/javascript">
+            function obtenerDatos(id) {
+                console.log(id)
+            }
+        </script>
+    </h:body>
 </html>

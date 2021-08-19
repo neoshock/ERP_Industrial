@@ -37,7 +37,7 @@ public class PagoManagedBean implements Serializable{
     public Pago getPago() {
         return pago;
     }
-
+    
     public void setPago(Pago pago) {
         this.pago = pago;
     }
