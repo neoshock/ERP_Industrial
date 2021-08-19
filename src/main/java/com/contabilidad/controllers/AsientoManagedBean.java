@@ -2,6 +2,7 @@ package com.contabilidad.controllers;
 
 import com.contabilidad.dao.AsientoDAO;
 import com.contabilidad.dao.DiarioDAO;
+import com.contabilidad.dao.MovimientoDAO;
 import com.contabilidad.models.Asiento;
 import com.contabilidad.models.Diario;
 import com.contabilidad.models.Movimiento;
@@ -15,17 +16,22 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class AsientoManagedBean implements Serializable {
 
     private List<Asiento> asientos;
     private Asiento currentAsiento;
+
     private AsientoDAO asientoDAO = new AsientoDAO();
+    private MovimientoDAO movimientoDAO = new MovimientoDAO();
+
     private Date fechaCreacion;
     private Date fechaCierre;
     private List<SubCuenta> subCuentas = new ArrayList<>();
@@ -40,8 +46,9 @@ public class AsientoManagedBean implements Serializable {
         asientos = new ArrayList<>();
         currentAsiento = new Asiento();
         asientos = asientoDAO.getAsientosContables();
+        asientos.forEach(m -> m.setMovimientos(movimientoDAO.getMovimientoByAsiento(m.getIdAsiento())));
         subCuentas = asientoDAO.getCuentasContables();
-        openNewAsiento();
+        diarios = diarioAccess.getDiariosContables();
     }
 
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
@@ -50,7 +57,7 @@ public class AsientoManagedBean implements Serializable {
     }
 
     public void setMovimientos() {
-        currentAsiento.setMovimientos(asientoDAO.getMovimientoByAsiento(0));
+        currentAsiento.setMovimientos(movimientoDAO.getMovimientoByAsiento(0));
     }
 
     public void showInfo(String message) {
@@ -69,10 +76,12 @@ public class AsientoManagedBean implements Serializable {
                 if (totalDebe == totalHaber && totalDebe != 0 && totalHaber != 0) {
                     currentAsiento.setTotal(Double.toString(totalDebe));
                     asientoDAO.addAsientoContable(currentAsiento);
+                    currentAsiento.getMovimientos().forEach(m -> movimientoDAO.updateMovimientos(m, movimientoDAO.setMovimientoDefault()));
                     currentAsiento = new Asiento();
                     fechaCreacion = new Date();
                     fechaCierre = new Date();
                     asientos = asientoDAO.getAsientosContables();
+                    asientos.forEach(m -> m.setMovimientos(movimientoDAO.getMovimientoByAsiento(m.getIdAsiento())));
                     showInfo("Se ha registrado un nuevo Asiento");
                     openNewAsiento();
                 } else {
@@ -84,10 +93,16 @@ public class AsientoManagedBean implements Serializable {
             }
         } else {
             if (totalDebe == totalHaber) {
-                currentAsiento.setTotal(Double.toString(totalDebe));
-                asientoDAO.editAsientoContable(currentAsiento, currentAsiento.getIdAsiento());
-                showInfo("Cambios Realizados Correctamente");
-                openNewAsiento();
+                if (ValidateChange()) {
+                    currentAsiento.setTotal(Double.toString(totalDebe));
+                    asientoDAO.editAsientoContable(currentAsiento, currentAsiento.getIdAsiento());
+                    currentAsiento.getMovimientos().forEach(m -> movimientoDAO.updateMovimientos(m, currentAsiento.getIdAsiento()));
+                    showInfo("Cambios Realizados Correctamente");
+                    closeDialogModal();
+                    openNewAsiento();
+                }else{
+                    showWarn("No se detectaron cambios");
+                }
             } else {
                 showWarn("Los valores totales deben Coincidir");
             }
@@ -103,13 +118,21 @@ public class AsientoManagedBean implements Serializable {
 
     public void openNewAsiento() {
         currentAsiento = new Asiento();
-        String numero = "ASC-0" + (asientoDAO.getCountAsientos() + 1);
-        currentAsiento.setNumero(numero);
+        currentAsiento.setNumero(generateNumeroAsiento());
         currentAsiento.setMovimientos(new ArrayList<>());
         diarios = diarioAccess.getDiariosContables();
         subCuentas = asientoDAO.getCuentasContables();
         totalDebe = 0;
         totalHaber = 0;
+    }
+
+    private String generateNumeroAsiento() {
+        int num = asientoDAO.getCountAsientos();
+        if (num > 8) {
+            return "ASC-" + (num + 1);
+        } else {
+            return "ASC-0" + (num + 1);
+        }
     }
 
     public void onFechaCreacionSelected(SelectEvent<Date> event) {
@@ -177,8 +200,19 @@ public class AsientoManagedBean implements Serializable {
         updateTotalHaber();
     }
 
-    public void onLineaEdit(RowEditEvent<Movimiento> event) {
+    public void closeDialogModal() {
+        PrimeFaces.current().executeScript("PF('detalleAsiento').hide()");
+    }
 
+    public boolean ValidateChange() {
+        Asiento oldAsiento = asientoDAO.getAsientoById(currentAsiento.getIdAsiento());
+        if (oldAsiento.getDetalle().equals(currentAsiento.getDetalle()) && oldAsiento.getFechaCierre().equals(currentAsiento.getFechaCierre()) && 
+                oldAsiento.getFechaCreacion().equals(currentAsiento.getFechaCreacion()) && 
+                oldAsiento.getIdDiario() == currentAsiento.getIdDiario() && oldAsiento.getEstado().equals(currentAsiento.getEstado())) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public List<Asiento> getAsientos() {

@@ -35,6 +35,25 @@ public class ImformeContableDAO {
         return libros;
     }
 
+    public List<Libro> filtrateLibroByDiario(int idiario) {
+        String sql = String.format("select * from fillLibroMayor(%1$d);",idiario);
+        conexion.conectar();
+        List<Libro> libros = new ArrayList<>();
+        try {
+            connection = conexion.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(sql);
+            //Llena la lista de los datos
+            while (resultSet.next()) {
+                libros.add(new Libro(resultSet.getString("Codigo"), resultSet.getString("SubCuenta"), resultSet.getString("Fecha"),
+                        resultSet.getString("Asiento"), resultSet.getString("Descripcion"), resultSet.getDouble("Debe"), resultSet.getDouble("Haber")));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return libros;
+    }
+
     public List<BalanceGeneral> getInformeBalanceGeneral() {
         conexion.conectar();
         String sql = "select * from generateBalanceSituacional();";
@@ -45,7 +64,7 @@ public class ImformeContableDAO {
             resultSet = statement.executeQuery(sql);
             //Llena la lista de los datos
             while (resultSet.next()) {
-                balance.add(new BalanceGeneral(resultSet.getString("nombre"),resultSet.getString("subcuenta"),resultSet.getDouble("saldo")));
+                balance.add(new BalanceGeneral(resultSet.getString("nombre"), resultSet.getString("subcuenta"), resultSet.getDouble("saldo")));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

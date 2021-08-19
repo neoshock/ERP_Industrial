@@ -73,6 +73,7 @@
                                                     <p:outputLabel value="Diario:"></p:outputLabel>
                                                     <p:selectOneMenu id="diario" value="#{asientoManagedBean.currentAsiento.idDiario}" editable="false" 
                                                                      disabled="#{asientoManagedBean.currentAsiento.estado == 'cerrado'}">
+                                                        <f:selectItem itemLabel="Seleccione un Diario" itemValue="" noSelectionOption="true"/>
                                                         <f:selectItems value="#{asientoManagedBean.diarios}" var="diario" 
                                                                        itemLabel="#{diario.nombre}" 
                                                                        itemValue="#{diario.idDiario}"></f:selectItems>
@@ -104,7 +105,7 @@
                                                          editInitEvent="dblclick" editMode="cell"
                                                          value="#{asientoManagedBean.currentAsiento.movimientos}">
 
-                                                <p:ajax event="cellEdit" listener="#{asientoManagedBean.onLineaEdit}" process="@this" update=":form:dtMovimientos"/>
+                                                <p:ajax event="cellEdit" process="@this" update=":form:dtMovimientos"/>
 
                                                 <p:column headerText="Cuenta Contable">
                                                     <p:cellEditor>
@@ -191,7 +192,7 @@
                                         <div class="col-md-2">
                                             <p:commandButton value="Cerrar" icon="pi pi-times"
                                                              styleClass="ui-button-danger" process="@this"
-                                                             action="#{asientoManagedBean.cleanNotChangeAsientos()}" oncomplete="PF('detalleAsiento').hide()"/>
+                                                             oncomplete="PF('detalleAsiento').hide()"/>
                                         </div>
                                     </div>
                                 </p:outputPanel>
@@ -205,10 +206,11 @@
                             <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
                                              onclick="PF('editarAsiento').hide()"/>
                         </p:confirmDialog>
-                        <p:dataTable id="dtAsientos" widgetVar="asientosTable" var="asiento" 
+                        <p:dataTable id="dtAsientos" widgetVar="asientosTable" var="asiento"
                                      value="#{asientoManagedBean.asientos}" reflow="true" paginator="true"
                                      selection="#{asientoManagedBean.currentAsiento}"
                                      rows="7" rowSelectMode="add" paginatorPosition="bottom" rowKey="#{asiento.numero}" >
+                            
                             <f:facet name="header">
                                 <div class="products-table-header">
                                     <span style="font-weight: bold; margin-right: 6px;">Asientos Contables</span>
@@ -225,7 +227,7 @@
                                 </h:outputText>
                             </p:column>
 
-                            <p:column headerText="Numero" sortBy="#{asiento.numero}">
+                            <p:column headerText="Numero" sortBy="#{asiento.numero}" filterBy="#{asiento.numero}" filterStyle="display : none">
                                 <h:outputText value="#{asiento.numero}" />
                             </p:column>
 
@@ -254,7 +256,7 @@
                             </p:column>
                             <p:column headerText="Acciones">
                                 <p:commandButton icon="pi pi-pencil" update=":form:manage-asiento"
-                                                 oncomplete="PF('detalleAsiento').show()" action="#{asientoManagedBean.calculateTotal()}" 
+                                                 oncomplete="PF('detalleAsiento').show()" action="#{asientoManagedBean.calculateTotal()}"  
                                                  styleClass="edit-button rounded-button ui-button-info" process="@this">
                                     <f:setPropertyActionListener value="#{asiento}" target="#{asientoManagedBean.currentAsiento}"/>
                                     <p:resetInput target=":form:manage-asiento"/>

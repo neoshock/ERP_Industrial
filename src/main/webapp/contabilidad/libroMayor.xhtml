@@ -18,18 +18,18 @@
                             </p:commandButton>
                             <p:commandButton type="button" value="Imprimir" title="Print" icon="pi pi-print" styleClass="ui-button-primary p-mr-2"/>
                         </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:menuButton value="Diario">
-                                <p:menuitem value="DIA-0001"/>
-                                <p:menuitem value="DIA-0002"/>
-                                <p:menuitem value="DIA-0003" />
-                                <p:menuitem value="DIA-0004"/>
-                            </p:menuButton>
+                        <p:toolbarGroup align="right" style="width: 27%;">
+                            <p:selectOneMenu style="width: 100%;" id="labeled" value="#{libroManagedBean.onSelectedDiario.idDiario}" label="Seleccione un diario" editable="false">
+                                <f:selectItem itemLabel="Seleccione un Diario Contable" itemValue="0" noSelectionOption="true"/>
+                                <p:ajax listener="#{libroManagedBean.filtrateLibroMayor()}" update=":form:dt-libros"/>
+                                <f:selectItems value="#{libroManagedBean.diarios}" var="diario"
+                                               itemLabel="#{diario.nombre}" itemValue="#{diario.idDiario}"/>
+                            </p:selectOneMenu>
                         </p:toolbarGroup>
                     </p:toolbar>
 
                     <div class="card p-2">
-                        <h3 style="margin: 1% 0px;">Libro mayor de la empresa</h3>
+                        <h3 style="margin: 1% 0px;">Libro mayor</h3>
                         <p:dataTable id="dt-libros" widgetVar="dtLibros" var="libro"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                                      value="#{libroManagedBean.libros}" sortBy="#{libro.codigo}">
@@ -54,7 +54,7 @@
                                         <h:outputText styleClass="p-ml-2" value="#{libro.codigo} #{libro.nombre}"/>
                                     </div>
                                 </p:column>
-                                
+
                                 <p:column>
                                     <div class="p-d-inline-flex p-ai-center" style="vertical-align: middle">
                                         <h:outputText styleClass="p-ml-2" value="#{libroManagedBean.calculateSaldoCuenta(libro.codigo)}"/>
