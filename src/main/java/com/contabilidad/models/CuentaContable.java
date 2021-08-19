@@ -19,7 +19,11 @@ public class CuentaContable {
         this.cuenta = cuenta;
         this.subcuenta = subcuenta;
     }
-    
+
+    public CuentaContable() {
+        
+    }
+
     public String getCodigo() {
         return codigo;
     }

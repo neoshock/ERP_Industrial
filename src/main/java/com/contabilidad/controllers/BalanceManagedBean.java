@@ -17,7 +17,7 @@ public class BalanceManagedBean implements Serializable{
     
     @PostConstruct
     public void mainBalanceSituacional() {
-        balances = imformeContableDAO.getInformeBalanceGeneral();
+        //balances = imformeContableDAO.getInformeBalanceGeneral();
     }
     
     public double calculateSaldo(String nombre){ 

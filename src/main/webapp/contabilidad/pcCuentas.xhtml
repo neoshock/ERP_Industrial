@@ -26,10 +26,15 @@
                         <p:dataTable var="cuenta" value="#{cuentaMB.listaCuentas}"
                                      paginator="true" rows="5" paginatorPosition="bottom" 
                                      sortMode="single" id="tblCuenta">
-                            <p:column headerText="Código" sortBy="#{cuenta.codigo}">
+                            <f:facet name="header">
+                                <div class="products-table-header">
+                                    <span style="font-weight: bold">LISTADO DE CUENTAS</span>
+                                </div>
+                            </f:facet>
+                            <p:column headerText="Código" sortBy="#{cuenta.codigo}" width="15%">
                                 <h:outputText value="#{cuenta.codigo}" />
                             </p:column>
-                            <p:column headerText="SubGrupo" sortBy="#{cuenta.idsubgrupo}">
+                            <p:column headerText="SubGrupo" sortBy="#{cuenta.idsubgrupo}" width="15%">
                                 <h:outputText value="#{cuenta.idsubgrupo}" />
                             </p:column>
                             <p:column headerText="Nombre" sortBy="#{cuenta.nombre}">

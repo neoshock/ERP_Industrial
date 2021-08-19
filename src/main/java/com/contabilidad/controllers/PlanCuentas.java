@@ -12,10 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
@@ -47,6 +45,9 @@ public class PlanCuentas implements Serializable {
     private Grupo intoGrupo;
     private SubGrupo intoSubgrupo;
     private Cuenta intoCuenta;
+    
+    // filter
+    private List<CuentaContable> filterCuentaContable;
 
     public PlanCuentas() {
         cuentasContables = new ArrayList<>();
@@ -74,6 +75,8 @@ public class PlanCuentas implements Serializable {
             subgrupos = contableDAO.getSubGrupos(codigo);
         } else {
             codigo = "";
+            onSeletedSubgrupo = "0";
+            onSeletedCuenta = "0";
         }
     }
 
@@ -441,6 +444,14 @@ public class PlanCuentas implements Serializable {
 
     public void setGrupo(Grupo grupo) {
         this.grupo = grupo;
+    }
+
+    public List<CuentaContable> getFilterCuentaContable() {
+        return filterCuentaContable;
+    }
+
+    public void setFilterCuentaContable(List<CuentaContable> filterCuentaContable) {
+        this.filterCuentaContable = filterCuentaContable;
     }
 
     

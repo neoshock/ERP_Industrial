@@ -53,22 +53,4 @@ public class ImformeContableDAO {
         }
         return libros;
     }
-
-    public List<BalanceGeneral> getInformeBalanceGeneral() {
-        conexion.conectar();
-        String sql = "select * from generateBalanceSituacional();";
-        List<BalanceGeneral> balance = new ArrayList<>();
-        try {
-            connection = conexion.getConnection();
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(sql);
-            //Llena la lista de los datos
-            while (resultSet.next()) {
-                balance.add(new BalanceGeneral(resultSet.getString("nombre"), resultSet.getString("subcuenta"), resultSet.getDouble("saldo")));
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return balance;
-    }
 }

@@ -21,10 +21,12 @@ public class GrupoManagedBean implements Serializable {
     private List<Grupo> listaGrupos;
     private Grupo grupo, grupoActual;
     private String action;
+    private List<Grupo> filteredGrupoList;
     
     public GrupoManagedBean() {
         grupoDAO = new GrupoDAO();
         listaGrupos = new ArrayList<>();
+        filteredGrupoList = new ArrayList<>();
         grupo = new Grupo();
         grupoActual = new Grupo();
     }
@@ -121,5 +123,14 @@ public class GrupoManagedBean implements Serializable {
     public void setGrupoActual(Grupo grupoActual) {
         this.grupoActual = grupoActual;
     }
+
+    public List<Grupo> getFilteredGrupoList() {
+        return filteredGrupoList;
+    }
+
+    public void setFilteredGrupoList(List<Grupo> filteredGrupoList) {
+        this.filteredGrupoList = filteredGrupoList;
+    }
+    
     
 }

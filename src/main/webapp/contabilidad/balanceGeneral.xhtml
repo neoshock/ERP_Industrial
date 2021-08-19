@@ -22,7 +22,7 @@
                     </p:toolbar>
                     <p:dataTable id="dt-libros" widgetVar="dtBalance" var="balance"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
-                                 value="#{balanceManagedBean.balances}" sortBy="#{balance.nombre}">
+                                 value="#{balanceGeneralMB.balanceGeneral}">
 
                         <f:facet name="header">
                             <div class="row">
@@ -35,39 +35,25 @@
                                 </div>
                             </div>
                         </f:facet>
-                        <p:headerRow field="nombre"
-                                     expandable="true" expanded="false">
 
-                            <p:column colspan="9">
-                                <div class="p-d-inline-flex p-ai-center" style="vertical-align: middle">
-                                    <h:outputText styleClass="p-ml-2" value="#{balance.nombre}"/>
+                        <p:column colspan="8" headerText="Cuenta Contable" responsivePriority="4">
+                            <h:outputText value="#{balance.nombre}" rendered="#{balanceGeneralMB.getBold(balance.nombre)}" style="font-weight: bold" />
+                            <h:outputText value="#{balance.nombre}" rendered="#{!balanceGeneralMB.getBold(balance.nombre)}" />
+                        </p:column>
+
+                        <p:column colspan="2" headerText="Saldo" responsivePriority="2">
+                            <h:outputText value="#{balance.saldo}" rendered="#{balanceGeneralMB.getBold(balance.nombre)}" style="font-weight: bold" />
+                            <h:outputText value="#{balance.saldo}" rendered="#{!balanceGeneralMB.getBold(balance.nombre)}" />
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <div class="row">
+                                <div class="col-md-9">Pasivo + Patrimonio</div>
+                                <div class="col-md-3" style="text-align: left">
+                                    <p><h:outputText value="#{balanceGeneralMB.sumaPasivoPatrimonio()}"/></p>
                                 </div>
-                            </p:column>
-
-                            <p:column>
-                                <div class="p-d-inline-flex p-ai-center" style="vertical-align: middle">
-                                    <h:outputText styleClass="p-ml-2" value="#{balanceManagedBean.calculateSaldo(balance.nombre)}"/>
-                                </div>
-                            </p:column>
-                        </p:headerRow>
-
-                        <p:column headerText="Nombre" colspan="3">
-
-                        </p:column>
-
-                        <p:column colspan="6" headerText="Subcuenta" responsivePriority="4">
-                            <h:outputText value="#{balance.subcuenta}"/>
-                        </p:column>
-
-                        <p:column colspan="1" headerText="Saldo" responsivePriority="2">
-                            <h:outputText value="#{balance.saldo}"/>
-                        </p:column>
-                        <p:columnGroup type="footer">
-                            <p:row>
-                                <p:column colspan="9" style="text-align:right" footerText="Pasivo + Patrimonio ="/>
-                                <p:column style="text-align:left" footerText="valor total"/>
-                            </p:row>
-                        </p:columnGroup>
+                            </div>
+                        </f:facet>
                     </p:dataTable>
                 </h:form>
             </ui:define>
