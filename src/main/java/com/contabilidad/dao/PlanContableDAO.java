@@ -5,6 +5,7 @@ import com.contabilidad.models.Grupo;
 import com.contabilidad.models.Cuenta;
 import com.contabilidad.models.SubCuenta;
 import com.contabilidad.models.SubGrupo;
+import com.google.gson.Gson;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,28 +16,50 @@ import java.util.List;
  * @author LUIS ALFREDO
  */
 public class PlanContableDAO {
-
     private Conexion conexion = new Conexion();
     private List<CuentaContable> cuentasContables;
     private List<Grupo> grupos;
     private List<SubGrupo> subgrupos;
     private List<Cuenta> cuentas;
-
+    private Gson gson;
     private ResultSet result;
 
+    public PlanContableDAO() {
+        gson = new Gson();
+    }    
+
+//    public List<CuentaContable> getSubCuentas() {
+//        cuentasContables = new ArrayList<>();
+//        result = conexion.consultar("select * from public.getsubcuentas()");
+//        try {
+//            //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
+//            while (result.next()) {
+//                cuentasContables.add(new CuentaContable(
+//                        result.getString("codigo"),
+//                        result.getString("grupo"),
+//                        result.getString("subgrupo"),
+//                        result.getString("cuenta"),
+//                        result.getString("nombre")
+//                ));
+//            }
+//        } catch (SQLException ex) {
+//            System.out.println("Hubo un problema en getAllClientes: " + ex.getMessage());
+//        } finally {
+//            conexion.desconectar();
+//        }
+//        return cuentasContables;
+//    }
+    
     public List<CuentaContable> getSubCuentas() {
         cuentasContables = new ArrayList<>();
-        result = conexion.consultar("select * from public.getsubcuentas()");
+        result = conexion.consultar("select getsubcuentas()");
         try {
             //(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta)
             while (result.next()) {
-                cuentasContables.add(new CuentaContable(
-                        result.getString("codigo"),
-                        result.getString("grupo"),
-                        result.getString("subgrupo"),
-                        result.getString("cuenta"),
-                        result.getString("nombre")
-                ));
+                String cadenaJSON = result.getString("getsubcuentas");
+                CuentaContable cuentaContable = gson.fromJson(cadenaJSON, CuentaContable.class);
+                System.out.println(cuentaContable.toString());
+                cuentasContables.add(cuentaContable);
             }
         } catch (SQLException ex) {
             System.out.println("Hubo un problema en getAllClientes: " + ex.getMessage());
@@ -172,5 +195,19 @@ public class PlanContableDAO {
             System.out.println("Error insertar Subgrupo: " + e.getMessage());
         }
         return -1;
+    }
+    
+    public boolean updateSubCuenta(SubCuenta subCuenta) {
+        try {
+            String obj = gson.toJson(subCuenta);
+            String sql = String.format("select updatesubcuenta('%1$s')", obj);
+            result = conexion.ejecutar(sql);
+            if (result.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error update SubGrupo" + e.getMessage());
+        }
+        return false;
     }
 }

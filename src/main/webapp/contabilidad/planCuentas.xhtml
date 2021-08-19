@@ -16,14 +16,10 @@
 
                         <p:toolbar>
                             <p:toolbarGroup>
-                                <!--<p:commandButton value="Nuevo" icon="pi pi-plus" 
-                                                 update=":form:manage-product-content" oncomplete="PF('manageProductDialog').show()"
-                                                 styleClass="ui-button-primary" 
-                                                 style="margin-right: .5rem">
-                                    <p:resetInput target=":form:manage-product-content"/>
-                                </p:commandButton>-->
-                                <p:button outcome="agregarCuenta" value="Nuevo" icon="pi pi-plus"
-                                          styleClass="ui-button-success" />
+                                <p:commandButton action="#{planCuentas.formAgregarSubCuenta}" value="Nuevo" icon="pi pi-plus"
+                                                 styleClass="ui-button-success">
+                                    <f:setPropertyActionListener value="create" target="#{planCuentas.action}" />
+                                </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
 
@@ -57,7 +53,8 @@
                                 <h:outputText value="#{pc.cuenta}" />
                             </p:column>
 
-                            <p:column sortBy="#{pc.subcuenta}" headerText="Subcuenta" filterBy="#{pc.subcuenta}">
+                            <p:column sortBy="#{pc.subcuenta}" headerText="Subcuenta" 
+                                      filterBy="#{pc.subcuenta}" filterStyle="display: none">
                                 <h:outputText value="#{pc.subcuenta}" />
                             </p:column>
 
@@ -66,11 +63,8 @@
                                                  styleClass="edit-button rounded-button ui-button-primary"
                                                  action="#{planCuentas.editarCuentaContable(pc)}"
                                                  >
+                                    <f:setPropertyActionListener value="update" target="#{planCuentas.action}" />
                                 </p:commandButton>
-
-                                <!--<p:commandButton class="ui-button-danger rounded-button" icon="pi pi-times" process="@this">
-
-                                </p:commandButton>-->
                             </p:column>
                         </p:dataTable>
                     </div>

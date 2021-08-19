@@ -6,14 +6,19 @@ import com.contabilidad.models.CuentaContable;
 import com.contabilidad.models.Grupo;
 import com.contabilidad.models.SubCuenta;
 import com.contabilidad.models.SubGrupo;
+import com.primefaces.Messages;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.PrimeFaces;
@@ -45,9 +50,9 @@ public class PlanCuentas implements Serializable {
     private Grupo intoGrupo;
     private SubGrupo intoSubgrupo;
     private Cuenta intoCuenta;
-    
+
     // filter
-    private List<CuentaContable> filterCuentaContable;
+    private String action;
 
     public PlanCuentas() {
         cuentasContables = new ArrayList<>();
@@ -75,22 +80,29 @@ public class PlanCuentas implements Serializable {
             subgrupos = contableDAO.getSubGrupos(codigo);
         } else {
             codigo = "";
-            onSeletedSubgrupo = "0";
+            subgrupos = new ArrayList<>();
+            cuentas = new ArrayList<>();
             onSeletedCuenta = "0";
+            onSeletedSubgrupo = "0";
         }
     }
 
     public void onSubGrupoChange() {
         System.out.println("onSeletedSubgrupo: " + onSeletedSubgrupo);
         if (onSeletedSubgrupo != null && !onSeletedSubgrupo.trim().equals("0")) {
-            subgrupos.forEach(g -> { 
-                if (g.getId() == Integer.parseInt(onSeletedSubgrupo) ){
+            subgrupos.forEach(g -> {
+                if (g.getId() == Integer.parseInt(onSeletedSubgrupo)) {
                     codigo = g.getCodigo();
                 }
             });
             cuentas = contableDAO.getCuentas(onSeletedSubgrupo.trim());
         } else {
-            codigo = "0";
+            if (codigo.length() > 1) {
+                codigo = codigo.substring(0, 1);
+            }
+            onSeletedSubgrupo = "0";
+            onSeletedCuenta = "0";
+            cuentas = new ArrayList<>();
         }
     }
 
@@ -98,8 +110,8 @@ public class PlanCuentas implements Serializable {
         String codAux = codigo;
         if (onSeletedCuenta != null && !onSeletedCuenta.trim().equals("0")) {
             System.out.println("######## CuentaCodigo:" + onSeletedCuenta);
-            cuentas.forEach(g -> { 
-                if (g.getIdcuenta() == Integer.parseInt(onSeletedCuenta) ){
+            cuentas.forEach(g -> {
+                if (g.getIdcuenta() == Integer.parseInt(onSeletedCuenta)) {
                     codigo = g.getCodigo();
                 }
             });
@@ -107,7 +119,7 @@ public class PlanCuentas implements Serializable {
             codigo = codigo.trim() + "." + plus;
             //cuentas = contableDAO.getCuentas(codigo.substring(2));
         } else {
-            codigo = subGrupo.getCodigo();
+            codigo = codigo.substring(0, 3);
         }
     }
 
@@ -131,7 +143,26 @@ public class PlanCuentas implements Serializable {
             showWarn("Faltan rellenar campos");
         }
     }
-    
+
+    public void actualizarSubCuenta() {
+        if (!subCuenta.getNombre().isEmpty()) {
+            subCuenta.setId(cuentaContable.getId());
+            if (contableDAO.updateSubCuenta(subCuenta)) {
+                subCuenta = new SubCuenta();
+                Messages.showInfo("Se ha actualizado la cuenta");
+                cuentasContables = contableDAO.getSubCuentas();
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext()
+                            .redirect("planCuentas.xhtml");
+                } catch (IOException ex) {
+                    System.out.println("Error al redirigir la pagina" + ex.getMessage());
+                }
+            }
+        } else {
+            Messages.showWarn("Faltan rellenar campos");
+        }
+    }
+
     /* Cambiar el nombre de la funcion por formAgregarGrupo */
     public void formAgregarClasificacion(String outcome) {
         System.out.println("############ Agregar Grupo ##########");
@@ -146,39 +177,39 @@ public class PlanCuentas implements Serializable {
             showWarn("Ya tiene seleccionado un Grupo");
         }
     }
-    
+
     public void formAgregarSubGrupo() {
         System.out.println("############ formAgregarSubGrupo ##########");
         System.out.println("Subgrupo: " + onSeletedSubgrupo.trim());
-        
-        if (onSeletedSubgrupo.trim().equals("0")) {
+
+        if (onSeletedSubgrupo.trim().equals("0") && !onSeletedGrupo.trim().equals("0")) {
             System.out.println("pasamos al subgrupoooooo");
             intoSubgrupo = new SubGrupo();
             intoSubgrupo.setCodigo(onSeletedGrupo.trim() + "." + String.valueOf(subgrupos.size() + 1));
             intoSubgrupo.setGrupo(Integer.parseInt(onSeletedGrupo.trim()));
             abrirModal("dialogAgregarSubGrupo");
         } else {
-            showWarn("Ya tiene seleccionado un Subgrupo");
+            Messages.showWarn("Ya tiene seleccionado un Subgrupo ó no ha seleccionado un Grupo");
         }
     }
-    
+
     public void formAgregarCuenta() {
         System.out.println("############ formAgregarCuenta ##########");
         System.out.println("Cuenta: " + onSeletedCuenta.trim());
-        
-        if (onSeletedCuenta.trim().equals("0")) {
+
+        if (onSeletedCuenta.trim().equals("0") && !onSeletedSubgrupo.trim().equals("0")) {
             System.out.println("pasamos a la cuentaaaaaaa");
             intoCuenta = new Cuenta();
             intoCuenta.setCodigo(codigo.trim() + "." + String.valueOf(cuentas.size() + 1));
             intoCuenta.setIdsubgrupo(Integer.parseInt(onSeletedSubgrupo.trim()));
-            subgrupos.forEach(g -> { 
-                if (g.getId() == Integer.parseInt(onSeletedSubgrupo.trim()) ){
+            subgrupos.forEach(g -> {
+                if (g.getId() == Integer.parseInt(onSeletedSubgrupo.trim())) {
                     subGrupo = g;
                 }
             });
             abrirModal("dialogAgregarCuenta");
         } else {
-            showWarn("Ya tiene seleccionado un Subgrupo");
+            showWarn("Ya tiene seleccionado una Cuenta ó no ha seleccionado un SubGrupo");
         }
     }
 
@@ -189,7 +220,7 @@ public class PlanCuentas implements Serializable {
             long count = grupos.stream().filter(
                     g -> g.getNombre().trim().toLowerCase()
                             .equals(intoGrupo.getNombre().trim().toLowerCase())
-                ).count();
+            ).count();
             if (count == 0) {
                 // si no existe, agregarlo en la base de datos
                 if (contableDAO.insertGrupo(intoGrupo) == 1) {
@@ -205,7 +236,7 @@ public class PlanCuentas implements Serializable {
             showWarn("Campo nombre esta vacío");
         }
     }
-    
+
     public void registrarSubGrupo() {
         System.out.println("############ Registrar subgrupo");
         System.out.println("Nombre: " + intoSubgrupo.getNombre());
@@ -215,11 +246,11 @@ public class PlanCuentas implements Serializable {
             long count = subgrupos.stream().filter(
                     g -> g.getNombre().trim().toLowerCase()
                             .equals(intoSubgrupo.getNombre().trim().toLowerCase())
-                ).count();
+            ).count();
             if (count == 0) {
                 //si no existe, agregarlo en la base de datos
                 if (contableDAO.insertSubGrupo(intoSubgrupo) == 1) {
-                     //si lo agrega actualizar la lista
+                    //si lo agrega actualizar la lista
                     System.out.println("Enviando: " + intoSubgrupo.toString());
                     PrimeFaces.current().dialog().closeDynamic(intoSubgrupo);
                 } else {
@@ -232,7 +263,7 @@ public class PlanCuentas implements Serializable {
             showWarn("Campo nombre esta vacío");
         }
     }
-    
+
     public void registrarCuenta() {
         System.out.println("############ Registrar cuenta");
         System.out.println("Nombre: " + intoCuenta.getNombre());
@@ -242,11 +273,11 @@ public class PlanCuentas implements Serializable {
             long count = cuentas.stream().filter(
                     g -> g.getNombre().trim().toLowerCase()
                             .equals(intoCuenta.getNombre().trim().toLowerCase())
-                ).count();
+            ).count();
             if (count == 0) {
                 //si no existe, agregarlo en la base de datos
                 if (contableDAO.insertCuenta(intoCuenta) == 1) {
-                     //si lo agrega actualizar la lista
+                    //si lo agrega actualizar la lista
                     System.out.println("Enviando: " + intoCuenta.toString());
                     PrimeFaces.current().dialog().closeDynamic(intoCuenta);
                 } else {
@@ -259,9 +290,9 @@ public class PlanCuentas implements Serializable {
             showWarn("Campo nombre esta vacío");
         }
     }
-    
+
     public String editarCuentaContable(CuentaContable cuentaContable) {
-        System.out.println("Cuenta: " + cuentaContable.getSubcuenta());
+        System.out.println("Recibiendo: " + cuentaContable.toString());
         this.cuentaContable = cuentaContable;
         this.codigo = cuentaContable.getCodigo();
         this.onSeletedGrupo = cuentaContable.getGrupo();
@@ -270,26 +301,33 @@ public class PlanCuentas implements Serializable {
         this.subCuenta.setNombre(cuentaContable.getSubcuenta());
         return "agregarCuenta";
     }
-    
+
+    public String formAgregarSubCuenta() {
+        codigo = "";
+        cuentaContable = new CuentaContable();
+        subCuenta = new SubCuenta();
+        return "agregarCuenta";
+    }
+
     public void abrirModal(String outcome) {
         Map<String, Object> options = new HashMap<>();
         options.put("modal", true);
         options.put("draggable", false);
         PrimeFaces.current().dialog().openDynamic(outcome, options, null);
     }
-    
+
     public void onActSelect(SelectEvent event) {
         grupos.add((Grupo) event.getObject());
         intoGrupo = new Grupo();
     }
-    
+
     public void onActSelectSubgrupo(SelectEvent event) {
         System.out.println("######### Recibiendo: ");
         System.out.println(((SubGrupo) event.getObject()).toString());
         subgrupos.add((SubGrupo) event.getObject());
         intoSubgrupo = new SubGrupo();
     }
-    
+
     public void onActSelectCuenta(SelectEvent event) {
         System.out.println("######### Recibiendo: ");
         System.out.println(((Cuenta) event.getObject()).toString());
@@ -446,13 +484,12 @@ public class PlanCuentas implements Serializable {
         this.grupo = grupo;
     }
 
-    public List<CuentaContable> getFilterCuentaContable() {
-        return filterCuentaContable;
+    public String getAction() {
+        return action;
     }
 
-    public void setFilterCuentaContable(List<CuentaContable> filterCuentaContable) {
-        this.filterCuentaContable = filterCuentaContable;
+    public void setAction(String action) {
+        this.action = action;
     }
 
-    
 }

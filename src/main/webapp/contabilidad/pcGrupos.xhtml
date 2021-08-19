@@ -15,42 +15,46 @@
                     <p:growl id="messages" showDetail="true" />
 
                     <p:dialog modal="true" draggable="false" id="dialog-form-grupo"
-                              header="Agregar Grupo" widgetVar="dialogFormGrupo"
+                              header="Grupo" widgetVar="dialogFormGrupo"
                               responsive="true" width="60%" closeOnEscape="true">
-                        <p:outputPanel id="manage-grupo-content">
-                            <p:staticMessage rendered="#{grupoMB.action eq 'create'}"
-                                             severity="warn" summary="Atención" 
-                                             detail="Una vez registrada una subcuenta solo se puede modificar el nombre" 
-                                             style="width: 100%; margin-bottom: 3%;"/>
-                            <div class="ui-fluid" >
-                                <div class="p-field">
-                                    <p:outputLabel for="@next" value="Código: *"/>
-                                    <p:inputText id="codigo" 
-                                                 value="#{grupoMB.grupo.codigo}"
-                                                 readonly="true"/>
-                                </div>
-                                <div class="p-field">
-                                    <p:outputLabel for="@next" value="Nombre *"/>
-                                    <p:inputText id="nombre" 
-                                                 value="#{grupoMB.grupo.nombre}"
-                                                 />
-                                </div>
+
+                        <p:staticMessage rendered="#{grupoMB.action eq 'create'}"
+                                         severity="warn" summary="Atención" 
+                                         detail="Una vez registrada una subcuenta solo se puede modificar el nombre" 
+                                         style="width: 100%; margin-bottom: 3%;"/>
+                        <div class="ui-fluid" >
+                            <div class="p-field">
+                                <p:outputLabel for="@next" value="Código: *"/>
+                                <p:inputText id="codigo" 
+                                             value="#{grupoMB.grupo.codigo}"
+                                             readonly="true"/>
                             </div>
-                            <div class="p-jc-end">
-                                <p:commandButton rendered="#{grupoMB.action eq 'create'}" 
-                                                 value="Guardar" icon="pi pi-check" 
-                                                 action="#{grupoMB.create()}"
-                                                 styleClass="ui-button-success"
-                                                 update="messages, tblGrupos"
-                                                 />
-                                <p:commandButton rendered="#{grupoMB.action eq 'update'}" 
-                                                 value="Actualizar" icon="pi pi-check" 
-                                                 action="#{grupoMB.edit()}"
-                                                 styleClass="ui-button-success"
-                                                 update="messages, tblGrupos"
-                                                 />
+                            <div class="p-field">
+                                <p:outputLabel for="@next" value="Nombre *"/>
+                                <p:inputText id="nombre" 
+                                             value="#{grupoMB.grupo.nombre}"
+                                             />
                             </div>
-                        </p:outputPanel>
+                        </div>
+                        
+                        <f:facet name="footer">
+                            <p:commandButton value="Guardar" 
+                                             icon="pi pi-check" 
+                                             styleClass="ui-button-success"
+                                             update="messages, tblGrupos"
+                                             rendered="#{grupoMB.action eq 'create'}" 
+                                             action="#{grupoMB.create()}" />
+                            <p:commandButton value="Actualizar" 
+                                             icon="pi pi-check" 
+                                             styleClass="ui-button-success"
+                                             update="messages, tblGrupos"
+                                             rendered="#{grupoMB.action eq 'update'}"
+                                             action="#{grupoMB.edit()}" />
+                            <p:commandButton type="button" value="Cancelar" 
+                                             icon="pi pi-times" 
+                                             styleClass="ui-button-danger p-mr-2"
+                                             onclick="PF('dialogFormGrupo').hide()" />
+                        </f:facet>
                     </p:dialog>
 
                     <p:confirmDialog widgetVar="deleteDialogGrupo" showEffect="fade" width="40%"

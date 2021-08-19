@@ -13,7 +13,7 @@
             <ui:define name="content">
                 <p:card>
                     <f:facet name="title">
-                        Agregar Cuenta
+                        SubCuenta
                     </f:facet>
                     <h:form>
                         <p:growl id="messages" showDetail="true"/>
@@ -32,12 +32,15 @@
                             <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="Grupo: *"/>
                                 <div class="ui-inputgroup">
+                                    <p:inputText rendered="#{planCuentas.action eq 'update'}" value="#{planCuentas.onSeletedGrupo}"
+                                                 disabled="true" />
                                     <p:selectOneMenu id="grupo" 
                                                      value="#{planCuentas.onSeletedGrupo}"
                                                      filter="true"
+                                                     rendered="#{planCuentas.action eq 'create'}"
                                                      >
                                         <p:ajax listener="#{planCuentas.onGrupoChange}"
-                                                update="codigo, subgrupo" />
+                                                update="codigo, subgrupo, cuentas" />
                                         <f:selectItem itemLabel="Selecciona grupo" 
                                                       itemValue="0"
                                                       noSelectionOption="true"/>
@@ -49,7 +52,7 @@
                                     <p:commandButton styleClass="ui-button-success"
                                                      icon="pi pi-plus"
                                                      action="#{planCuentas.formAgregarClasificacion('dialogAgregarGrupo')}"
-                                                     update="messages">
+                                                     update="messages" rendered="#{planCuentas.action eq 'create'}">
                                         <p:ajax event="dialogReturn" listener="#{planCuentas.onActSelect}" 
                                             update="grupo, messages" />
                                     </p:commandButton>
@@ -59,9 +62,12 @@
                             <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="SubGrupo: *"/>
                                 <div class="ui-inputgroup">
+                                    <p:inputText rendered="#{planCuentas.action eq 'update'}" value="#{planCuentas.onSeletedSubgrupo}"
+                                                 disabled="true" />
                                     <p:selectOneMenu id="subgrupo" 
                                                      value="#{planCuentas.onSeletedSubgrupo}" 
-                                                     filter="true" filterMatchMode="startsWith">
+                                                     filter="true" filterMatchMode="startsWith"
+                                                     rendered="#{planCuentas.action eq 'create'}">
                                         <p:ajax listener="#{planCuentas.onSubGrupoChange}" 
                                                 update="codigo, cuentas" />
                                         <f:selectItem itemLabel="Selecciona subgrupo" 
@@ -74,7 +80,8 @@
                                     </p:selectOneMenu>
                                     <p:commandButton styleClass="ui-button-success" 
                                                      icon="pi pi-plus"
-                                                     action="#{planCuentas.formAgregarSubGrupo()}">
+                                                     action="#{planCuentas.formAgregarSubGrupo()}"
+                                                     update="messages" rendered="#{planCuentas.action eq 'create'}">
                                         <p:ajax event="dialogReturn" listener="#{planCuentas.onActSelectSubgrupo}" 
                                             update="subgrupo, messages" />
                                     </p:commandButton>
@@ -84,9 +91,12 @@
                             <div class="p-field p-md-4 p-col-12">
                                 <p:outputLabel for="@next" value="Cuentas: *"/>
                                 <div class="ui-inputgroup">
+                                    <p:inputText rendered="#{planCuentas.action eq 'update'}" value="#{planCuentas.onSeletedCuenta}"
+                                                 disabled="true" />
                                     <p:selectOneMenu id="cuentas"
                                                      value="#{planCuentas.onSeletedCuenta}"
-                                                     filter="true" filterMatchMode="startsWith">
+                                                     filter="true" filterMatchMode="startsWith"
+                                                     rendered="#{planCuentas.action eq 'create'}">
                                         <p:ajax listener="#{planCuentas.onCuentaChange}" 
                                                 update="codigo" />
                                         <f:selectItem itemLabel="Selecciona cuenta" 
@@ -99,7 +109,8 @@
                                     </p:selectOneMenu>
                                     <p:commandButton styleClass="ui-button-success" 
                                                      icon="pi pi-plus"
-                                                     action="#{planCuentas.formAgregarCuenta}">
+                                                     action="#{planCuentas.formAgregarCuenta}"
+                                                     update="messages" rendered="#{planCuentas.action eq 'create'}">
                                         <p:ajax event="dialogReturn" listener="#{planCuentas.onActSelectCuenta}" 
                                             update="cuentas, messages" />
                                     </p:commandButton>
@@ -114,7 +125,8 @@
                             <div class="p-field p-col-12">
                                 <p:selectOneRadio id="saldo" layout="pageDirection" 
                                                   columns="1" 
-                                                  value="#{planCuentas.subCuenta.tipo}">
+                                                  value="#{planCuentas.subCuenta.tipo}"
+                                                  rendered="#{planCuentas.action eq 'create'}">
                                     <f:selectItem itemLabel="Saldo Deudor" 
                                                   itemValue="Deudor"/>
                                     <f:selectItem itemLabel="Saldo Acreedor" 
@@ -126,7 +138,14 @@
                         <p:commandButton value="Guardar" icon="pi pi-check" 
                                          styleClass="ui-button-success" 
                                          action="#{planCuentas.registrarSubCuenta()}"
-                                         update="@form"/>
+                                         update="@form" rendered="#{planCuentas.action eq 'create'}"/>
+                        <p:commandButton value="Actualizar" icon="pi pi-check" 
+                                         styleClass="ui-button-success" 
+                                         action="#{planCuentas.actualizarSubCuenta()}"
+                                         update="@form" rendered="#{planCuentas.action eq 'update'}"/>
+                        <p:commandButton value="Cancelar" icon="pi pi-times" 
+                                         styleClass="ui-button-danger ml-2"
+                                         action="planCuentas" />
                     </h:form>
                 </p:card>
             </ui:define>

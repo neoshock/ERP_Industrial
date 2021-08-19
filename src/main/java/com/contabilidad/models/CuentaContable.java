@@ -10,7 +10,11 @@ package com.contabilidad.models;
  * @author LUIS ALFREDO
  */
 public class CuentaContable {
-    private String codigo, grupo, subgrupo, cuenta, subcuenta;
+    private int id;
+    private String codigo, grupo, subgrupo, cuenta, subcuenta, tiposaldo;
+
+    public CuentaContable() {
+    }
 
     public CuentaContable(String codigo, String grupo, String subgrupo, String cuenta, String subcuenta) {
         this.codigo = codigo;
@@ -18,6 +22,25 @@ public class CuentaContable {
         this.subgrupo = subgrupo;
         this.cuenta = cuenta;
         this.subcuenta = subcuenta;
+    }
+
+    public CuentaContable(int id, String codigo, String grupo, String subgrupo, String cuenta, String subcuenta) {
+        this.id = id;
+        this.codigo = codigo;
+        this.grupo = grupo;
+        this.subgrupo = subgrupo;
+        this.cuenta = cuenta;
+        this.subcuenta = subcuenta;
+    }
+
+    public CuentaContable(int id, String codigo, String grupo, String subgrupo, String cuenta, String subcuenta, String tiposaldo) {
+        this.id = id;
+        this.codigo = codigo;
+        this.grupo = grupo;
+        this.subgrupo = subgrupo;
+        this.cuenta = cuenta;
+        this.subcuenta = subcuenta;
+        this.tiposaldo = tiposaldo;
     }
     
     public String getCodigo() {
@@ -59,6 +82,27 @@ public class CuentaContable {
     public void setSubcuenta(String subcuenta) {
         this.subcuenta = subcuenta;
     }
-    
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTiposaldo() {
+        return tiposaldo;
+    }
+
+    public void setTiposaldo(String tiposaldo) {
+        this.tiposaldo = tiposaldo;
+    }
+
+    @Override
+    public String toString() {
+        return "CuentaContable{" + "id=" + id + ", codigo=" + codigo + ", grupo=" + grupo + ", subgrupo=" + subgrupo + ", cuenta=" + cuenta + ", subcuenta=" + subcuenta + ", tiposaldo=" + tiposaldo + '}';
+    }
+
     
 }
