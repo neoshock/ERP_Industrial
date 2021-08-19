@@ -9,6 +9,7 @@
     </h:head>
     <h:body>
         <h:form>
+            <p:growl id="messages" showDetail="true" />
             <div style="margin: 0px 10px">
                 <div class="ui-fluid p-formgrid p-grid" >
                     <div class="p-field p-col-12">
@@ -32,7 +33,8 @@
                 <div class="p-jc-end">
                     <p:commandButton value="Guardar" icon="pi pi-check" 
                                      action="#{planCuentas.registrarSubGrupo}"
-                                     styleClass="ui-button-success"/>
+                                     styleClass="ui-button-success"
+                                     update="messages"/>
                 </div>
             </div>
         </h:form>

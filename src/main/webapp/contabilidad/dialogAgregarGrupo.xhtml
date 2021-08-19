@@ -11,36 +11,27 @@
         <h:form>
             <p:growl id="messages" showDetail="true" />
             <div style="margin: 0px 10px">
-                <div class="ui-fluid" >
-                    <div class="p-field">
+                <div class="ui-fluid p-formgrid p-grid" >
+                    <div class="p-field p-col-12">
                         <p:outputLabel for="@next" value="Código: *"/>
                         <p:inputText id="codigo" 
-                                     value="#{grupoMB.grupo.codigo}"
-                                     readonly="true" style="width: 100%;"/>
+                                     value="#{planCuentas.intoGrupo.codigo}"
+                                     readonly="true"/>
                     </div>
-                    <div class="p-field">
+                    <div class="p-field p-col-12">
                         <p:outputLabel for="@next" value="Nombre *"/>
                         <p:inputText id="nombre" 
-                                     value="#{grupoMB.grupo.nombre}"
+                                     value="#{planCuentas.intoGrupo.nombre}"
                                      />
                     </div>
                 </div>
                 <div class="p-jc-end">
-                    <p:commandButton rendered="#{grupoMB.action eq 'create'}" 
-                                     value="Guardar" icon="pi pi-check" 
-                                     action="#{ grupoMB.create() }"
+                    <p:commandButton value="Guardar" icon="pi pi-check" 
+                                     action="#{planCuentas.registrarGrupo}"
                                      styleClass="ui-button-success"
-                                     update="messages" 
-                                     />
-                    <p:commandButton rendered="#{grupoMB.action eq 'update'}" 
-                                     value="Actualizar" icon="pi pi-check" 
-                                     action="#{ grupoMB.edit() }"
-                                     styleClass="ui-button-success"
-                                     update="messages" 
-                                     />
+                                     update="messages"/>
                 </div>
             </div>
         </h:form>
     </h:body>
 </html>
-
