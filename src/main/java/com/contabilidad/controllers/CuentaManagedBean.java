@@ -69,27 +69,41 @@ public class CuentaManagedBean implements Serializable {
                 showWarn("Uno o mas datos no han sido ingresados");
             }
         } else {
-            if (!onselectedCuenta.getNombre().isEmpty() && !onselectedCuenta.getCodigo().equals("")) {
-                boolean result = cuentaDAO.update(onselectedCuenta);
-                if (result) {
-                    showInfo("Cambios realizado exitosamente");
-                    listaCuentas = cuentaDAO.getCuentas();
-                    closeDialog("cuentaFormDialog");
+            if (!validateCuenta()) {
+                if (!onselectedCuenta.getNombre().isEmpty() && !onselectedCuenta.getCodigo().equals("")) {
+                    boolean result = cuentaDAO.update(onselectedCuenta);
+                    if (result) {
+                        showInfo("Cambios realizado exitosamente");
+                        listaCuentas = cuentaDAO.getCuentas();
+                        closeDialog("cuentaFormDialog");
+                    } else {
+                        showWarn("Hubo un error al registrar la cuenta contable");
+                    }
                 } else {
-                    showWarn("Hubo un error al registrar la cuenta contable");
+                    showWarn("Uno o mas datos no han sido ingresados");
                 }
-            } else {
-                showWarn("Uno o mas datos no han sido ingresados");
+            }else {
+                showWarn("No se han detectado cambio");
             }
         }
     }
-    
-    public void deleteCuenta(){
-        if(cuentaDAO.delete(onselectedCuenta.getIdcuenta())){
+
+    public void deleteCuenta() {
+        if (cuentaDAO.delete(onselectedCuenta.getIdcuenta())) {
             showInfo("Eliminacion exitosa");
             listaCuentas.remove(onselectedCuenta);
-        }else {
+        } else {
             showWarn("No se puede eliminar la cuenta, existen uno o mas datos referenciados");
+        }
+    }
+
+    public boolean validateCuenta() {
+        String actualNombre = onselectedCuenta.getNombre();
+        Cuenta oldCuenta = cuentaDAO.getCuentaById(onselectedCuenta.getIdcuenta());
+        if (actualNombre.equals(oldCuenta.getNombre())) {
+            return true;
+        } else {
+            return false;
         }
     }
 

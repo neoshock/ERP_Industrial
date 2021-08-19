@@ -115,4 +115,17 @@ public class BalanceGeneralDAO {
         
         return balanceGeneral;
     }
+    
+    public double sumaPasivoPatrimonio() {
+        String sql = "select sumapasivopatrimonio()";
+        result = conexion.consultar(sql);
+        try {
+            if (result.next()) {
+                return result.getDouble("sumapasivopatrimonio");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error sumapasivopatrimonio: " + ex.getMessage());
+        }
+        return 0;
+    }
 }

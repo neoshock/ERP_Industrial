@@ -10,9 +10,13 @@ public class Main {
     public static void main(String[] args) {
         BalanceGeneralDAO generalDAO = new BalanceGeneralDAO();
 
-        generalDAO.generateBalanceGeneral().forEach(bg -> {
-            System.out.println(bg.toString());
-        });
+//        generalDAO.generateBalanceGeneral().forEach(bg -> {
+//            System.out.println(bg.toString());
+//        });
+        
+        
+        String cadena = "1.1.1 Efectivo y sus equivalentes";
+        System.out.println();
     }
 
 }

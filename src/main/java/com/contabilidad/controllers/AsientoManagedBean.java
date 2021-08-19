@@ -75,7 +75,7 @@ public class AsientoManagedBean implements Serializable {
                     asientos = asientoDAO.getAsientosContables();
                     showInfo("Se ha registrado un nuevo Asiento");
                     openNewAsiento();
-                }else {
+                } else {
                     showWarn("Los valores del debe y el haber deben coincidir, y ser diferentes a cero");
                 }
 
@@ -107,6 +107,7 @@ public class AsientoManagedBean implements Serializable {
         currentAsiento.setNumero(numero);
         currentAsiento.setMovimientos(new ArrayList<>());
         diarios = diarioAccess.getDiariosContables();
+        subCuentas = asientoDAO.getCuentasContables();
         totalDebe = 0;
         totalHaber = 0;
     }

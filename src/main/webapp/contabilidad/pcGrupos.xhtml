@@ -77,11 +77,22 @@
 
                         <p:dataTable var="grupo" value="#{grupoMB.listaGrupos}" 
                                      paginator="true" rows="5" paginatorPosition="bottom" 
-                                     sortMode="single" id="tblGrupos">
-                            <p:column headerText="Código" sortBy="#{grupo.codigo}">
+                                     sortMode="single" id="tblGrupos" widgetVar="dtGrupos">
+                            <f:facet name="header">
+                                <div class="products-table-header">
+                                    <span style="font-weight: bold">LISTADO DE GRUPOS</span>
+                                    <span class="filter-container ui-input-icon-left">
+                                        <i class="pi pi-search"></i>
+                                        <p:inputText id="globalFilter" onkeyup="PF('dtGrupos').filter()" 
+                                                     placeholder="Buscar"/>
+                                    </span>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="Código" sortBy="#{grupo.codigo}" width="30%">
                                 <h:outputText value="#{grupo.codigo}" />
                             </p:column>
-                            <p:column headerText="Nombre" sortBy="#{grupo.nombre}">
+                            <p:column headerText="Nombre" sortBy="#{grupo.nombre}" filterBy="#{grupo.nombre}" filterStyle="display: none">
                                 <h:outputText value="#{grupo.nombre}" />
                             </p:column>
                             <p:column exportable="false" width="10%">
