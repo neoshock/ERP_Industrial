@@ -72,7 +72,7 @@ public class AsientoManagedBean implements Serializable {
         if (currentAsiento.getIdAsiento() == 0) {
             if (!currentAsiento.getDocumento().isEmpty() && !currentAsiento.getDetalle().isEmpty()
                     && currentAsiento.getFechaCreacion() != null && currentAsiento.getFechaCierre() != null
-                    && currentAsiento.getMovimientos().size() > 0) {
+                    && currentAsiento.getMovimientos().size() > 1) {
                 if (totalDebe == totalHaber && totalDebe != 0 && totalHaber != 0) {
                     currentAsiento.setTotal(Double.toString(totalDebe));
                     asientoDAO.addAsientoContable(currentAsiento);
@@ -100,7 +100,7 @@ public class AsientoManagedBean implements Serializable {
                     showInfo("Cambios Realizados Correctamente");
                     closeDialogModal();
                     openNewAsiento();
-                }else{
+                } else {
                     showWarn("No se detectaron cambios");
                 }
             } else {
@@ -206,13 +206,25 @@ public class AsientoManagedBean implements Serializable {
 
     public boolean ValidateChange() {
         Asiento oldAsiento = asientoDAO.getAsientoById(currentAsiento.getIdAsiento());
-        if (oldAsiento.getDetalle().equals(currentAsiento.getDetalle()) && oldAsiento.getFechaCierre().equals(currentAsiento.getFechaCierre()) && 
-                oldAsiento.getFechaCreacion().equals(currentAsiento.getFechaCreacion()) && 
-                oldAsiento.getIdDiario() == currentAsiento.getIdDiario() && oldAsiento.getEstado().equals(currentAsiento.getEstado())) {
+        oldAsiento.setMovimientos(movimientoDAO.getMovimientoByAsiento(oldAsiento.getIdAsiento()));
+        if (oldAsiento.getDetalle().equals(currentAsiento.getDetalle()) && oldAsiento.getFechaCierre().equals(currentAsiento.getFechaCierre())
+                && oldAsiento.getFechaCreacion().equals(currentAsiento.getFechaCreacion())
+                && oldAsiento.getIdDiario() == currentAsiento.getIdDiario()
+                && oldAsiento.getEstado().equals(currentAsiento.getEstado()) && compareMovimientos(oldAsiento.getMovimientos())) {
             return false;
         } else {
             return true;
         }
+    }
+
+    public boolean compareMovimientos(List<Movimiento> movimientos) {
+        int counter = 0;
+        for (int i = 0; i < movimientos.size(); i++) {
+            if (movimientos.get(i).getIdSubcuenta() == currentAsiento.getMovimientos().get(i).getIdSubcuenta()) {
+                counter++;
+            }
+        }
+        return counter >= movimientos.size();
     }
 
     public List<Asiento> getAsientos() {
